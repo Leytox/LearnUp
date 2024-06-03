@@ -1,0 +1,31 @@
+.feedback-card {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 20px;
+    padding: 50px;
+    transition: 0.3s;
+}
+
+.feedback-card:hover {
+    border: 1px solid #007bff;
+    box-shadow: 0 0 10px #007bff;
+    border-radius: 10px;
+    cursor: pointer;
+    transform: translateY(-10px);
+}
+
+.feedback-card-text {
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.feedback-card img {
+    width: 250px;
+    border-radius: 30px;
+}
