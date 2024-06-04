@@ -1,15 +1,20 @@
 .cookie-consent {
     position: fixed;
-    bottom: 0;
-    width: 100%;
+    width: 900px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     background-color: #eaeaea;
-    padding: 60px;
-    text-align: center;
+    padding: 50px;
+    text-align: start;
     z-index: 1000;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
 }
 
 .cookie-consent button {
-    margin: 20px;
+    margin-right: 20px;
+    margin-top: 20px;
     padding: 10px 20px;
 }
 
@@ -30,6 +35,7 @@
 }
 
 #about:hover {
-    background: #777777;
+    cursor: help;
+    background: #000000;
     color: #fff;
 }

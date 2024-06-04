@@ -43,9 +43,9 @@ a:hover {
     color: #fff;
     padding: 20px 0;
     text-align: center;
-    position: fixed; /* Set position to fixed */
-    bottom: 0; /* Anchor the footer to the bottom */
-    width: 100%; /* Make the footer full width */
+    position: fixed;
+    bottom: 0;
+    width: 100%;
 }
 
 .footer-content {
@@ -79,10 +79,21 @@ form {
     display: flex;
     flex-direction: column;
     height: fit-content;
-    width: 400px;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    width: 500px;
+    padding: 40px;
+}
+
+.oauth-button {
+
+}
+
+form hr {
+    border: none;
+    border-top: 1px solid #ccc;
+    color: #fff;
+    background-color: #fff;
+    height: 1px;
+    width: 100%;
 }
 
 input {
@@ -165,11 +176,12 @@ button:hover {
 }
 
 .features {
+    margin-top: 50px;
     background-color: #f1f1f1;
 }
 
 .features .texts {
-    padding: 50px;
+    padding: 75px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -185,8 +197,9 @@ button:hover {
 }
 
 .search input[type="text"] {
+    height: 50px;
     outline: none;
-    width: 300px;
+    width: 350px;
     border: 1px solid #ccc;
     border-radius: 10px 0 0 10px;
 }
@@ -194,7 +207,8 @@ button:hover {
 .search button {
     background-color: #007bff;
     color: #fff;
-    height: 40px;
+    height: 50px;
+    width: 50px;
     border-radius: 0 10px 10px 0;
     border: none;
     cursor: pointer;

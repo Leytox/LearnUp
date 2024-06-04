@@ -1,25 +1,37 @@
-import { Link, useLocation } from "react-router-dom";
-import Search from "./Search.jsx";
-import LanguageSelector from "./Language.jsx";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import Search from "../Search/Search.jsx";
+import LanguageSelector from "../LanguageSelector/LanguageSelector.jsx";
 import Cookies from "js-cookie";
 import { useContext, useEffect } from "react";
-import UserContext from "../UserContext.jsx";
+import UserContext from "../../UserContext.jsx";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faRightFromBracket, faUser } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCartShopping,
+  faChalkboardUser,
+  faHouse,
+  faRightFromBracket,
+  faUser,
+} from "@fortawesome/free-solid-svg-icons";
 
 export default function Header() {
   const { user, setUser } = useContext(UserContext);
   const location = useLocation().pathname;
+  const navigate = useNavigate();
 
   function logout() {
+    if (!window.confirm("Are you sure you want to logout?")) return;
     Cookies.remove("token");
     Cookies.remove("username");
+    Cookies.remove("role");
+    Cookies.remove("id");
     setUser(null);
+    navigate("/");
   }
 
   useEffect(() => {
     if (Cookies.get("username")) setUser({ username: Cookies.get("username") });
   }, [setUser]);
+
   return (
     <header>
       <nav className={"navbar"}>
@@ -32,7 +44,14 @@ export default function Header() {
         <ul className={"navbar-links"}>
           {location !== "/" && (
             <li>
-              <Link to={"/"}>Home</Link>
+              <Link to={"/"}>
+                <button
+                  style={{ width: "50px", height: "50px" }}
+                  title={"Go to home"}
+                >
+                  <FontAwesomeIcon icon={faHouse} />
+                </button>
+              </Link>
             </li>
           )}
           {!user && (
@@ -47,7 +66,31 @@ export default function Header() {
               </Link>
             </li>
           )}
-          {user && (
+          {Cookies.get("role") === "instructor" && (
+            <li>
+              <Link to={"/dashboard"}>
+                <button
+                  style={{ width: "50px", height: "50px" }}
+                  title={"Go to dashboard"}
+                >
+                  <FontAwesomeIcon icon={faChalkboardUser} />
+                </button>
+              </Link>
+            </li>
+          )}
+          {Cookies.get("role") === "student" && (
+            <li>
+              <Link to={"/cart"}>
+                <button
+                  style={{ width: "50px", height: "50px" }}
+                  title={"Go to cart"}
+                >
+                  <FontAwesomeIcon icon={faCartShopping} />
+                </button>
+              </Link>
+            </li>
+          )}
+          {user && location !== "/profile" && (
             <li>
               <Link to={"/profile"}>
                 <button
@@ -59,9 +102,6 @@ export default function Header() {
               </Link>
             </li>
           )}
-          <li>
-            <LanguageSelector />
-          </li>
           {user && (
             <li>
               <button
@@ -73,6 +113,9 @@ export default function Header() {
               </button>
             </li>
           )}
+          <li>
+            <LanguageSelector />
+          </li>
         </ul>
       </nav>
     </header>

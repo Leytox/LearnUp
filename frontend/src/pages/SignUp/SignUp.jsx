@@ -1,7 +1,14 @@
 import { useEffect, useState } from "react";
-import { Navigate } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import axios from "axios";
 import Cookies from "js-cookie";
+import { Helmet } from "react-helmet";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faFacebook,
+  faGoogle,
+  faTwitter,
+} from "@fortawesome/free-brands-svg-icons";
 
 export default function Register() {
   const [name, setName] = useState("");
@@ -30,7 +37,6 @@ export default function Register() {
         },
       );
       if (response.status === 200) setRedirect(true);
-      if (response.data.token) Cookies.set("token", response.data.token);
     } catch (err) {
       setError(true);
     }
@@ -40,7 +46,10 @@ export default function Register() {
 
   return (
     <form onSubmit={Register}>
-      <h1>Sign up</h1>
+      <Helmet>
+        <title>Sign Up</title>
+      </Helmet>
+      <h1>Create an account</h1>
       <input
         type="text"
         id="name"
@@ -80,12 +89,58 @@ export default function Register() {
         id="bio"
         name="bio"
         placeholder={"Tell something about yourself..."}
-        rows="4"
+        rows="2"
         cols="50"
         onChange={(event) => setBio(event.target.value)}
       />
-      <button type={"submit"}>Sign up</button>
+      <button type={"submit"}>Continue</button>
+      <p>
+        Already have an account?{" "}
+        <Link to={"/login"} style={{ color: "#007bff" }}>
+          Log in
+        </Link>
+      </p>
       {error && <p style={{ color: "red" }}>User already exists</p>}
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "center",
+          alignItems: "center",
+          gap: "10px",
+        }}
+      >
+        <hr></hr>
+        <h3>OR</h3>
+        <hr></hr>
+      </div>
+      <div
+        style={{
+          display: "flex",
+          gap: "25px",
+          justifyContent: "center",
+          flexDirection: "column",
+        }}
+      >
+        <button>
+          <a
+            href="http://localhost:5000/api/auth/google"
+            className={"oauth-button"}
+          >
+            <FontAwesomeIcon icon={faGoogle} /> Continue with Google
+          </a>
+        </button>
+        <button>
+          <a href="http://localhost:5000/api/auth/facebook">
+            <FontAwesomeIcon icon={faFacebook} /> Continue with Facebook
+          </a>
+        </button>
+        <button>
+          <a href="http://localhost:5000/api/auth/twitter">
+            <FontAwesomeIcon icon={faTwitter} /> Continue with Twitter
+          </a>
+        </button>
+      </div>
     </form>
   );
 }

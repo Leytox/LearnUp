@@ -1,4 +1,4 @@
-import "./FeedBack.css";
+import "./FeedBackCard.css";
 
 export default function FeedBackCard({ feedback }) {
   return (

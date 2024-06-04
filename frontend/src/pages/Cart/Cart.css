@@ -1,0 +1,46 @@
+/* frontend/src/pages/Cart/Cart.css */
+
+.cart-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center; /* This will center items vertically */
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.cart-empty {
+    font-size: 2em;
+    color: #777777;
+    font-style: italic;
+    margin-bottom: 20px;
+    margin-top: 300px;
+    text-align: center; /* This will center the text horizontally */
+}
+
+.cart-title {
+    font-size: 2em;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.cart-item h3 {
+    margin: 0;
+}
+
+.cart-item p {
+    margin: 0;
+    color: #888;
+}

@@ -32,7 +32,6 @@ function LanguageSelector() {
           <li onClick={() => handleLanguageChange("en")}>English</li>
           <li onClick={() => handleLanguageChange("ua")}>Ukrainian</li>
           <li onClick={() => handleLanguageChange("es")}>Spanish</li>
-          <li onClick={() => handleLanguageChange("zh")}>Chinese</li>
           {/* Add more languages as needed */}
         </ul>
       )}

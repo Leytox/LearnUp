@@ -3,6 +3,7 @@ const connectDB = require("./config/db");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const path = require("path");
+const PORT = process.env.PORT || 5000;
 
 dotenv.config();
 const app = express();
@@ -19,7 +20,10 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // Routes
 app.use("/api/auth", require("./routes/auth"));
+app.use("/api/categories", require("./routes/categories"));
 app.use("/api/courses", require("./routes/courses"));
+app.use("/api/lessons", require("./routes/lessons"));
+app.use("/api/quizzes", require("./routes/quizzes"));
 app.use("/api/enrollments", require("./routes/enrollments"));
 app.use("/api/videos", require("./routes/videos"));
 app.use("/api/payments", require("./routes/payments"));
@@ -27,5 +31,4 @@ app.use("/api/profile", require("./routes/profile"));
 app.use("/api/admin", require("./routes/admin"));
 app.use("/api/search", require("./routes/search"));
 app.use("/api/reviews", require("./routes/reviews"));
-
-const PORT = process.env.PORT || 5000;
+app.use("/api/cart", require("./routes/cart"));

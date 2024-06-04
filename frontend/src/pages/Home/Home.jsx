@@ -1,13 +1,37 @@
 import { Link } from "react-router-dom";
-import CourseCard from "../components/CourseCard.jsx";
-import FeedBackCard from "../components/FeedBackCard.jsx";
-import { useContext } from "react";
-import UserContext from "../UserContext.jsx";
+import CourseCard from "../../components/CourseCard/CourseCard.jsx";
+import FeedBackCard from "../../components/FeedBackCard/FeedBackCard.jsx";
+import { useContext, useEffect } from "react";
+import UserContext from "../../UserContext.jsx";
+import { Helmet } from "react-helmet";
+import axios from "axios";
+import Cookies from "js-cookie";
 
 export default function Home() {
   const { user } = useContext(UserContext);
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:5000/api/categories",
+          {
+            headers: {
+              "x-auth-token": Cookies.get("token"),
+            },
+          },
+        );
+        console.log(response);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchCategories();
+  }, []);
   return (
     <>
+      <Helmet>
+        <title>Home</title>
+      </Helmet>
       <div
         style={{
           marginTop: "40px",
@@ -155,6 +179,9 @@ export default function Home() {
               }}
             />
           </div>
+          <Link to={"/courses"}>
+            <button>Check all courses</button>
+          </Link>
         </div>
 
         <div className={"community"}>
