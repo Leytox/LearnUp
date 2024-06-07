@@ -1,25 +1,49 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { Navigate, useParams } from "react-router-dom";
 import "./CreateLesson.css";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import Cookies from "js-cookie";
+import Preloader from "../../components/Preloader/Preloader.jsx";
 
 export default function CreateLesson() {
   const { courseId } = useParams();
   const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
   const [content, setContent] = useState("");
+  const [lessonId, setLessonId] = useState("");
   const [redirect, setRedirect] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchCourse = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:5000/api/courses/${courseId}`,
+        );
+        if (response.data.instructor._id !== Cookies.get("id"))
+          setRedirect(true);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchCourse();
+    setLoading(false);
+  }, [courseId]);
+
+  if (redirect) return <Navigate to="/" />;
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      await axios.post(
+      const response = await axios.post(
         "http://localhost:5000/api/lessons",
         {
           course: courseId,
           title,
+          description,
           content,
         },
         {
@@ -28,6 +52,7 @@ export default function CreateLesson() {
           },
         },
       );
+      setLessonId(response.data._id);
       setRedirect(true);
     } catch (err) {
       console.error(err);
@@ -35,7 +60,8 @@ export default function CreateLesson() {
     }
   };
 
-  if (redirect) return <Navigate to={`/courses/${courseId}`} />;
+  if (redirect)
+    return <Navigate to={`/course/${courseId}/lesson/${lessonId}`} />;
 
   const toolbarOptions = [
     ["bold", "italic", "underline", "strike"], // toggled buttons
@@ -56,7 +82,9 @@ export default function CreateLesson() {
     ["clean"], // remove formatting button
   ];
 
-  return (
+  return loading ? (
+    <Preloader />
+  ) : (
     <form onSubmit={handleSubmit} className="create-lesson-container">
       <h1 className="create-lesson-title">Create Lesson</h1>
       <div className="lesson-item">
@@ -65,6 +93,15 @@ export default function CreateLesson() {
           type="text"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
+          required
+        />
+      </div>
+      <div className="lesson-item">
+        <label>Description</label>
+        <input
+          type="text"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
           required
         />
       </div>

@@ -1,4 +1,4 @@
-.course-card {
+.category-card {
     width: 300px;
     display: flex;
     flex-direction: row;
@@ -11,7 +11,7 @@
     transition: transform 0.3s;
 }
 
-.course-card:hover {
+.category-card:hover {
     border: 1px solid #007bff;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
     cursor: pointer;
@@ -19,11 +19,11 @@
 
 }
 
-.course-card img {
+.category-card img {
     border-radius: 5px 0 0 5px;
     width: 150px;
 }
 
-.course-card-text {
+.category-card-text {
     padding: 10px;
 }

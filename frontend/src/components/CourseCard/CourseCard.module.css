@@ -1,0 +1,32 @@
+.course-item-card {
+    width: 400px;
+    max-height: 300px;
+    border: 1px solid #ddd;
+    padding: 20px;
+    margin: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+}
+
+.course-item-card h1 {
+    font-size: 2em;
+    color: #333;
+}
+
+.course-item-card p {
+    font-size: 1.2em;
+    color: #666;
+}
+
+.course-item-card-link {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    color: inherit;
+}
+
+.course-item-card img {
+    width: 40%;
+    border-radius: 5px;
+    max-width: 200px;
+}

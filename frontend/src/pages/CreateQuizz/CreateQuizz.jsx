@@ -5,6 +5,7 @@ import "./CreateQuizz.css";
 export default function CreateQuizz() {
   const [courseId, setCourseId] = useState("");
   const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
   const [questions, setQuestions] = useState([
     { questionText: "", options: [{ text: "", isCorrect: false }] },
   ]);
@@ -15,6 +16,7 @@ export default function CreateQuizz() {
       await axios.post("http://localhost:5000/api/quizzes", {
         course: courseId,
         title,
+        description,
         questions,
       });
       alert("Quiz created successfully");
@@ -70,6 +72,15 @@ export default function CreateQuizz() {
           type="text"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
+          required
+        />
+      </div>
+      <div>
+        <label>Description</label>
+        <input
+          type="text"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
           required
         />
       </div>

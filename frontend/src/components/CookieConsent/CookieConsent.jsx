@@ -6,7 +6,7 @@ export default function CookieConsent() {
   const [show, setShow] = useState(Cookies.get("cookieConsent") !== "true");
 
   const handleAccept = () => {
-    Cookies.set("cookieConsent", "true");
+    Cookies.set("cookieConsent", "true", { expires: 365 });
     setShow(false);
   };
 

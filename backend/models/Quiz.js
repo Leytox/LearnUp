@@ -8,6 +8,7 @@ const QuestionSchema = new mongoose.Schema({
 const QuizSchema = new mongoose.Schema(
   {
     title: { type: String, required: true },
+    description: { type: String, required: true },
     questions: [QuestionSchema],
   },
   { timestamps: true },

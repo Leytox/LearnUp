@@ -9,7 +9,7 @@ const { extname } = require("node:path");
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "./uploads/");
+    cb(null, "./uploads/profile");
   },
   filename: function (req, file, cb) {
     cb(null, uuidv4() + extname(file.originalname));
@@ -20,6 +20,17 @@ const upload = multer({ storage: storage });
 router.get("/", auth, async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select("-password");
+    res.json(user);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server error");
+  }
+});
+
+router.get("/:id", async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id).select("-password");
+    if (!user) return res.status(404).json({ msg: "User not found" });
     res.json(user);
   } catch (err) {
     console.error(err.message);
@@ -41,7 +52,6 @@ router.post(
         fs.unlink(`${user.profilePicture}`, (err) => {
           if (err) console.error(err);
         });
-
       // Save the new profile picture
       user.profilePicture = req.file.path;
       await user.save();

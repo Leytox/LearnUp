@@ -17,6 +17,7 @@
     justify-content: start;
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
     gap: 20px;
     width: 100%;
 }
@@ -27,15 +28,18 @@
 }
 
 .course-item-card {
-    display: flex;
-    flex-direction: column;
     padding: 20px;
-    gap: 10px;
-    width: 300px;
+    width: 20%;
     border: 1px solid #aaaaaa;
     border-radius: 10px;
     cursor: pointer;
     transition: background-color 0.3s;
+}
+
+.course-item-card-link {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 .course-item-card img {
@@ -55,4 +59,10 @@
 .course-item p {
     margin: 0;
     color: #888;
+}
+
+.courses-empty {
+    font-size: 1.5em;
+    color: #888;
+    font-style: italic;
 }

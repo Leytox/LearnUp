@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import "./CreateCourse.css";
+import "./EditCourse.css";
 import Cookies from "js-cookie";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faBan, faFloppyDisk } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Navigate } from "react-router-dom";
+import { Link, Navigate, useParams } from "react-router-dom";
+import Preloader from "../../components/Preloader/Preloader.jsx";
 
 export default function CreateCourse() {
   const [availableCategories, setAvailableCategories] = useState([]);
@@ -13,7 +14,31 @@ export default function CreateCourse() {
   const [category, setCategory] = useState("");
   const [price, setPrice] = useState("");
   const [file, setFile] = useState(null);
+  const [image, setImage] = useState(null);
   const [redirect, setRedirect] = useState(false);
+  const [loading, setLoading] = useState(true); // Add this line
+  const { courseId } = useParams();
+  const userId = Cookies.get("id");
+
+  useEffect(() => {
+    const fetchCourse = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:5000/api/courses/${courseId}`,
+        );
+        setTitle(response.data.title);
+        setDescription(response.data.description);
+        setCategory(response.data.category);
+        setPrice(response.data.price);
+        setImage(response.data.picture);
+        if (response.data.instructor._id !== userId) setRedirect(true);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchCourse();
+    setLoading(false);
+  }, [courseId, userId]);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -54,11 +79,13 @@ export default function CreateCourse() {
     }
   };
 
-  if (redirect) return <Navigate to={"/dashboard"} />;
+  if (redirect) return <Navigate to="/" />;
 
-  return (
-    <form onSubmit={handleSubmit} className="create-course-container">
-      <h1 className="create-course-title">Create Course</h1>
+  return loading ? (
+    <Preloader />
+  ) : (
+    <form onSubmit={handleSubmit} className="edit-course-container">
+      <h1 className="edit-course-title">Edit Course Info</h1>
       <div className="course-item">
         <label>Title</label>
         <input
@@ -103,15 +130,32 @@ export default function CreateCourse() {
       </div>
       <div className="course-item">
         <label>Image</label>
+        <img
+          className={"course-picture"}
+          src={
+            image
+              ? `http://localhost:5000/${image}`
+              : "https://cdn-icons-png.flaticon.com/512/21/21104.png"
+          }
+          alt={"profile picture"}
+          width={200}
+        />
         <input
           required={true}
           type="file"
           onChange={(e) => setFile(e.target.files)}
         />
       </div>
-      <button type="submit" className="create-course-button">
-        Create Course <FontAwesomeIcon icon={faPlus} />
-      </button>
+      <div style={{ display: "flex", gap: "25px" }}>
+        <button type="submit" className="edit-course-button">
+          Save <FontAwesomeIcon icon={faFloppyDisk} />
+        </button>
+        <Link to={"/dashboard"}>
+          <button>
+            Cancel <FontAwesomeIcon icon={faBan} />
+          </button>
+        </Link>
+      </div>
     </form>
   );
 }

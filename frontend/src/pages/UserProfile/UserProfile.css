@@ -1,0 +1,51 @@
+.user-profile {
+    width: 80%;
+    margin: 0 auto;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.user-profile-title {
+    font-size: 2em;
+    color: #333;
+    text-align: center;
+}
+
+.user-profile h1 {
+    font-size: 2em;
+    color: #333;
+}
+
+.user-profile p {
+    font-size: 1.2em;
+    color: #666;
+}
+
+.profile-picture {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.user-courses {
+    margin-top: 20px;
+    width: 100%;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.user-courses h2 {
+    font-size: 2em;
+    color: #333;
+    text-align: center;
+}
+
+.user-courses-list {
+    margin-top: 20px;
+    width: 100%;
+    padding: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+}

@@ -36,7 +36,7 @@ router.get("/my-courses", auth, async (req, res) => {
 });
 
 // Get all enrollments for a course
-router.get("/course/:courseId", auth, async (req, res) => {
+router.get("/course/:courseId", async (req, res) => {
   try {
     const enrollments = await Enrollment.find({
       course: req.params.courseId,

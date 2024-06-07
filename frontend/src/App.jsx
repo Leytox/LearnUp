@@ -18,6 +18,9 @@ import Cart from "./pages/Cart/Cart.jsx";
 import CreateCourse from "./pages/CreateCourse/CreateCourse.jsx";
 import CreateLesson from "./pages/CreateLesson/CreateLesson.jsx";
 import CreateQuizz from "./pages/CreateQuizz/CreateQuizz.jsx";
+import Lesson from "./pages/Lesson/Lesson.jsx";
+import EditCourse from "./pages/EditCourse/EditCourse.jsx";
+import UserProfile from "./pages/UserProfile/UserProfile.jsx";
 
 function App() {
   return (
@@ -31,24 +34,29 @@ function App() {
         <Route path={"/login"} element={<Login />} />
         <Route path={"/signup"} element={<SignUp />} />
         <Route path={"/profile"} element={<Profile />} />
+        <Route path={"/profile/:id"} element={<UserProfile />} />
         <Route path={"/courses"} element={<Courses />} />
+        <Route path={"/courses/:courseId"} element={<CourseDetail />} />
+        <Route path={"/course/:courseId/edit"} element={<EditCourse />} />
         <Route path={"/create-course"} element={<CreateCourse />} />
         <Route
           path={"/course/:courseId/create-lesson"}
           element={<CreateLesson />}
         />
         <Route
-          path={"/course/:courseId/:lessonId/create-quizz"}
+          path={"/course/:courseId/lesson/:lessonId"}
+          element={<Lesson />}
+        />
+        <Route
+          path={"/course/:courseId/lesson/:lessonId/create-quizz"}
           element={<CreateQuizz />}
         />
-        <Route path={"/courses/:courseId"} element={<CourseDetail />} />
-        <Route
-          path={"/courses/:courseId/lesson/:lessonId"}
-          element={<div>Lesson</div>}
-        />
-
         <Route path={"/dashboard"} element={<Dashboard />} />
         <Route path={"/admin"} element={<Admin />} />
+        <Route
+          path={"/admin/create-category"}
+          element={<div>Create Category</div>}
+        />
         <Route path={"/cart"} element={<Cart />} />
         <Route path={"*"} element={<NotFound />} />
       </Routes>

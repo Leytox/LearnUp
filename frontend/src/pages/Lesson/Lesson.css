@@ -1,0 +1,20 @@
+.lesson-container {
+    padding: 20px;
+}
+
+.lesson-title {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.lesson-description {
+    font-size: 18px;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.lesson-content {
+    font-size: 16px;
+    color: #444;
+}
