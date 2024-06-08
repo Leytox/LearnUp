@@ -3,6 +3,18 @@ const router = express.Router();
 const auth = require("../middlewares/auth");
 const User = require("../models/User");
 
+router.get("/", auth, async (req, res) => {
+  try {
+    if (req.user.role !== "admin")
+      return res.status(403).json({ msg: "Forbidden" });
+    const users = await User.find().select("-password");
+    res.status(200).json(users);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server error");
+  }
+});
+
 router.get("/:userId", async (req, res) => {
   const { userId } = req.params;
   try {

@@ -1,0 +1,157 @@
+
+.course-container {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+    margin-top: 20px;
+    padding: 50px;
+    margin-bottom: 50px;
+}
+
+.course-category {
+    font-size: 20px;
+    color: #666;
+    font-style: italic;
+}
+
+.course-details {
+    gap: 25px;
+    display: flex;
+    flex-direction: column;
+    width: 75%;
+}
+
+.course-content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 25px;
+}
+
+.course-description {
+    color: #444;
+}
+
+.course-instructor {
+    font-size: 20px;
+    color: #444;
+    margin-top: 10px;
+}
+
+.course-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.course-instructor-bio {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.review {
+    border-radius: 5px;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.review-button-submit {
+    align-self: center;
+    width: 50%;
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.reviews-empty {
+    font-size: 2em;
+    color: #777777;
+    font-style: italic;
+    margin-bottom: 20px;
+    margin-top: 20px;
+    text-align: center;
+}
+
+.reviewer-name {
+    font-size: 18px;
+    color: #333;
+}
+
+.review-text {
+    font-size: 16px;
+    color: #444;
+}
+
+.review-rating {
+    font-size: 16px;
+    color: #666;
+}
+
+p a {
+    text-decoration: none;
+    color: #007bff;
+}
+
+.course-instructor-picture {
+    width: 200px;
+    border-radius: 5px;
+    object-fit: cover;
+    margin-right: 10px;
+}
+
+.review-user-picture {
+    width: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+}
+
+.review-textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px none #ddd;
+    border-bottom-style: solid;
+    border-radius: 5px;
+    margin-top: 10px;
+    resize: none;
+}
+
+.review-header {
+    text-align: center;
+}
+
+.review-creation {
+    display: flex;
+    flex-direction: column;
+}
+
+#buy-button {
+    width: 100%;
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    margin-top: 20px;
+}
+
+#buy-button:hover {
+    background-color: #0056b3;
+}
+
+p a:hover {
+    color: #0056b3;
+}

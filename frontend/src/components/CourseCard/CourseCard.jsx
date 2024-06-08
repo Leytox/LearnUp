@@ -1,9 +1,27 @@
 import { Link } from "react-router-dom";
 import styles from "./CourseCard.module.css";
 
-export default function CourseCard({ course }) {
+export default function CourseCard({ course, children }) {
+  // Define a function to return color based on difficulty
+  const getBorderColor = (difficulty) => {
+    switch (difficulty) {
+      case "Beginner":
+        return "green";
+      case "Intermediate":
+        return "orange";
+      case "Advanced":
+        return "red";
+      default:
+        return "black";
+    }
+  };
+
   return (
-    <div key={course._id} className={styles["course-item-card"]}>
+    <div
+      key={course._id}
+      className={styles["course-item-card"]}
+      style={{ borderBottomColor: getBorderColor(course.difficulty) }} // Set border color based on difficulty
+    >
       <Link
         to={`/courses/${course._id}`}
         className={styles["course-item-card-link"]}
@@ -26,6 +44,7 @@ export default function CourseCard({ course }) {
         <p>${course.price}</p>
         <p>{course.visible}</p>
       </Link>
+      <div className={styles["course-item-card-children"]}>{children}</div>
     </div>
   );
 }

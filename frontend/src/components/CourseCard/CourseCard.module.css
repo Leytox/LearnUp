@@ -1,11 +1,14 @@
 .course-item-card {
-    width: 400px;
-    max-height: 300px;
+    position: relative;
+    width: 350px;
+    min-height: 280px;
+    max-height: 280px;
     border: 1px solid #ddd;
-    padding: 20px;
+    padding: 15px;
     margin: 10px;
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+    border-bottom: 3px solid;
 }
 
 .course-item-card h1 {
@@ -21,7 +24,7 @@
 .course-item-card-link {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 5px;
     color: inherit;
 }
 
@@ -29,4 +32,10 @@
     width: 40%;
     border-radius: 5px;
     max-width: 200px;
+}
+
+.course-item-card-children {
+    position: absolute;
+    right: 5px;
+    bottom: 5px;
 }

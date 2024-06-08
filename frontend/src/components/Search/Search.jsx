@@ -29,7 +29,7 @@ export default function Search() {
           </button>
         </Link>
       ) : (
-        <Link to={"/courses"}>
+        <Link to={"/courses?search="}>
           <button>
             <FontAwesomeIcon icon={faSearch} />
           </button>

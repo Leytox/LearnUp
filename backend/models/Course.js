@@ -9,6 +9,12 @@ const CourseSchema = new mongoose.Schema(
       required: true,
     },
     category: { type: String, required: true },
+    difficulty: {
+      type: String,
+      enum: ["Beginner", "Intermediate", "Advanced"],
+      required: true,
+      default: "Beginner",
+    },
     price: { type: Number, required: true },
     available: { type: Boolean, required: false, default: false },
     picture: { type: String, required: false },

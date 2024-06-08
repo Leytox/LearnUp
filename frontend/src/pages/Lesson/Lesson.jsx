@@ -1,6 +1,6 @@
 import "./Lesson.css";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import Cookies from "js-cookie";
 import Preloader from "../../components/Preloader/Preloader.jsx";
@@ -8,7 +8,9 @@ import Preloader from "../../components/Preloader/Preloader.jsx";
 export default function Lesson() {
   const [lesson, setLesson] = useState(null);
   const [loading, setLoading] = useState(true);
+  const userId = Cookies.get("id");
   const { lessonId } = useParams();
+
   useEffect(() => {
     const fetchLesson = async () => {
       try {
@@ -20,15 +22,13 @@ export default function Lesson() {
             },
           },
         );
-        console.log(lessonResponse.data);
         setLesson(lessonResponse.data);
-        setLoading(false);
+        console.log(lessonResponse.data);
       } catch (error) {
         console.error(error);
-        setLoading(false);
       }
     };
-    fetchLesson();
+    fetchLesson().finally(() => setLoading(false));
   }, [lessonId]);
 
   return loading ? (
@@ -41,6 +41,32 @@ export default function Lesson() {
         className="lesson-content"
         dangerouslySetInnerHTML={{ __html: lesson.content }}
       />
+      {userId === lesson.course.instructor ? (
+        <Link to={`/course/${lesson.course._id}/lesson/${lesson._id}/edit`}>
+          <button>Edit Lesson</button>
+        </Link>
+      ) : null}
+      {lesson.quiz ? (
+        userId === lesson.course.instructor ? (
+          <Link
+            to={`/course/${lesson.course._id}/lesson/${lesson._id}/quiz/${lesson.quiz}/edit`}
+          >
+            <button>Edit Quiz</button>
+          </Link>
+        ) : (
+          <Link
+            to={`/course/${lesson.course._id}/lesson/${lesson._id}/quiz/${lesson.quiz}`}
+          >
+            <button>Quiz</button>
+          </Link>
+        )
+      ) : userId === lesson.course.instructor ? (
+        <Link
+          to={`/course/${lesson.course._id}/lesson/${lesson._id}/create-quiz`}
+        >
+          <button>Create Quiz</button>
+        </Link>
+      ) : null}
     </div>
   );
 }

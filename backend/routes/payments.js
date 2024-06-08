@@ -11,11 +11,6 @@ router.post("/process", auth, async (req, res) => {
     if (!cart || cart.courses.length === 0) {
       return res.status(400).json({ msg: "Cart is empty" });
     }
-
-    // Simulate payment processing logic here (e.g., calling a payment gateway API)
-    // For now, we'll assume payment is always successful
-
-    // Enroll in all courses in the cart
     const enrollments = cart.courses.map((courseItem) => ({
       course: courseItem.course,
       student: req.user.id,

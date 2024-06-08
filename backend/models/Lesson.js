@@ -10,7 +10,11 @@ const LessonSchema = new mongoose.Schema(
     title: { type: String, required: true },
     description: { type: String, required: true },
     content: { type: String, required: true },
-    quiz: { type: mongoose.Schema.Types.ObjectId, ref: "Quiz" }, // Add this line
+    quiz: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Quiz",
+      unique: true,
+    },
   },
   { timestamps: true },
 );

@@ -26,7 +26,7 @@ router.get("/:courseId", async (req, res) => {
   const { courseId } = req.params;
   try {
     const reviews = await Review.find({ course: courseId }).populate("user", [
-      "name",
+      "-password",
     ]);
     res.json(reviews);
   } catch (err) {

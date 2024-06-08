@@ -1,14 +1,17 @@
 import { Link } from "react-router-dom";
 import CategoryCard from "../../components/CategoryCard/CategoryCard.jsx";
 import FeedBackCard from "../../components/FeedBackCard/FeedBackCard.jsx";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import UserContext from "../../UserContext.jsx";
 import { Helmet } from "react-helmet";
 import axios from "axios";
 import Cookies from "js-cookie";
+import Preloader from "../../components/Preloader/Preloader.jsx";
 
 export default function Home() {
   const { user } = useContext(UserContext);
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -20,14 +23,16 @@ export default function Home() {
             },
           },
         );
-        console.log(response);
+        setCategories(response.data);
       } catch (error) {
         console.error(error);
       }
     };
-    fetchCategories();
+    fetchCategories().finally(() => setLoading(false));
   }, []);
-  return (
+  return loading ? (
+    <Preloader />
+  ) : (
     <>
       <Helmet>
         <title>Home</title>
@@ -90,85 +95,11 @@ export default function Home() {
         <div className={"explore"}>
           <h1>Explore our courses</h1>
           <div className={"course-types"}>
-            <CategoryCard
-              category={{
-                image:
-                  "https://thumbor.forbes.com/thumbor/fit-in/900x510/https://www.forbes.com/advisor/wp-content/uploads/2023/07/computer-coding.jpg",
-                title: "Programming",
-              }}
-            />
-            <CategoryCard
-              category={{
-                image:
-                  "https://www.mtu.edu/cs/what/images/what-is-computer-science-banner1600.jpg",
-                title: "Computer science",
-              }}
-            />
-            <CategoryCard
-              category={{
-                image:
-                  "https://imageio.forbes.com/specials-images/imageserve/5fca87f3ce4ca55e8985a10a/0x0.jpg?format=jpg&height=900&width=1600&fit=bounds",
-                title: "Business",
-              }}
-            />
-            <CategoryCard
-              category={{
-                image:
-                  "https://ecorner.stanford.edu/wp-content/uploads/sites/2/2016/08/eCorner_Arts_Tech5.jpg",
-                title: "Arts",
-              }}
-            />
-            <CategoryCard
-              category={{
-                image:
-                  "https://t3.ftcdn.net/jpg/04/83/90/18/360_F_483901821_46VsNR67uJC3xIKQN4aaxR6GtAZhx9G8.jpg",
-                title: "Math",
-              }}
-            />
-            <CategoryCard
-              category={{
-                image:
-                  "https://kaplan.co.uk/images/default-source/insights-posts/magnifying-glass-data.jpg?sfvrsn=215d7f02_1",
-                title: "Data Analyst",
-              }}
-            />
-            <CategoryCard
-              category={{
-                image:
-                  "https://img.freepik.com/free-photo/texture-treble-clef-dark-background-isolated-generative-ai_169016-29581.jpg",
-                title: "Music",
-              }}
-            />
-            <CategoryCard
-              category={{
-                image:
-                  "https://static.owayo-cdn.com/newhp/img/magazin/sportmotivation-EN/sport-motivation-670.jpg",
-                title: "Sport",
-              }}
-            />
-            <CategoryCard
-              category={{
-                image:
-                  "https://elearningindustry.com/wp-content/uploads/2022/12/shutterstock_2037142181.jpg",
-                title: "Cybersecurity",
-              }}
-            />
-            <CategoryCard
-              category={{
-                image:
-                  "https://uwaterloo.ca/science/sites/default/files/uploads/images/190424-uw-mur-dscf2586_resized.jpg",
-                title: "Science",
-              }}
-            />
-            <CategoryCard
-              category={{
-                image:
-                  "https://www.ft.com/__origami/service/image/v2/images/raw/https%3A%2F%2Fd1e00ek4ebabms.cloudfront.net%2Fproduction%2F6d165ba4-2390-4263-a804-1e2d6a87d034.png?source=next-article&fit=scale-down&quality=highest&width=700&dpr=1",
-                title: "Economics",
-              }}
-            />
+            {categories.map((category) => (
+              <CategoryCard key={category._id} category={category} />
+            ))}
           </div>
-          <Link to={"/courses"}>
+          <Link to={"/courses?search="}>
             <button>Check all courses</button>
           </Link>
         </div>

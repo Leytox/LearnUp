@@ -10,6 +10,18 @@ const QuizSchema = new mongoose.Schema(
     title: { type: String, required: true },
     description: { type: String, required: true },
     questions: [QuestionSchema],
+    course: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Course",
+      required: true,
+      unique: true,
+    },
+    lesson: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Lesson",
+      required: true,
+      unique: true,
+    },
   },
   { timestamps: true },
 );

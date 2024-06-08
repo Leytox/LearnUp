@@ -1,0 +1,13 @@
+.user-card {
+    border: 1px solid #444;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    height: 100px;
+    background-color: #f5f5f5;
+}
+
+.user-card p {
+    margin: 0;
+    padding: 0;
+}

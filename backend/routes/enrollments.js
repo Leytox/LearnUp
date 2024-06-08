@@ -22,7 +22,21 @@ router.post("/", auth, async (req, res) => {
   }
 });
 
-// Get all enrollments for a student
+// Return true if enrolled for a course
+router.get("/enrolled/:course", auth, async (req, res) => {
+  try {
+    const enrollment = await Enrollment.findOne({
+      course: req.params.course,
+      student: req.user.id,
+    });
+    res.json(!!enrollment);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server error");
+  }
+});
+
+// Get all enrolled courses for a student
 router.get("/my-courses", auth, async (req, res) => {
   try {
     const enrollments = await Enrollment.find({

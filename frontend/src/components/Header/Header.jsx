@@ -10,8 +10,10 @@ import {
   faChalkboardUser,
   faHouse,
   faRightFromBracket,
+  faScrewdriverWrench,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
+import { faLeanpub } from "@fortawesome/free-brands-svg-icons";
 
 export default function Header() {
   const { user, setUser } = useContext(UserContext);
@@ -54,31 +56,56 @@ export default function Header() {
               </Link>
             </li>
           )}
-          {!user && (
+          {!user && location !== "/login" && (
             <li>
               <Link to={"/login"}>Log In</Link>
             </li>
           )}
-          {!user && (
+          {!user && location !== "/signup" && (
             <li>
               <Link to={"/signup"} id={"signup-link"}>
                 Join for Free
               </Link>
             </li>
           )}
-          {Cookies.get("role") === "instructor" && (
+          {Cookies.get("role") === "instructor" &&
+            location !== "/dashboard" && (
+              <li>
+                <Link to={"/dashboard"}>
+                  <button
+                    style={{ width: "50px", height: "50px" }}
+                    title={"Go to dashboard"}
+                  >
+                    <FontAwesomeIcon icon={faChalkboardUser} />
+                  </button>
+                </Link>
+              </li>
+            )}
+          {Cookies.get("role") === "admin" && location !== "/admin" && (
             <li>
-              <Link to={"/dashboard"}>
+              <Link to={"/admin"}>
                 <button
                   style={{ width: "50px", height: "50px" }}
-                  title={"Go to dashboard"}
+                  title={"Go to admin panel"}
                 >
-                  <FontAwesomeIcon icon={faChalkboardUser} />
+                  <FontAwesomeIcon icon={faScrewdriverWrench} />
                 </button>
               </Link>
             </li>
           )}
-          {Cookies.get("role") === "student" && (
+          {Cookies.get("role") === "student" && location !== "/my-courses" && (
+            <li>
+              <Link to={"/my-courses"}>
+                <button
+                  style={{ width: "50px", height: "50px" }}
+                  title={"Enrollments"}
+                >
+                  <FontAwesomeIcon icon={faLeanpub} />
+                </button>
+              </Link>
+            </li>
+          )}
+          {Cookies.get("role") === "student" && location !== "/cart" && (
             <li>
               <Link to={"/cart"}>
                 <button
