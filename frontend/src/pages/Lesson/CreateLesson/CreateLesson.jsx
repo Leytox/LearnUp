@@ -1,20 +1,24 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Navigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import "./CreateLesson.css";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import Cookies from "js-cookie";
 import Preloader from "../../../components/Preloader/Preloader.jsx";
+import { Helmet } from "react-helmet";
+import NotFound from "../../NotFound/NotFound.jsx";
 
 export default function CreateLesson() {
   const { courseId } = useParams();
+  const [course, setCourse] = useState(null);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [content, setContent] = useState("");
   const [lessonId, setLessonId] = useState("");
   const [redirect, setRedirect] = useState(false);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCourse = async () => {
@@ -24,15 +28,15 @@ export default function CreateLesson() {
         );
         if (response.data.instructor._id !== Cookies.get("id"))
           setRedirect(true);
+        setCourse(response.data);
       } catch (err) {
         console.error(err);
       }
     };
-    fetchCourse();
-    setLoading(false);
+    fetchCourse().finally(() => setLoading(false));
   }, [courseId]);
 
-  if (redirect) return <Navigate to="/" />;
+  if (redirect) navigate("/");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -60,8 +64,8 @@ export default function CreateLesson() {
     }
   };
 
-  if (redirect)
-    return <Navigate to={`/course/${courseId}/lesson/${lessonId}`} />;
+  if (redirect && lessonId) navigate(`/course/${courseId}/lesson/${lessonId}`);
+  else navigate("/");
 
   const toolbarOptions = [
     ["bold", "italic", "underline", "strike"], // toggled buttons
@@ -84,8 +88,11 @@ export default function CreateLesson() {
 
   return loading ? (
     <Preloader />
-  ) : (
+  ) : course ? (
     <form onSubmit={handleSubmit} className="create-lesson-container">
+      <Helmet>
+        <title>Create Lesson</title>
+      </Helmet>
       <h1 className="create-lesson-title">Create Lesson</h1>
       <div className="lesson-item">
         <label>Title</label>
@@ -120,5 +127,7 @@ export default function CreateLesson() {
         Create Lesson
       </button>
     </form>
+  ) : (
+    <NotFound />
   );
 }

@@ -20,3 +20,16 @@
 .courseCard {
     margin: 10px;
 }
+
+.no-enrollments {
+    color: #777777;
+    font-style: italic;
+    margin-bottom: 20px;
+    margin-top: 300px;
+    text-align: center;
+}
+
+.no-enrollments h2 {
+    font-style: italic;
+    color: #555;
+}

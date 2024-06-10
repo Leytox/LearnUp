@@ -28,7 +28,7 @@ import PassQuiz from "./pages/Quiz/PassQuiz.jsx";
 import EditLesson from "./pages/Lesson/EditLesson/EditLesson.jsx";
 import Enrollments from "./pages/Enrollments/Enrollments.jsx";
 
-function App() {
+export default function App() {
   return (
     <Layout>
       <Routes>
@@ -80,5 +80,3 @@ function App() {
     </Layout>
   );
 }
-
-export default App;

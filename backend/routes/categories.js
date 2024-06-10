@@ -17,6 +17,7 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage: storage });
+
 // Create a category (only admins)
 router.post("/", auth, upload.single("file"), async (req, res) => {
   const { name, role } = req.body;

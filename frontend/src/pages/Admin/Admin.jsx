@@ -9,6 +9,7 @@ import "./Admin.css";
 import UserCard from "../../components/UserCard/UserCard.jsx";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMinus, faPen, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { Helmet } from "react-helmet";
 
 export default function Admin() {
   const [loading, setLoading] = useState(true);
@@ -54,6 +55,9 @@ export default function Admin() {
     <Preloader />
   ) : (
     <div className={"admin-panel"}>
+      <Helmet>
+        <title>Admin</title>
+      </Helmet>
       <div className={"admin-panel-header"}>
         <h1>Admin Dashboard</h1>
       </div>

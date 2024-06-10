@@ -3,20 +3,43 @@ import axios from "axios";
 import "../CreateEditQuiz.css";
 import Cookies from "js-cookie";
 import { useNavigate, useParams } from "react-router-dom";
+import { Helmet } from "react-helmet";
+import Preloader from "../../../components/Preloader/Preloader.jsx";
 
 export default function CreateQuiz() {
   const { courseId, lessonId } = useParams();
   const navigate = useNavigate();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [redirect, setRedirect] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [questions, setQuestions] = useState([
     { questionText: "", options: [{ text: "", isCorrect: false }] },
   ]);
+  const userId = Cookies.get("id");
 
   useEffect(() => {
-    if (!Cookies.get("token") || Cookies.get("role") !== "instructor")
-      navigate("/login");
-  }, []);
+    if (!userId) {
+      setRedirect(true);
+      return;
+    }
+    const fetchData = async () => {
+      try {
+        const courseResponse = await axios.get(
+          `http://localhost:5000/api/courses/${courseId}`,
+          {
+            headers: {
+              "x-auth-token": Cookies.get("token"),
+            },
+          },
+        );
+        if (courseResponse.data.instructor._id !== userId) setRedirect(true);
+      } catch (error) {
+        console.error("Error fetching course:", error);
+      }
+    };
+    fetchData().finally(() => setLoading(false));
+  }, [courseId, userId]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -78,8 +101,15 @@ export default function CreateQuiz() {
     setQuestions(updatedQuestions);
   };
 
-  return (
+  if (redirect) navigate("/");
+
+  return loading ? (
+    <Preloader />
+  ) : (
     <form onSubmit={handleSubmit} className="create-quizz-container">
+      <Helmet>
+        <title>Create Quiz</title>
+      </Helmet>
       <h1 className="create-quizz-title">Create Quiz</h1>
       <div className={"question-item"}>
         <label>Title</label>

@@ -4,6 +4,10 @@ import Cookies from "js-cookie";
 import CourseCard from "../../components/CourseCard/CourseCard.jsx";
 import Preloader from "../../components/Preloader/Preloader.jsx";
 import "./Enrollments.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCartShopping, faStamp } from "@fortawesome/free-solid-svg-icons";
+import { Helmet } from "react-helmet";
+import { Link } from "react-router-dom";
 
 export default function Enrollments() {
   const [enrolledCourses, setEnrolledCourses] = useState([]);
@@ -28,11 +32,48 @@ export default function Enrollments() {
     fetchEnrolledCourses().finally(() => setLoading(false));
   }, []);
 
+  async function generateCertificate(courseId) {
+    try {
+      const response = await axios.get(
+        `http://localhost:5000/api/enrollments/progress/certificate/${Cookies.get("id")}/${courseId}`,
+        {
+          headers: {
+            "x-auth-token": Cookies.get("token"),
+          },
+        },
+      );
+      window.open(
+        `http://localhost:5000/uploads/users_certificates/${response.data}`,
+        "_blank",
+      );
+      console.log(response.data);
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  async function handleGenerateCertificate(courseId) {
+    await generateCertificate(courseId);
+  }
+
   return loading ? (
     <Preloader />
   ) : (
     <div className={"enrollmentsContainer"}>
+      <Helmet>
+        <title>Enrollments</title>
+      </Helmet>
       <h1>Enrollments</h1>
+      {enrolledCourses.length === 0 && (
+        <div className={"no-enrollments"}>
+          <h2>No courses enrolled yet...</h2>
+          <Link to={"/courses?search="}>
+            <button>
+              Buy courses <FontAwesomeIcon icon={faCartShopping} />
+            </button>
+          </Link>
+        </div>
+      )}
       <div className={"enrolled-courses-container"}>
         {enrolledCourses.map((enrolled) => (
           <CourseCard
@@ -40,7 +81,15 @@ export default function Enrollments() {
             course={enrolled.course}
             className={"courseCard"}
           >
-            <p>Progress: {enrolled.progress}%</p>
+            {enrolled.progress === 100 ? (
+              <button
+                onClick={() => handleGenerateCertificate(enrolled.course._id)}
+              >
+                Get Certificate <FontAwesomeIcon icon={faStamp} />
+              </button>
+            ) : (
+              <p> Progress: {enrolled.progress}%</p>
+            )}
           </CourseCard>
         ))}
       </div>

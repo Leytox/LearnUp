@@ -4,21 +4,34 @@ import "../CreateEditQuiz.css";
 import Cookies from "js-cookie";
 import { useNavigate, useParams } from "react-router-dom";
 import Preloader from "../../../components/Preloader/Preloader.jsx";
+import { Helmet } from "react-helmet";
+import NotFound from "../../NotFound/NotFound.jsx";
 
 export default function EditQuiz() {
   const { courseId, lessonId, quizId } = useParams();
   const navigate = useNavigate();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [quiz, setQuiz] = useState(null);
+  const [lesson, setLesson] = useState(null);
+  const [course, setCourse] = useState(null);
+  const [redirect, setRedirect] = useState(false);
   const [questions, setQuestions] = useState([
     { questionText: "", options: [{ text: "", isCorrect: false }] },
   ]);
   const [loading, setLoading] = useState(true);
+
   useEffect(() => {
-    if (!Cookies.get("token") && Cookies.get("role") !== "instructor")
-      navigate("/login");
-    const fetchQuiz = async () => {
-      const response = await axios.get(
+    if (
+      !Cookies.get("token") &&
+      !Cookies.get("id") &&
+      Cookies.get("role") !== "instructor"
+    ) {
+      setRedirect(true);
+      return;
+    }
+    const fetchData = async () => {
+      const quizResponse = await axios.get(
         `http://localhost:5000/api/quizzes/course/${courseId}/quizz/${quizId}`,
         {
           headers: {
@@ -26,12 +39,28 @@ export default function EditQuiz() {
           },
         },
       );
-      setTitle(response.data.title);
-      setDescription(response.data.description);
-      setQuestions(response.data.questions);
+      setQuiz(quizResponse.data);
+      setTitle(quizResponse.data.title);
+      setDescription(quizResponse.data.description);
+      setQuestions(quizResponse.data.questions);
+      const lessonResponse = await axios.get(
+        `http://localhost:5000/api/lessons/${lessonId}`,
+        {
+          headers: {
+            "x-auth-token": Cookies.get("token"),
+          },
+        },
+      );
+      setLesson(lessonResponse.data);
+      const courseResponse = await axios.get(
+        `http://localhost:5000/api/courses/${courseId}`,
+      );
+      setCourse(courseResponse);
+      if (courseResponse.data.instructor._id !== Cookies.get("id"))
+        setRedirect(true);
     };
-    fetchQuiz().finally(() => setLoading(false));
-  }, []);
+    fetchData().finally(() => setLoading(false));
+  }, [courseId, lessonId, navigate, quizId]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -93,10 +122,15 @@ export default function EditQuiz() {
     setQuestions(updatedQuestions);
   };
 
+  if (redirect) navigate("/login");
+
   return loading ? (
     <Preloader />
-  ) : (
+  ) : quiz && lesson && course ? (
     <form onSubmit={handleSubmit} className="create-quizz-container">
+      <Helmet>
+        <title>Edit Quiz</title>
+      </Helmet>
       <h1 className="create-quizz-title">Edit Quiz</h1>
       <div className={"question-item"}>
         <label>Title</label>
@@ -180,5 +214,7 @@ export default function EditQuiz() {
         Edit Quiz
       </button>
     </form>
+  ) : (
+    <NotFound />
   );
 }

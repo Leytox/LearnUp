@@ -4,7 +4,9 @@ import "./CreateCourse.css";
 import Cookies from "js-cookie";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import Preloader from "../../../components/Preloader/Preloader.jsx";
+import { Helmet } from "react-helmet";
 
 export default function CreateCourse() {
   const [availableCategories, setAvailableCategories] = useState([]);
@@ -15,7 +17,8 @@ export default function CreateCourse() {
   const [difficulty, setDifficulty] = useState("");
   const [file, setFile] = useState(null);
   const [redirect, setRedirect] = useState(false);
-
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -27,7 +30,7 @@ export default function CreateCourse() {
         console.error(err);
       }
     };
-    fetchCategories();
+    fetchCategories().finally(() => setLoading(false));
   }, []);
 
   const handleSubmit = async (e) => {
@@ -56,10 +59,15 @@ export default function CreateCourse() {
     }
   };
 
-  if (redirect) return <Navigate to={"/dashboard"} />;
+  if (redirect) navigate("/dashboard");
 
-  return (
+  return loading ? (
+    <Preloader />
+  ) : (
     <form onSubmit={handleSubmit} className="create-course-container">
+      <Helmet>
+        <title>Create Course</title>
+      </Helmet>
       <h1 className="create-course-title">Create Course</h1>
       <div className="course-item">
         <label>Title</label>

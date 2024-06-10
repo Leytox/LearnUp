@@ -1,14 +1,8 @@
 import { useEffect, useState } from "react";
-import { Link, Navigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { Helmet } from "react-helmet";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faFacebook,
-  faGoogle,
-  faTwitter,
-} from "@fortawesome/free-brands-svg-icons";
 
 export default function Register() {
   const [name, setName] = useState("");
@@ -18,7 +12,7 @@ export default function Register() {
   const [bio, setBio] = useState("");
   const [redirect, setRedirect] = useState(false);
   const [error, setError] = useState(false);
-
+  const navigate = useNavigate();
   useEffect(() => {
     if (Cookies.get("token")) setRedirect(true);
   }, []);
@@ -42,7 +36,7 @@ export default function Register() {
     }
   }
 
-  if (redirect) return <Navigate to={"/login"} />;
+  if (redirect) navigate("/login");
 
   return (
     <form onSubmit={Register}>
@@ -101,46 +95,6 @@ export default function Register() {
         </Link>
       </p>
       {error && <p style={{ color: "red" }}>User already exists</p>}
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "center",
-          alignItems: "center",
-          gap: "10px",
-        }}
-      >
-        <hr></hr>
-        <h3>OR</h3>
-        <hr></hr>
-      </div>
-      <div
-        style={{
-          display: "flex",
-          gap: "25px",
-          justifyContent: "center",
-          flexDirection: "column",
-        }}
-      >
-        <button>
-          <a
-            href="http://localhost:5000/api/auth/google"
-            className={"oauth-button"}
-          >
-            <FontAwesomeIcon icon={faGoogle} /> Continue with Google
-          </a>
-        </button>
-        <button>
-          <a href="http://localhost:5000/api/auth/facebook">
-            <FontAwesomeIcon icon={faFacebook} /> Continue with Facebook
-          </a>
-        </button>
-        <button>
-          <a href="http://localhost:5000/api/auth/twitter">
-            <FontAwesomeIcon icon={faTwitter} /> Continue with Twitter
-          </a>
-        </button>
-      </div>
     </form>
   );
 }

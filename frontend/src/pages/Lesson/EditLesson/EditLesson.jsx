@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
-import { Navigate, useParams } from "react-router-dom";
-import "./EditLesson.css";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
 import Cookies from "js-cookie";
+import { Helmet } from "react-helmet";
+import "./EditLesson.css";
+import "react-quill/dist/quill.snow.css";
 import Preloader from "../../../components/Preloader/Preloader.jsx";
+import NotFound from "../../NotFound/NotFound.jsx";
+import ReactQuill from "react-quill";
 
 export default function EditLesson() {
   const { courseId, lessonId } = useParams();
@@ -14,23 +16,17 @@ export default function EditLesson() {
   const [content, setContent] = useState("");
   const [redirect, setRedirect] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [instructorId, setInstructorId] = useState("");
+  const [lesson, setLesson] = useState(null);
+  const [course, setCourse] = useState(null);
+  const navigate = useNavigate();
+  const userId = Cookies.get("id");
 
   useEffect(() => {
-    const fetchCourse = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:5000/api/courses/${courseId}`,
-        );
-        if (response.data.instructor._id !== Cookies.get("id"))
-          setRedirect(true);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-    fetchCourse().then(() => setLoading(false));
-  }, [courseId]);
-
-  useEffect(() => {
+    if (!userId) {
+      setRedirect(true);
+      return;
+    }
     const fetchLesson = async () => {
       try {
         const response = await axios.get(
@@ -41,23 +37,28 @@ export default function EditLesson() {
             },
           },
         );
+        setLesson(response.data);
         setTitle(response.data.title);
         setDescription(response.data.description);
         setContent(response.data.content);
+        const courseResponse = await axios.get(
+          `http://localhost:5000/api/courses/${courseId}`,
+        );
+        if (courseResponse.data.instructor._id !== Cookies.get("id"))
+          setRedirect(true);
+        setInstructorId(courseResponse.data.instructor);
+        setCourse(courseResponse.data);
       } catch (err) {
         console.error(err);
       }
     };
     fetchLesson().finally(() => setLoading(false));
-  }, [lessonId]);
-
-  if (redirect) return <Navigate to="/" />;
+  }, [courseId, lessonId, userId]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
-      const response = await axios.put(
+      await axios.put(
         `http://localhost:5000/api/lessons/${lessonId}`,
         {
           course: courseId,
@@ -74,13 +75,8 @@ export default function EditLesson() {
       setRedirect(true);
     } catch (err) {
       console.error(err);
-      alert("Error creating lesson");
     }
   };
-
-  if (redirect)
-    return <Navigate to={`/course/${courseId}/lesson/${lessonId}`} />;
-
   const toolbarOptions = [
     ["bold", "italic", "underline", "strike"], // toggled buttons
     ["blockquote", "code-block", "image", "link", "video"],
@@ -100,10 +96,16 @@ export default function EditLesson() {
     ["clean"], // remove formatting button
   ];
 
+  if (redirect && instructorId === Cookies.get("id"))
+    navigate(`/course/${courseId}/lesson/${lessonId}`);
+  else if (redirect && instructorId !== Cookies.get("id")) navigate("/");
   return loading ? (
     <Preloader />
-  ) : (
+  ) : course && lesson ? (
     <form onSubmit={handleSubmit} className="create-lesson-container">
+      <Helmet>
+        <title>Edit Lesson</title>
+      </Helmet>
       <h1 className="create-lesson-title">Edit Lesson</h1>
       <div className="lesson-item">
         <label>Title</label>
@@ -138,5 +140,7 @@ export default function EditLesson() {
         Edit Lesson
       </button>
     </form>
+  ) : (
+    <NotFound />
   );
 }

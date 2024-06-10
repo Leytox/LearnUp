@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, Navigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./Cart.css";
 import Cookies from "js-cookie";
 import axios from "axios";
@@ -18,6 +18,7 @@ export default function Cart() {
   const [total, setTotal] = useState(0);
   const [redirect, setRedirect] = useState(false);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -89,7 +90,7 @@ export default function Cart() {
     }
   };
 
-  if (redirect) return <Navigate to={"/login"} />;
+  if (redirect) navigate("/login");
 
   return loading ? (
     <Preloader />

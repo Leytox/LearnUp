@@ -3,11 +3,14 @@ import Cookies from "js-cookie";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import Preloader from "../../../components/Preloader/Preloader.jsx";
+import { Helmet } from "react-helmet";
+import NotFound from "../../NotFound/NotFound.jsx";
 
 export default function EditCategory() {
   const [loading, setLoading] = useState(true);
   const [name, setName] = useState("");
   const [file, setFile] = useState(null);
+  const [category, setCategory] = useState(null);
   const { id } = useParams();
   const [redirect, setRedirect] = useState(false);
   const navigate = useNavigate();
@@ -22,8 +25,8 @@ export default function EditCategory() {
             `http://localhost:5000/api/categories/${id}`,
             { headers: { "x-auth-token": Cookies.get("token") } },
           );
-          console.log(response.data);
           setName(response.data.name);
+          setCategory(response.data);
         } catch (error) {
           console.error(error);
         }
@@ -53,8 +56,11 @@ export default function EditCategory() {
 
   return loading ? (
     <Preloader />
-  ) : (
+  ) : category ? (
     <div>
+      <Helmet>
+        <title>Edit Category</title>
+      </Helmet>
       <h1 style={{ textAlign: "center" }}>Edit Category</h1>
       <form onSubmit={handleSubmit}>
         <label htmlFor={"name"}>Name</label>
@@ -74,5 +80,7 @@ export default function EditCategory() {
         <button type={"submit"}>Edit</button>
       </form>
     </div>
+  ) : (
+    <NotFound />
   );
 }

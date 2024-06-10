@@ -16,12 +16,10 @@ const certificatesDir = path.join(
   "users_certificates",
 );
 
-if (!fs.existsSync(certificatesDir)) {
+if (!fs.existsSync(certificatesDir))
   fs.mkdirSync(certificatesDir, { recursive: true });
-}
 
-// Function to generate PDF certificate
-async function generateCertificate(userName, courseTitle) {
+async function generateCertificate(userName, courseTitle, courseId) {
   const pdfDoc = await PDFDocument.create();
   const page = pdfDoc.addPage();
   const fontSize = 30;
@@ -70,11 +68,8 @@ async function generateCertificate(userName, courseTitle) {
   });
 
   const pdfBytes = await pdfDoc.save();
-  const filePath = path.join(
-    certificatesDir,
-    `${userName}_${courseTitle}.pdf`.trim(),
-  );
-  fs.writeFileSync(filePath, pdfBytes);
+  const filePath = path.join(`${userName}_${courseId}.pdf`.trim());
+  fs.writeFileSync(certificatesDir + "/" + filePath, pdfBytes);
 
   return filePath;
 }
@@ -120,7 +115,9 @@ router.get("/certificate/:userId/:courseId", auth, async (req, res) => {
     const enrollment = await Enrollment.findOne({
       student: userId,
       course: courseId,
-    });
+    })
+      .populate("student", "name")
+      .populate("course", "title");
     if (!enrollment)
       return res.status(404).json({ error: "Enrollment not found" });
     if (enrollment.certificate) {
@@ -130,6 +127,7 @@ router.get("/certificate/:userId/:courseId", auth, async (req, res) => {
         enrollment.certificate = await generateCertificate(
           enrollment.student.name,
           enrollment.course.title,
+          enrollment.course._id,
         );
         await enrollment.save();
         res.status(200).send(enrollment.certificate);

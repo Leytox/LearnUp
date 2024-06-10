@@ -4,10 +4,13 @@ import "./EditCourse.css";
 import Cookies from "js-cookie";
 import { faBan, faFloppyDisk } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Link, Navigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import Preloader from "../../../components/Preloader/Preloader.jsx";
+import { Helmet } from "react-helmet";
+import NotFound from "../../NotFound/NotFound.jsx";
 
 export default function CreateCourse() {
+  const [course, setCourse] = useState(null);
   const [availableCategories, setAvailableCategories] = useState([]);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -18,6 +21,7 @@ export default function CreateCourse() {
   const [redirect, setRedirect] = useState(false);
   const [difficulty, setDifficulty] = useState("");
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
   const { courseId } = useParams();
   const userId = Cookies.get("id");
 
@@ -30,6 +34,7 @@ export default function CreateCourse() {
         const categoriesResponse = await axios.get(
           "http://localhost:5000/api/categories",
         );
+        setCourse(response.data);
         setAvailableCategories(categoriesResponse.data);
         setTitle(response.data.title);
         setDescription(response.data.description);
@@ -75,12 +80,16 @@ export default function CreateCourse() {
     }
   };
 
-  if (redirect) return <Navigate to="/dashboard" />;
+  if (redirect && Cookies.get("role") === "instructor") navigate("/dashboard");
+  else if (redirect) navigate("/courses?search=");
 
   return loading ? (
     <Preloader />
-  ) : (
+  ) : course ? (
     <form onSubmit={handleSubmit} className="edit-course-container">
+      <Helmet>
+        <title>Edit Course</title>
+      </Helmet>
       <h1 className="edit-course-title">Edit Course Info</h1>
       <div className="course-item">
         <label>Title</label>
@@ -166,5 +175,7 @@ export default function CreateCourse() {
         </Link>
       </div>
     </form>
+  ) : (
+    <NotFound />
   );
 }

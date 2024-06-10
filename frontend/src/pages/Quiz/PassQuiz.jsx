@@ -1,20 +1,31 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Preloader from "../../components/Preloader/Preloader.jsx";
 import Cookies from "js-cookie";
+import "./PassQuiz.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
+import { Helmet } from "react-helmet";
+import NotFound from "../NotFound/NotFound.jsx";
 
 export default function PassQuiz() {
   const { courseId, quizId } = useParams();
   const [quiz, setQuiz] = useState([]);
   const [answers, setAnswers] = useState({});
   const [loading, setLoading] = useState(true);
+  const [redirect, setRedirect] = useState(false);
+  const navigate = useNavigate();
   const userId = Cookies.get("id");
 
   useEffect(() => {
-    const fetchQuiz = async () => {
+    if (!userId) {
+      setRedirect(true);
+      return;
+    }
+    const fetchData = async () => {
       try {
-        const response = await axios.get(
+        const quizResponse = await axios.get(
           `http://localhost:5000/api/quizzes/course/${courseId}/quizz/${quizId}`,
           {
             headers: {
@@ -22,16 +33,13 @@ export default function PassQuiz() {
             },
           },
         );
-        setQuiz(response.data);
-        setLoading(false);
+        setQuiz(quizResponse.data);
       } catch (error) {
         console.error("Error fetching quiz:", error);
-        setLoading(false);
       }
     };
-
-    fetchQuiz().then(() => setLoading(false));
-  }, [courseId, quizId]);
+    fetchData().then(() => setLoading(false));
+  }, [courseId, quizId, userId]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -60,6 +68,7 @@ export default function PassQuiz() {
           },
         );
         alert("Quiz completed successfully!");
+        navigate(`/courses/${courseId}`);
       } catch (error) {
         console.error("Error updating progress:", error);
       }
@@ -87,20 +96,25 @@ export default function PassQuiz() {
     }
   };
 
-  if (!quiz) return <div>Quiz not found</div>;
-
+  if (redirect) navigate("/");
+  if (quiz && quiz.length === 0) navigate("/");
   return loading ? (
     <Preloader />
-  ) : (
-    <div>
+  ) : quiz ? (
+    <div className={"quizContainer"}>
+      <Helmet>
+        <title>Quiz</title>
+      </Helmet>
       <h2>{quiz.title}</h2>
       <form onSubmit={handleSubmit}>
         {quiz.questions.map((question, index) => {
           const hasMultipleCorrectAnswers =
             question.options.filter((option) => option.isCorrect).length > 1;
           return (
-            <div key={index}>
-              <h3>{question.questionText}</h3>
+            <div key={index} className={"questionCard"}>
+              <h3>
+                Question {index + 1}: {question.questionText}
+              </h3>
               {question.options.map((option) => (
                 <div key={option.text}>
                   <label>
@@ -128,8 +142,12 @@ export default function PassQuiz() {
             </div>
           );
         })}
-        <button type="submit">Submit Quiz</button>
+        <button className={"quiz-submit-button"} type="submit">
+          Submit <FontAwesomeIcon icon={faPaperPlane} />
+        </button>
       </form>
     </div>
+  ) : (
+    <NotFound />
   );
 }

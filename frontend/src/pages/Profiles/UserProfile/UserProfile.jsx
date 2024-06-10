@@ -5,6 +5,7 @@ import Preloader from "../../../components/Preloader/Preloader.jsx";
 import "./UserProfile.css";
 import CourseCard from "../../../components/CourseCard/CourseCard.jsx";
 import NotFound from "../../NotFound/NotFound.jsx";
+import { Helmet } from "react-helmet";
 
 export default function UserProfile() {
   const [user, setUser] = useState(null);
@@ -23,8 +24,8 @@ export default function UserProfile() {
         );
         setUser(userResponse.data);
         setCourses(coursesResponse.data);
-      } catch (err) {
-        console.error(err);
+      } catch (error) {
+        console.error(error);
       }
     };
     fetchUserAndCourses().finally(() => setLoading(false));
@@ -34,6 +35,9 @@ export default function UserProfile() {
     <Preloader />
   ) : user ? (
     <div>
+      <Helmet>
+        <title>{user.name}&amp;s Profile</title>
+      </Helmet>
       <div className="user-profile">
         <img
           className={"profile-picture"}

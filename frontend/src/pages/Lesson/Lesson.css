@@ -18,3 +18,11 @@
     font-size: 16px;
     color: #444;
 }
+
+.lesson-buttons {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-direction: row;
+}

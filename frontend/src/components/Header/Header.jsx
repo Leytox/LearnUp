@@ -1,6 +1,5 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Search from "../Search/Search.jsx";
-import LanguageSelector from "../LanguageSelector/LanguageSelector.jsx";
 import Cookies from "js-cookie";
 import { useContext, useEffect } from "react";
 import UserContext from "../../UserContext.jsx";
@@ -140,9 +139,6 @@ export default function Header() {
               </button>
             </li>
           )}
-          <li>
-            <LanguageSelector />
-          </li>
         </ul>
       </nav>
     </header>

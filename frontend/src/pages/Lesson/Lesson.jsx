@@ -1,17 +1,32 @@
 import "./Lesson.css";
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import Cookies from "js-cookie";
 import Preloader from "../../components/Preloader/Preloader.jsx";
+import { Helmet } from "react-helmet";
+import NotFound from "../NotFound/NotFound.jsx";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faFlaskVial,
+  faPen,
+  faPlus,
+  faVial,
+} from "@fortawesome/free-solid-svg-icons";
 
 export default function Lesson() {
   const [lesson, setLesson] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [redirect, setRedirect] = useState(false);
+  const navigate = useNavigate();
   const userId = Cookies.get("id");
-  const { lessonId } = useParams();
+  const { courseId, lessonId } = useParams();
 
   useEffect(() => {
+    if (!userId) {
+      setRedirect(true);
+      return;
+    }
     const fetchLesson = async () => {
       try {
         const lessonResponse = await axios.get(
@@ -23,50 +38,66 @@ export default function Lesson() {
           },
         );
         setLesson(lessonResponse.data);
-        console.log(lessonResponse.data);
       } catch (error) {
         console.error(error);
       }
     };
     fetchLesson().finally(() => setLoading(false));
-  }, [lessonId]);
+  }, [lessonId, userId]);
+
+  if (redirect) navigate(`/courses/${courseId}`);
 
   return loading ? (
     <Preloader />
-  ) : (
+  ) : lesson ? (
     <div className="lesson-container">
+      <Helmet>
+        <title>Lesson</title>
+      </Helmet>
       <h1 className="lesson-title">{lesson.title}</h1>
       <p className="lesson-description">{lesson.description}</p>
       <div
         className="lesson-content"
         dangerouslySetInnerHTML={{ __html: lesson.content }}
       />
-      {userId === lesson.course.instructor ? (
-        <Link to={`/course/${lesson.course._id}/lesson/${lesson._id}/edit`}>
-          <button>Edit Lesson</button>
-        </Link>
-      ) : null}
-      {lesson.quiz ? (
-        userId === lesson.course.instructor ? (
-          <Link
-            to={`/course/${lesson.course._id}/lesson/${lesson._id}/quiz/${lesson.quiz}/edit`}
-          >
-            <button>Edit Quiz</button>
+      <div className={"lesson-buttons"}>
+        {userId === lesson.course.instructor ? (
+          <Link to={`/course/${lesson.course._id}/lesson/${lesson._id}/edit`}>
+            <button>
+              Edit Lesson <FontAwesomeIcon icon={faPen} />
+            </button>
           </Link>
-        ) : (
+        ) : null}
+        {lesson.quiz ? (
+          userId === lesson.course.instructor ? (
+            <Link
+              to={`/course/${lesson.course._id}/lesson/${lesson._id}/quiz/${lesson.quiz}/edit`}
+            >
+              <button>
+                Edit Quiz <FontAwesomeIcon icon={faFlaskVial} />
+              </button>
+            </Link>
+          ) : (
+            <Link
+              to={`/course/${lesson.course._id}/lesson/${lesson._id}/quiz/${lesson.quiz}`}
+            >
+              <button>
+                Quiz <FontAwesomeIcon icon={faVial} />
+              </button>
+            </Link>
+          )
+        ) : userId === lesson.course.instructor ? (
           <Link
-            to={`/course/${lesson.course._id}/lesson/${lesson._id}/quiz/${lesson.quiz}`}
+            to={`/course/${lesson.course._id}/lesson/${lesson._id}/create-quiz`}
           >
-            <button>Quiz</button>
+            <button>
+              Create Quiz <FontAwesomeIcon icon={faPlus} />
+            </button>
           </Link>
-        )
-      ) : userId === lesson.course.instructor ? (
-        <Link
-          to={`/course/${lesson.course._id}/lesson/${lesson._id}/create-quiz`}
-        >
-          <button>Create Quiz</button>
-        </Link>
-      ) : null}
+        ) : null}
+      </div>
     </div>
+  ) : (
+    <NotFound />
   );
 }

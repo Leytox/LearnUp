@@ -16,6 +16,8 @@ import Cookies from "js-cookie";
 import ReactStars from "react-rating-stars-component/dist/react-stars.js";
 import TimeAgo from "javascript-time-ago";
 import en from "javascript-time-ago/locale/en";
+import { Helmet } from "react-helmet";
+import NotFound from "../../NotFound/NotFound.jsx";
 
 TimeAgo.addDefaultLocale(en);
 
@@ -37,10 +39,12 @@ export default function CourseDetail() {
   useEffect(() => {
     const fetchCourse = async () => {
       try {
-        const userResponse = await axios.get(
-          `http://localhost:5000/api/users/${Cookies.get("id")}`,
-        );
-        setUser(userResponse.data);
+        if (Cookies.get("id")) {
+          const userResponse = await axios.get(
+            `http://localhost:5000/api/users/${Cookies.get("id")}`,
+          );
+          setUser(userResponse.data);
+        }
         const courseResponse = await axios.get(
           `http://localhost:5000/api/courses/${courseId}`,
         );
@@ -71,16 +75,16 @@ export default function CourseDetail() {
             },
           );
           setIsEnrolled(!!enrolledResponse.data);
-        }
-        const progressResponse = await axios.get(
-          `http://localhost:5000/api/enrollments/progress/user/${Cookies.get("id")}/course/${courseId}`,
-          {
-            headers: {
-              "x-auth-token": Cookies.get("token"),
+          const progressResponse = await axios.get(
+            `http://localhost:5000/api/enrollments/progress/user/${Cookies.get("id")}/course/${courseId}`,
+            {
+              headers: {
+                "x-auth-token": Cookies.get("token"),
+              },
             },
-          },
-        );
-        if (progressResponse.data) setProgress(progressResponse.data);
+          );
+          if (progressResponse.data) setProgress(progressResponse.data);
+        }
       } catch (error) {
         console.error(error);
       }
@@ -158,8 +162,11 @@ export default function CourseDetail() {
 
   return loading ? (
     <Preloader />
-  ) : (
+  ) : course ? (
     <div className="course-container">
+      <Helmet>
+        <title>Course Details</title>
+      </Helmet>
       <div className={"course-details"}>
         <h1 className="course-title">{course.title}</h1>
         {isEnrolled && <p>Your Progress: {progress}%</p>}
@@ -174,7 +181,7 @@ export default function CourseDetail() {
             {lessons.map((lesson, index) => (
               <Accordion key={index} title={lesson.title}>
                 <p>{lesson.description}</p>
-                {user._id === course.instructor._id && (
+                {(user?._id === course.instructor._id || isEnrolled) && (
                   <Link to={`/course/${course._id}/lesson/${lesson._id}`}>
                     <button>Show Lesson</button>
                   </Link>
@@ -240,6 +247,7 @@ export default function CourseDetail() {
             />
             <textarea
               rows={1}
+              required={true}
               placeholder={"Leave a comment..."}
               className={"review-textarea"}
               value={reviewText}
@@ -306,5 +314,7 @@ export default function CourseDetail() {
         <p className="course-instructor-bio">{instructor.bio}</p>
       </div>
     </div>
+  ) : (
+    <NotFound />
   );
 }

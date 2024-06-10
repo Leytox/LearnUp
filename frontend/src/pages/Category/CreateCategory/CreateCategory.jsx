@@ -3,6 +3,7 @@ import Cookies from "js-cookie";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Preloader from "../../../components/Preloader/Preloader.jsx";
+import { Helmet } from "react-helmet";
 
 export default function CreateCategory() {
   const [loading, setLoading] = useState(true);
@@ -40,6 +41,9 @@ export default function CreateCategory() {
     <Preloader />
   ) : (
     <div>
+      <Helmet>
+        <title>Create Category</title>
+      </Helmet>
       <h1 style={{ textAlign: "center" }}>Create Category</h1>
       <form onSubmit={handleSubmit}>
         <label htmlFor={"name"}>Name</label>
