@@ -1,14 +1,13 @@
-import React from "react";
 import { Helmet } from "react-helmet";
 import "./About.css";
 
 export default function About() {
   return (
-    <div className="about-container">
+    <div className="about-container main-wrapper">
       <Helmet>
         <title>About</title>
       </Helmet>
-      <h1>About Us</h1>
+      <h2>About Us</h2>
       <p>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod
         ultrices massa, et venenatis ipsum ultrices at. Vivamus suscipit

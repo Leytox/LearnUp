@@ -4,7 +4,7 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: #eaeaea;
+    background-color: var(--bg-color);
     padding: 50px;
     text-align: start;
     z-index: 1000;
@@ -28,14 +28,35 @@
     z-index: 999;
 }
 
++
 #about {
-    background: none;
     border: 1px solid #333333;
-    color: #333333;
+    color: var(--bg-secondary-color);
 }
 
 #about:hover {
     cursor: help;
     background: #000000;
     color: #fff;
+}
+
+@media (max-width: 768px) {
+    .cookie-consent {
+        width: 90%;
+        padding: 20px;
+    }
+
+    .cookie-consent h2 {
+        font-size: 20px;
+    }
+
+    .cookie-consent p {
+        font-size: 16px;
+    }
+
+    .cookie-consent button {
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+    }
 }

@@ -1,0 +1,24 @@
+.help-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 50px;
+    gap: 20px;
+}
+
+.accordions-container {
+    width: 600px;
+    display: flex;
+    flex-direction: column;
+}
+
+@media screen and (max-width: 768px) {
+    .help-container {
+        margin-top: 20px;
+    }
+
+    .accordions-container {
+        width: 90%;
+    }
+}

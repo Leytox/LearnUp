@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import "./EditCourse.css";
 import Cookies from "js-cookie";
 import { faBan, faFloppyDisk } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import Preloader from "../../../components/Preloader/Preloader.jsx";
+import Preloader from "../../components/Preloader/Preloader.jsx";
 import { Helmet } from "react-helmet";
-import NotFound from "../../NotFound/NotFound.jsx";
+import "./CreateEditCourse.css";
+import NotFound from "../NotFound/NotFound.jsx";
 
 export default function CreateCourse() {
   const [course, setCourse] = useState(null);
@@ -20,6 +20,7 @@ export default function CreateCourse() {
   const [image, setImage] = useState(null);
   const [redirect, setRedirect] = useState(false);
   const [difficulty, setDifficulty] = useState("");
+  const [availability, setAvailability] = useState("false");
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const { courseId } = useParams();
@@ -29,10 +30,10 @@ export default function CreateCourse() {
     const fetchCourse = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5000/api/courses/${courseId}`,
+          `${import.meta.env.VITE_BACKEND_URI}/api/courses/${courseId}`,
         );
         const categoriesResponse = await axios.get(
-          "http://localhost:5000/api/categories",
+          `${import.meta.env.VITE_BACKEND_URI}/api/categories`,
         );
         setCourse(response.data);
         setAvailableCategories(categoriesResponse.data);
@@ -42,6 +43,7 @@ export default function CreateCourse() {
         setPrice(response.data.price);
         setImage(response.data.picture);
         setDifficulty(response.data.difficulty);
+        setAvailability(response.data.available.toString());
         if (
           response.data.instructor._id !== userId &&
           Cookies.get("role") !== "admin"
@@ -63,9 +65,10 @@ export default function CreateCourse() {
       formData.append("category", category);
       formData.append("price", price);
       formData.append("difficulty", difficulty);
+      formData.append("available", availability);
       if (file) formData.append("file", file[0]);
       const response = await axios.put(
-        `http://localhost:5000/api/courses/${courseId}`,
+        `${import.meta.env.VITE_BACKEND_URI}/api/courses/${courseId}`,
         formData,
         {
           headers: {
@@ -76,7 +79,8 @@ export default function CreateCourse() {
       if (response.status === 200) setRedirect(true);
     } catch (err) {
       console.error(err);
-      alert("Error editing course");
+      if (err.response.status === 400) alert(err.response.data.msg);
+      else alert("Error editing course");
     }
   };
 
@@ -86,11 +90,14 @@ export default function CreateCourse() {
   return loading ? (
     <Preloader />
   ) : course ? (
-    <form onSubmit={handleSubmit} className="edit-course-container">
+    <form
+      onSubmit={handleSubmit}
+      className="create-course-container main-wrapper"
+    >
       <Helmet>
         <title>Edit Course</title>
       </Helmet>
-      <h1 className="edit-course-title">Edit Course Info</h1>
+      <h1 className="create-course-title">Edit Course</h1>
       <div className="course-item">
         <label>Title</label>
         <input
@@ -117,6 +124,17 @@ export default function CreateCourse() {
           required={true}
           min={1}
         />
+      </div>
+      <div className="course-item">
+        <label>Availability</label>
+        <select
+          value={availability}
+          onChange={(e) => setAvailability(e.target.value)}
+          required={true}
+        >
+          <option value={"true"}>Shown</option>
+          <option value={"false"}>Hidden</option>
+        </select>
       </div>
       <div className="course-item">
         <label>Category</label>
@@ -152,7 +170,7 @@ export default function CreateCourse() {
           className={"course-picture"}
           src={
             image
-              ? `http://localhost:5000/${image}`
+              ? `${import.meta.env.VITE_BACKEND_URI}/${image}`
               : "https://cdn-icons-png.flaticon.com/512/21/21104.png"
           }
           alt={"profile picture"}
@@ -164,11 +182,11 @@ export default function CreateCourse() {
           onChange={(e) => setFile(e.target.files)}
         />
       </div>
-      <div style={{ display: "flex", gap: "25px" }}>
-        <button type="submit" className="edit-course-button">
+      <div className={"create-course-buttons"}>
+        <button type="submit" className="create-course-button">
           Save <FontAwesomeIcon icon={faFloppyDisk} />
         </button>
-        <Link to={"/dashboard"}>
+        <Link to={Cookies.get("role") === "admin" ? "/admin" : "/dashboard"}>
           <button>
             Cancel <FontAwesomeIcon icon={faBan} />
           </button>

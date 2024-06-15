@@ -4,7 +4,7 @@ import { Helmet } from "react-helmet"; // Assuming you have a CSS file for styli
 
 export default function NotFound() {
   return (
-    <div className="not-found-container">
+    <div className="not-found-container main-wrapper">
       <Helmet>
         <title>Not found</title>
       </Helmet>

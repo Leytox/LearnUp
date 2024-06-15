@@ -4,21 +4,22 @@
     width: 100%;
     height: 100%;
     justify-content: space-between;
-    margin-top: 20px;
+    margin-top: 75px;
     padding: 50px;
 }
 
 .course-category {
+    color: var(--text-color);
     font-size: 20px;
-    color: #666;
     font-style: italic;
 }
 
 .course-details {
+    color: var(--text-color);
     gap: 25px;
     display: flex;
+    width: 60%;
     flex-direction: column;
-    width: 75%;
 }
 
 .course-content {
@@ -31,12 +32,22 @@
 }
 
 .course-description {
-    color: #444;
+    color: var(--text-color);
+}
+
+.course-instructor-container {
+    border-radius: 5px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: end;
+    text-align: right;
 }
 
 .course-instructor {
     font-size: 20px;
-    color: #444;
+    color: var(--text-color);
     margin-top: 10px;
 }
 
@@ -48,11 +59,12 @@
 
 .course-instructor-bio {
     font-size: 16px;
-    color: #666;
+    color: var(--default-button-background);
     margin-bottom: 20px;
 }
 
 .review {
+    background: var(--bg-secondary-color);
     border-radius: 5px;
     display: flex;
     flex-direction: row;
@@ -89,7 +101,7 @@
 
 .review-text {
     font-size: 16px;
-    color: #444;
+    color: var(--text-color);
 }
 
 .review-rating {
@@ -153,4 +165,51 @@ p a {
 
 p a:hover {
     color: #0056b3;
+}
+
+@media (max-width: 768px) {
+    .course-container {
+        flex-direction: column;
+        padding: 20px;
+    }
+
+    .course-details {
+        width: 100%;
+    }
+
+    .course-instructor-container {
+        background: var(--bg-secondary-color);
+        justify-content: center;
+        align-content: center;
+        text-align: center;
+    }
+
+    .course-instructor {
+        width: 100%;
+        justify-content: center;
+        align-content: center;
+    }
+
+    .course-instructor-bio {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+    .course-instructor-picture {
+        margin: 0 auto;
+        width: 150px;
+    }
+
+    .review-user-picture {
+        width: 67px;
+    }
+
+    .course-category,
+    .course-instructor,
+    .course-instructor-bio,
+    .reviewer-name,
+    .review-text,
+    .review-rating {
+        font-size: 16px;
+    }
 }

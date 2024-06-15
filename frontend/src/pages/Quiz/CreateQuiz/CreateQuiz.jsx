@@ -5,6 +5,8 @@ import Cookies from "js-cookie";
 import { useNavigate, useParams } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import Preloader from "../../../components/Preloader/Preloader.jsx";
+import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function CreateQuiz() {
   const { courseId, lessonId } = useParams();
@@ -26,7 +28,7 @@ export default function CreateQuiz() {
     const fetchData = async () => {
       try {
         const courseResponse = await axios.get(
-          `http://localhost:5000/api/courses/${courseId}`,
+          `${import.meta.env.VITE_BACKEND_URI}/api/courses/${courseId}`,
           {
             headers: {
               "x-auth-token": Cookies.get("token"),
@@ -45,7 +47,7 @@ export default function CreateQuiz() {
     e.preventDefault();
     try {
       await axios.post(
-        "http://localhost:5000/api/quizzes",
+        `${import.meta.env.VITE_BACKEND_URI}/api/quizzes`,
         {
           title,
           description,
@@ -106,7 +108,10 @@ export default function CreateQuiz() {
   return loading ? (
     <Preloader />
   ) : (
-    <form onSubmit={handleSubmit} className="create-quizz-container">
+    <form
+      onSubmit={handleSubmit}
+      className="create-quizz-container main-wrapper"
+    >
       <Helmet>
         <title>Create Quiz</title>
       </Helmet>
@@ -174,10 +179,10 @@ export default function CreateQuiz() {
           ))}
           <div className={"question-item-buttons"}>
             <button type="button" onClick={() => addOption(qIndex)}>
-              Add Option
+              Add Option <FontAwesomeIcon icon={faPlus} />
             </button>
             <button type="button" onClick={() => deleteQuestion(qIndex)}>
-              Delete Question
+              Delete Question <FontAwesomeIcon icon={faTrash} />
             </button>
           </div>
         </div>
@@ -187,10 +192,10 @@ export default function CreateQuiz() {
         onClick={addQuestion}
         className="add-question-button"
       >
-        Add Question
+        New Question <FontAwesomeIcon icon={faPlus} />
       </button>
       <button type="submit" className="create-quizz-button">
-        Create Quiz
+        Create Quiz <FontAwesomeIcon icon={faPlus} />
       </button>
     </form>
   );

@@ -1,22 +1,30 @@
 .lesson-container {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
     padding: 20px;
+    justify-content: start;
+    margin-top: 80px;
 }
 
 .lesson-title {
     font-size: 24px;
-    color: #333;
+    color: var(--text-color);
     margin-bottom: 10px;
 }
 
 .lesson-description {
     font-size: 18px;
-    color: #666;
+    color: var(--text-color);
     margin-bottom: 20px;
 }
 
 .lesson-content {
     font-size: 16px;
-    color: #444;
+    max-width: 1000px;
+    color: var(--text-color);
+    overflow-wrap: break-word;
+    margin-bottom: 20px;
 }
 
 .lesson-buttons {
@@ -25,4 +33,20 @@
     justify-content: center;
     gap: 10px;
     flex-direction: row;
+}
+
+@media (max-width: 768px) {
+
+    .lesson-title {
+        font-size: 20px;
+    }
+
+    .lesson-description {
+        font-size: 16px;
+    }
+
+    .lesson-content {
+        font-size: 14px;
+        max-width: 100%;
+    }
 }

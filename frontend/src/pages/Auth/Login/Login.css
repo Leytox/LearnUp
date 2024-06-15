@@ -1,0 +1,10 @@
+@media (max-width: 768px) {
+    form {
+        width: 90%;
+        padding: 20px;
+    }
+
+    input, select, textarea {
+        width: 100%;
+    }
+}

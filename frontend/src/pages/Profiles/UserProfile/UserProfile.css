@@ -6,19 +6,19 @@
 }
 
 .user-profile-title {
+    color: var(--text-color);
     font-size: 2em;
-    color: #333;
     text-align: center;
 }
 
 .user-profile h1 {
+    color: var(--text-color);
     font-size: 2em;
-    color: #333;
 }
 
 .user-profile p {
+    color: var(--text-color);
     font-size: 1.2em;
-    color: #666;
 }
 
 .profile-picture {
@@ -29,7 +29,6 @@
 }
 
 .user-courses {
-    margin-top: 20px;
     width: 100%;
     padding: 20px;
     border-radius: 10px;
@@ -37,16 +36,14 @@
 
 .user-courses h2 {
     font-size: 2em;
-    color: #333;
+    color: var(--text-color);
     text-align: center;
 }
 
 .user-courses-list {
     margin-top: 20px;
     width: 100%;
-    padding: 20px;
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
-    margin-bottom: 40px;
 }

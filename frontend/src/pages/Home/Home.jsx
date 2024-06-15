@@ -7,6 +7,20 @@ import { Helmet } from "react-helmet";
 import axios from "axios";
 import Cookies from "js-cookie";
 import Preloader from "../../components/Preloader/Preloader.jsx";
+import "./Home.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faAddressBook,
+  faBuilding,
+  faBuildingColumns,
+  faCircleInfo,
+  faFlagCheckered,
+  faHandshake,
+  faPeopleGroup,
+  faPersonChalkboard,
+  faTurnUp,
+} from "@fortawesome/free-solid-svg-icons";
+import { faLeanpub } from "@fortawesome/free-brands-svg-icons";
 
 export default function Home() {
   const { user } = useContext(UserContext);
@@ -16,7 +30,7 @@ export default function Home() {
     const fetchCategories = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:5000/api/categories",
+          `${import.meta.env.VITE_BACKEND_URI}/api/categories`,
           {
             headers: {
               "x-auth-token": Cookies.get("token"),
@@ -33,7 +47,7 @@ export default function Home() {
   return loading ? (
     <Preloader />
   ) : (
-    <>
+    <div className={"main-wrapper"}>
       <Helmet>
         <title>Home</title>
       </Helmet>
@@ -48,7 +62,9 @@ export default function Home() {
       >
         <div className={"welcome-section"}>
           <div className={"texts"}>
-            <h1>Learn without limits</h1>
+            <h1>
+              <FontAwesomeIcon icon={faLeanpub} /> Learn without limits
+            </h1>
             <p>
               Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolore
               eius ipsam iure officia repudiandae. Minima quod quos rerum vitae
@@ -58,17 +74,21 @@ export default function Home() {
             <div style={{ display: "flex", gap: "20px" }}>
               {!user && (
                 <Link to={"/signup"}>
-                  <button>Get Started</button>
+                  <button>
+                    Get Started <FontAwesomeIcon icon={faFlagCheckered} />
+                  </button>
                 </Link>
               )}
               <Link to={"/about"}>
-                <button>Learn More</button>
+                <button>
+                  Learn More <FontAwesomeIcon icon={faCircleInfo} />
+                </button>
               </Link>
             </div>
           </div>
           <img
             src={
-              "https://fastly.picsum.photos/id/5/5000/3334.jpg?hmac=R_jZuyT1jbcfBlpKFxAb0Q3lof9oJ0kREaxsYV3MgCc"
+              "https://t3.ftcdn.net/jpg/02/65/18/30/360_F_265183061_NkulfPZgRxbNg3rvYSNGGwi0iD7qbmOp.jpg"
             }
             alt={"picture of man using laptop"}
             width={"500px"}
@@ -78,10 +98,10 @@ export default function Home() {
         <div className={"features"}>
           <div className={"texts"}>
             <h2>
-              We collaborate with{"  "}
-              <Link to={"/about/partners"} style={{ color: "#007bff" }}>
-                325+ leading universities and companies
-              </Link>
+              We collaborate <FontAwesomeIcon icon={faHandshake} /> with{"  "}
+              325+ leading universities{" "}
+              <FontAwesomeIcon icon={faBuildingColumns} /> and companies{" "}
+              <FontAwesomeIcon icon={faBuilding} />
             </h2>
             <p>
               Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolore
@@ -93,19 +113,25 @@ export default function Home() {
         </div>
 
         <div className={"explore"}>
-          <h1>Explore our courses</h1>
+          <h1>
+            Explore courses <FontAwesomeIcon icon={faPersonChalkboard} />
+          </h1>
           <div className={"course-types"}>
             {categories.map((category) => (
               <CategoryCard key={category._id} category={category} />
             ))}
           </div>
           <Link to={"/courses?search="}>
-            <button>Check all courses</button>
+            <button>
+              Check more <FontAwesomeIcon icon={faTurnUp} />
+            </button>
           </Link>
         </div>
 
         <div className={"community"}>
-          <h1>Community feedback</h1>
+          <h1>
+            Community <FontAwesomeIcon icon={faPeopleGroup} />
+          </h1>
           <div className={"feedback"}>
             <FeedBackCard
               feedback={{
@@ -139,7 +165,15 @@ export default function Home() {
             />
           </div>
         </div>
+        <div className={"contacts"}>
+          <h1>Got any questions left? Just see for FAQ!</h1>
+          <Link to={"/contact"}>
+            <button>
+              Contacts <FontAwesomeIcon icon={faAddressBook} />
+            </button>
+          </Link>
+        </div>
       </div>
-    </>
+    </div>
   );
 }

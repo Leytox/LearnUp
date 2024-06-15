@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import "./CreateCourse.css";
+import "./CreateEditCourse.css";
 import Cookies from "js-cookie";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useNavigate } from "react-router-dom";
-import Preloader from "../../../components/Preloader/Preloader.jsx";
+import Preloader from "../../components/Preloader/Preloader.jsx";
 import { Helmet } from "react-helmet";
 
 export default function CreateCourse() {
@@ -23,7 +23,7 @@ export default function CreateCourse() {
     const fetchCategories = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:5000/api/categories",
+          `${import.meta.env.VITE_BACKEND_URI}/api/categories`,
         );
         setAvailableCategories(response.data);
       } catch (err) {
@@ -44,7 +44,7 @@ export default function CreateCourse() {
       formData.append("difficulty", difficulty);
       formData.append("file", file[0]);
       const response = await axios.post(
-        "http://localhost:5000/api/courses",
+        `${import.meta.env.VITE_BACKEND_URI}/api/courses`,
         formData,
         {
           headers: {
@@ -64,7 +64,10 @@ export default function CreateCourse() {
   return loading ? (
     <Preloader />
   ) : (
-    <form onSubmit={handleSubmit} className="create-course-container">
+    <form
+      onSubmit={handleSubmit}
+      className="create-course-container main-wrapper"
+    >
       <Helmet>
         <title>Create Course</title>
       </Helmet>

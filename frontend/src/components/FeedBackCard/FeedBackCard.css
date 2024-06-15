@@ -9,11 +9,9 @@
 }
 
 .feedback-card:hover {
-    border: 1px solid #007bff;
     box-shadow: 0 0 10px #007bff;
     border-radius: 10px;
     cursor: pointer;
-    transform: translateY(-10px);
 }
 
 .feedback-card-text {

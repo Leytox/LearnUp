@@ -13,7 +13,8 @@ const LessonSchema = new mongoose.Schema(
     quiz: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Quiz",
-      unique: true,
+      required: false,
+      default: null,
     },
   },
   { timestamps: true },

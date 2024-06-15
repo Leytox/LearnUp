@@ -8,7 +8,13 @@ import CourseCard from "../../components/CourseCard/CourseCard.jsx";
 import "./Admin.css";
 import UserCard from "../../components/UserCard/UserCard.jsx";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMinus, faPen, faPlus } from "@fortawesome/free-solid-svg-icons";
+import {
+  faBan,
+  faCheck,
+  faMinus,
+  faPen,
+  faPlus,
+} from "@fortawesome/free-solid-svg-icons";
 import { Helmet } from "react-helmet";
 
 export default function Admin() {
@@ -24,15 +30,20 @@ export default function Admin() {
     const fetchData = async () => {
       try {
         const categoriesResponse = await axios.get(
-          "http://localhost:5000/api/categories",
+          `${import.meta.env.VITE_BACKEND_URI}/api/categories`,
         );
         setCategories(categoriesResponse.data);
         const coursesResponse = await axios.get(
-          "http://localhost:5000/api/courses/search?limit=10",
+          `${import.meta.env.VITE_BACKEND_URI}/api/admin/courses`,
+          {
+            headers: {
+              "x-auth-token": Cookies.get("token"),
+            },
+          },
         );
-        setCourses(coursesResponse.data.items);
+        setCourses(coursesResponse.data);
         const usersResponse = await axios.get(
-          "http://localhost:5000/api/users",
+          `${import.meta.env.VITE_BACKEND_URI}/api/admin/users`,
           {
             headers: {
               "x-auth-token": Cookies.get("token"),
@@ -54,15 +65,12 @@ export default function Admin() {
   return loading ? (
     <Preloader />
   ) : (
-    <div className={"admin-panel"}>
+    <div className={"admin-panel main-wrapper"}>
       <Helmet>
         <title>Admin</title>
       </Helmet>
-      <div className={"admin-panel-header"}>
-        <h1>Admin Dashboard</h1>
-      </div>
       <button
-        className={"hide-filter"}
+        className={"hide-filter-admin"}
         onClick={() => setAdminPanelVisible((prev) => !prev)}
         title={"Toggle Filter"}
       >
@@ -151,6 +159,14 @@ export default function Admin() {
                       Edit <FontAwesomeIcon icon={faPen} />
                     </button>
                   </Link>
+                  <p>
+                    Available:{" "}
+                    {course.available ? (
+                      <FontAwesomeIcon icon={faCheck} />
+                    ) : (
+                      <FontAwesomeIcon icon={faBan} />
+                    )}
+                  </p>
                 </CourseCard>
               </div>
             ))}

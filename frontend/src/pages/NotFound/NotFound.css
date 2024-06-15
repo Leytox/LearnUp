@@ -3,18 +3,17 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin-top: 300px;
     text-align: center;
 }
 
 .not-found-title {
     font-size: 6em;
-    color: #333;
+    color: var(--text-color);
 }
 
 .not-found-text {
     font-size: 2em;
-    color: #666;
+    color: var(--text-color);
 }
 
 .not-found-button {

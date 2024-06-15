@@ -2,10 +2,10 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import Preloader from "../../../components/Preloader/Preloader.jsx";
-import "./UserProfile.css";
 import CourseCard from "../../../components/CourseCard/CourseCard.jsx";
 import NotFound from "../../NotFound/NotFound.jsx";
 import { Helmet } from "react-helmet";
+import "./UserProfile.css";
 
 export default function UserProfile() {
   const [user, setUser] = useState(null);
@@ -17,10 +17,10 @@ export default function UserProfile() {
     const fetchUserAndCourses = async () => {
       try {
         const userResponse = await axios.get(
-          `http://localhost:5000/api/users/${id}`,
+          `${import.meta.env.VITE_BACKEND_URI}/api/profile/${id}`,
         );
         const coursesResponse = await axios.get(
-          `http://localhost:5000/api/courses/instructor/${id}`,
+          `${import.meta.env.VITE_BACKEND_URI}/api/courses/instructor/${id}`,
         );
         setUser(userResponse.data);
         setCourses(coursesResponse.data);
@@ -34,7 +34,7 @@ export default function UserProfile() {
   return loading ? (
     <Preloader />
   ) : user ? (
-    <div>
+    <div className={"main-wrapper"}>
       <Helmet>
         <title>{user.name}&amp;s Profile</title>
       </Helmet>
@@ -43,7 +43,7 @@ export default function UserProfile() {
           className={"profile-picture"}
           src={
             user.profilePicture
-              ? `http://localhost:5000/${user.profilePicture}`
+              ? `${import.meta.env.VITE_BACKEND_URI}/${user.profilePicture}`
               : "https://cdn-icons-png.flaticon.com/512/21/21104.png"
           }
           alt={"profile picture"}

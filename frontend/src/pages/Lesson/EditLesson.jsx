@@ -1,49 +1,65 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
-import "./CreateLesson.css";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
+import axios from "axios";
 import Cookies from "js-cookie";
-import Preloader from "../../../components/Preloader/Preloader.jsx";
 import { Helmet } from "react-helmet";
-import NotFound from "../../NotFound/NotFound.jsx";
+import "react-quill/dist/quill.snow.css";
+import Preloader from "../../components/Preloader/Preloader.jsx";
+import NotFound from "../NotFound/NotFound.jsx";
+import ReactQuill from "react-quill";
+import "./CreateEditLesson.css";
 
-export default function CreateLesson() {
-  const { courseId } = useParams();
-  const [course, setCourse] = useState(null);
+export default function EditLesson() {
+  const { courseId, lessonId } = useParams();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [content, setContent] = useState("");
-  const [lessonId, setLessonId] = useState("");
   const [redirect, setRedirect] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [instructorId, setInstructorId] = useState("");
+  const [lesson, setLesson] = useState(null);
+  const [course, setCourse] = useState(null);
   const navigate = useNavigate();
+  const userId = Cookies.get("id");
 
   useEffect(() => {
-    const fetchCourse = async () => {
+    if (!userId) {
+      setRedirect(true);
+      return;
+    }
+    const fetchLesson = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5000/api/courses/${courseId}`,
+          `${import.meta.env.VITE_BACKEND_URI}/api/lessons/details/${lessonId}`,
+          {
+            headers: {
+              "x-auth-token": Cookies.get("token"),
+            },
+          },
         );
-        if (response.data.instructor._id !== Cookies.get("id"))
+        setLesson(response.data);
+        setTitle(response.data.title);
+        setDescription(response.data.description);
+        setContent(response.data.content);
+        const courseResponse = await axios.get(
+          `${import.meta.env.VITE_BACKEND_URI}/api/courses/${courseId}`,
+        );
+        if (courseResponse.data.instructor._id !== Cookies.get("id"))
           setRedirect(true);
-        setCourse(response.data);
+        setInstructorId(courseResponse.data.instructor);
+        setCourse(courseResponse.data);
       } catch (err) {
         console.error(err);
       }
     };
-    fetchCourse().finally(() => setLoading(false));
-  }, [courseId]);
-
-  if (redirect) navigate("/");
+    fetchLesson().finally(() => setLoading(false));
+  }, [courseId, lessonId, userId]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
-      const response = await axios.post(
-        "http://localhost:5000/api/lessons",
+      await axios.put(
+        `${import.meta.env.VITE_BACKEND_URI}/api/lessons/${lessonId}`,
         {
           course: courseId,
           title,
@@ -56,17 +72,11 @@ export default function CreateLesson() {
           },
         },
       );
-      setLessonId(response.data._id);
       setRedirect(true);
     } catch (err) {
       console.error(err);
-      alert("Error creating lesson");
     }
   };
-
-  if (redirect && lessonId) navigate(`/course/${courseId}/lesson/${lessonId}`);
-  else navigate("/");
-
   const toolbarOptions = [
     ["bold", "italic", "underline", "strike"], // toggled buttons
     ["blockquote", "code-block", "image", "link", "video"],
@@ -86,14 +96,20 @@ export default function CreateLesson() {
     ["clean"], // remove formatting button
   ];
 
+  if (redirect && instructorId === Cookies.get("id"))
+    navigate(`/course/${courseId}/lesson/${lessonId}`);
+  else if (redirect && instructorId !== Cookies.get("id")) navigate("/");
   return loading ? (
     <Preloader />
-  ) : course ? (
-    <form onSubmit={handleSubmit} className="create-lesson-container">
+  ) : course && lesson ? (
+    <form
+      onSubmit={handleSubmit}
+      className="create-lesson-container main-wrapper"
+    >
       <Helmet>
-        <title>Create Lesson</title>
+        <title>Edit Lesson</title>
       </Helmet>
-      <h1 className="create-lesson-title">Create Lesson</h1>
+      <h1 className="create-lesson-title">Edit Lesson</h1>
       <div className="lesson-item">
         <label>Title</label>
         <input
@@ -124,7 +140,7 @@ export default function CreateLesson() {
         />
       </div>
       <button type="submit" className="create-lesson-button">
-        Create Lesson
+        Edit Lesson
       </button>
     </form>
   ) : (

@@ -4,7 +4,7 @@
     align-items: center;
     padding: 20px;
     border-radius: 10px;
-    gap: 50px;
+    gap: 20px;
 }
 
 .dashboard-title {
@@ -65,4 +65,10 @@
     font-size: 1.5em;
     color: #888;
     font-style: italic;
+}
+
+@media (max-width: 768px) {
+    .course-items {
+        justify-content: center;
+    }
 }

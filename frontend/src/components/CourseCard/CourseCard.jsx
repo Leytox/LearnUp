@@ -29,7 +29,7 @@ export default function CourseCard({ course, children }) {
         <img
           src={
             course.picture
-              ? `http://localhost:5000/${course.picture}`
+              ? `${import.meta.env.VITE_BACKEND_URI}/${course.picture}`
               : "https://cdn.shopify.com/s/files/1/0070/5901/3716/files/coding_background.jpg?v=1688538955"
           }
           alt={course.title}

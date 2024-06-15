@@ -30,7 +30,7 @@ export default function Lesson() {
     const fetchLesson = async () => {
       try {
         const lessonResponse = await axios.get(
-          `http://localhost:5000/api/lessons/details/${lessonId}`,
+          `${import.meta.env.VITE_BACKEND_URI}/api/lessons/details/${lessonId}`,
           {
             headers: {
               "x-auth-token": Cookies.get("token"),
@@ -50,7 +50,7 @@ export default function Lesson() {
   return loading ? (
     <Preloader />
   ) : lesson ? (
-    <div className="lesson-container">
+    <div className="lesson-container main-wrapper">
       <Helmet>
         <title>Lesson</title>
       </Helmet>

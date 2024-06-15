@@ -2,8 +2,6 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    margin-top: 30px;
     gap: 50px;
 }
 
@@ -11,7 +9,7 @@
     display: grid;
     grid-template-columns: 25% 75%;
     width: 75%;
-    border: 2px solid #dddddd;
+    border: 2px solid var(--text-color);
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     border-radius: 5px;
     height: 600px;
@@ -25,9 +23,13 @@
     align-items: start;
     justify-content: start;
     gap: 10px;
-    border-right: 2px solid #dddddd;
+    border-right: 2px solid var(--text-color);
     padding: 20px;
     height: 100%;
+}
+
+.profile-info button {
+    color: white;
 }
 
 .profile-settings {
@@ -51,4 +53,51 @@
     width: 200px;
     height: 200px;
     border-radius: 50%;
+}
+
+.edit-profile-button {
+    background-color: var(--special-button-background);
+    color: var(--special-button-color);
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+}
+
+.edit-profile-button:hover {
+    background-color: #222;
+}
+
+.delete-account-button {
+    background-color: #dc3545;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+}
+
+.delete-account-button:hover {
+    background-color: #a71d2a;
+}
+
+@media screen and (max-width: 768px) {
+    .profile {
+        grid-template-columns: 100%;
+        width: 90%;
+        height: auto;
+    }
+
+    .profile-info {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-right: none;
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+
+    .profile-settings button {
+        width: 100%;
+    }
 }

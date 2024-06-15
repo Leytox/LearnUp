@@ -7,7 +7,7 @@ export default function CategoryCard({ category, children }) {
         className={"category-card-image"}
         src={
           category.picture
-            ? `http://localhost:5000/${category.picture}`
+            ? `${import.meta.env.VITE_BACKEND_URI}/${category.picture}`
             : "https://cdn-icons-png.flaticon.com/512/21/21104.png"
         }
         alt={"profile picture"}

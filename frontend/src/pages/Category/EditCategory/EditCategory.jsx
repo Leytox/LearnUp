@@ -22,7 +22,7 @@ export default function EditCategory() {
       const fetchData = async () => {
         try {
           const response = await axios.get(
-            `http://localhost:5000/api/categories/${id}`,
+            `${import.meta.env.VITE_BACKEND_URI}/api/categories/${id}`,
             { headers: { "x-auth-token": Cookies.get("token") } },
           );
           setName(response.data.name);
@@ -41,7 +41,7 @@ export default function EditCategory() {
     if (file) formData.append("file", file[0]);
     try {
       const response = await axios.put(
-        `http://localhost:5000/api/categories/${id}`,
+        `${import.meta.env.VITE_BACKEND_URI}/api/categories/${id}`,
         formData,
         { headers: { "x-auth-token": Cookies.get("token") } },
       );
@@ -57,7 +57,7 @@ export default function EditCategory() {
   return loading ? (
     <Preloader />
   ) : category ? (
-    <div>
+    <div className={"main-wrapper"}>
       <Helmet>
         <title>Edit Category</title>
       </Helmet>
@@ -65,6 +65,7 @@ export default function EditCategory() {
       <form onSubmit={handleSubmit}>
         <label htmlFor={"name"}>Name</label>
         <input
+          maxLength={12}
           value={name}
           type={"text"}
           id={"name"}

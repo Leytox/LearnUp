@@ -7,8 +7,9 @@ import "./Profile.css";
 import UserContext from "../../../UserContext.jsx";
 import Preloader from "../../../components/Preloader/Preloader.jsx";
 import {
+  faArrowRightFromBracket,
+  faFloppyDisk,
   faPenToSquare,
-  faRightFromBracket,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -31,11 +32,14 @@ export default function Profile() {
           setRedirect(true);
           return;
         }
-        const response = await axios.get("http://localhost:5000/api/profile", {
-          headers: {
-            "x-auth-token": Cookies.get("token"),
+        const response = await axios.get(
+          `${import.meta.env.VITE_BACKEND_URI}/api/profile/${Cookies.get("id")}`,
+          {
+            headers: {
+              "x-auth-token": Cookies.get("token"),
+            },
           },
-        });
+        );
         setProfile(response.data);
         setName(response.data.name);
         setBio(response.data.bio);
@@ -52,7 +56,7 @@ export default function Profile() {
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/profile/picture",
+        `${import.meta.env.VITE_BACKEND_URI}/api/profile/picture`,
         formData,
         {
           headers: {
@@ -74,7 +78,7 @@ export default function Profile() {
       return;
     try {
       const response = await axios.delete(
-        "http://localhost:5000/api/profile/picture",
+        `${import.meta.env.VITE_BACKEND_URI}/api/profile/picture`,
         {
           headers: {
             "x-auth-token": Cookies.get("token"),
@@ -90,7 +94,7 @@ export default function Profile() {
   const handleEdit = async () => {
     try {
       const response = await axios.put(
-        "http://localhost:5000/api/profile",
+        `${import.meta.env.VITE_BACKEND_URI}/api/profile/`,
         { name, bio },
         {
           headers: {
@@ -131,7 +135,7 @@ export default function Profile() {
   return loading ? (
     <Preloader />
   ) : (
-    <div className="profile-container">
+    <div className="profile-container main-wrapper">
       <Helmet>
         <title>Profile</title>
       </Helmet>
@@ -144,7 +148,7 @@ export default function Profile() {
                 className={"profile-picture"}
                 src={
                   profile.profilePicture
-                    ? `http://localhost:5000/${profile.profilePicture}`
+                    ? `${import.meta.env.VITE_BACKEND_URI}/${profile.profilePicture}`
                     : "https://cdn-icons-png.flaticon.com/512/21/21104.png"
                 }
                 alt={"profile picture"}
@@ -194,7 +198,7 @@ export default function Profile() {
                   onClick={handleEdit}
                   style={{ backgroundColor: "darkgreen" }}
                 >
-                  Save
+                  Save <FontAwesomeIcon icon={faFloppyDisk} />
                 </button>
               </>
             ) : (
@@ -236,15 +240,21 @@ export default function Profile() {
                   navigate("/");
                 }}
               >
-                Logout <FontAwesomeIcon icon={faRightFromBracket} />
+                Logout <FontAwesomeIcon icon={faArrowRightFromBracket} />
               </button>
             </div>
             <div className={"profile-settings-buttons"}>
               <h3>Edit Profile Data</h3>
               <p>This will allow you to update your profile information.</p>
               <button
-                style={{ backgroundColor: "#007bff" }}
-                onClick={() => setEditMode((prev) => !prev)}
+                className={"edit-profile-button"}
+                onClick={() => {
+                  setEditMode((prev) => !prev);
+                  window.scrollTo({
+                    top: 0,
+                    behavior: "smooth",
+                  });
+                }}
               >
                 Edit Profile <FontAwesomeIcon icon={faPenToSquare} />
               </button>
@@ -256,7 +266,7 @@ export default function Profile() {
                 data.
               </p>
               <button
-                style={{ backgroundColor: "red", color: "white" }}
+                className={"delete-account-button"}
                 onClick={() => {
                   if (
                     window.confirm(
@@ -264,11 +274,14 @@ export default function Profile() {
                     )
                   ) {
                     axios
-                      .delete("http://localhost:5000/api/profile", {
-                        headers: {
-                          "x-auth-token": Cookies.get("token"),
+                      .delete(
+                        `${import.meta.env.VITE_BACKEND_URI}/api/profile`,
+                        {
+                          headers: {
+                            "x-auth-token": Cookies.get("token"),
+                          },
                         },
-                      })
+                      )
                       .then(() => {
                         Cookies.remove("token");
                         Cookies.remove("username");

@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen, faPlus } from "@fortawesome/free-solid-svg-icons";
 import Cookies from "js-cookie";
 import { Helmet } from "react-helmet";
+import CourseCard from "../../components/CourseCard/CourseCard.jsx";
 
 export default function Dashboard() {
   const [courses, setCourses] = useState([]);
@@ -21,7 +22,12 @@ export default function Dashboard() {
     const fetchCourses = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5000/api/courses/instructor/${Cookies.get("id")}`,
+          `${import.meta.env.VITE_BACKEND_URI}/api/courses/instructor/${Cookies.get("id")}`,
+          {
+            headers: {
+              instructorId: Cookies.get("id"),
+            },
+          },
         );
         setCourses(response.data);
         setLoading(false);
@@ -38,7 +44,7 @@ export default function Dashboard() {
   return loading ? (
     <Preloader />
   ) : (
-    <div className="dashboard-container">
+    <div className="dashboard-container main-wrapper">
       <Helmet>
         <title>Dashboard</title>
       </Helmet>
@@ -50,43 +56,18 @@ export default function Dashboard() {
       )}
       <div className={"course-items"}>
         {courses.map((course) => (
-          <div key={course._id} className={"course-item-card"}>
-            <Link
-              to={`/courses/${course._id}`}
-              className={"course-item-card-link"}
-            >
-              <img
-                src={
-                  course.picture
-                    ? `http://localhost:5000/${course.picture}`
-                    : "https://cdn.shopify.com/s/files/1/0070/5901/3716/files/coding_background.jpg?v=1688538955"
-                }
-                alt={course.title}
-                style={{ width: "200px" }}
-              />
-              <h3>{course.title}</h3>
-              <p>{course.description}</p>
-              <p>
-                <i>
-                  <strong>{course.category}</strong>
-                </i>
-              </p>
-              <p>${course.price}</p>
-              <div style={{ display: "flex", gap: "10px" }}>
-                <Link to={`/course/${course._id}/create-lesson`}>
-                  <button>
-                    <FontAwesomeIcon icon={faPlus} /> Add Lesson
-                  </button>
-                </Link>
-                <Link to={`/course/${course._id}/edit`}>
-                  <button>
-                    <FontAwesomeIcon icon={faPen} /> Edit Course
-                  </button>
-                </Link>
-              </div>
-              <p>{course.visible}</p>
+          <CourseCard key={course._id} course={course}>
+            <Link to={`/course/${course._id}/edit`}>
+              <button>
+                <FontAwesomeIcon icon={faPen} /> Edit Course
+              </button>
             </Link>
-          </div>
+            <Link to={`/course/${course._id}/create-lesson`}>
+              <button>
+                <FontAwesomeIcon icon={faPlus} /> Add Lesson
+              </button>
+            </Link>
+          </CourseCard>
         ))}
       </div>
       <Link to="/create-course">

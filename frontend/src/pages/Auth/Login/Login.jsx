@@ -4,6 +4,8 @@ import { Link, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import UserContext from "../../../UserContext.jsx";
 import { Helmet } from "react-helmet";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -21,7 +23,7 @@ export default function Login() {
     event.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/auth/login",
+        `${import.meta.env.VITE_BACKEND_URI}/api/auth/login`,
         {
           email,
           password,
@@ -29,14 +31,24 @@ export default function Login() {
       );
       if (response.status === 200) setRedirect(true);
       if (response.data.token)
-        Cookies.set("token", response.data.token, { expires: 1 });
-      if (response.data.id) Cookies.set("id", response.data.id, { expires: 1 });
+        Cookies.set("token", response.data.token, {
+          expires: 1,
+          sameSite: "strict",
+        });
+      if (response.data.id)
+        Cookies.set("id", response.data.id, { expires: 1, sameSite: "strict" });
       if (response.data.username) {
-        Cookies.set("username", response.data.username, { expires: 1 });
+        Cookies.set("username", response.data.username, {
+          expires: 1,
+          sameSite: "strict",
+        });
         setUser({ username: response.data.username });
       }
       if (response.data.role)
-        Cookies.set("role", response.data.role, { expires: 1 });
+        Cookies.set("role", response.data.role, {
+          expires: 1,
+          sameSite: "strict",
+        });
     } catch (err) {
       setError(true);
     }
@@ -44,7 +56,7 @@ export default function Login() {
 
   if (redirect) navigate("/");
   return (
-    <form onSubmit={Login}>
+    <form onSubmit={Login} className={"main-wrapper"}>
       <Helmet>
         <title>Login</title>
       </Helmet>
@@ -55,7 +67,10 @@ export default function Login() {
         name="email"
         placeholder={"Email"}
         required={true}
-        onChange={(event) => setEmail(event.target.value)}
+        onChange={(event) => {
+          setEmail(event.target.value);
+          setError(false);
+        }}
       />
       <input
         type="password"
@@ -63,9 +78,14 @@ export default function Login() {
         name="password"
         placeholder={"Password"}
         required={true}
-        onChange={(event) => setPassword(event.target.value)}
+        onChange={(event) => {
+          setPassword(event.target.value);
+          setError(false);
+        }}
       />
-      <button type={"submit"}>Continue</button>
+      <button type={"submit"}>
+        Continue <FontAwesomeIcon icon={faArrowRight} />
+      </button>
       <p>
         Don&apos;t have an account?{" "}
         <Link to={"/signup"} style={{ color: "#007bff" }}>

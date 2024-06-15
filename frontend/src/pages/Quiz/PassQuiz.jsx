@@ -10,7 +10,7 @@ import { Helmet } from "react-helmet";
 import NotFound from "../NotFound/NotFound.jsx";
 
 export default function PassQuiz() {
-  const { courseId, quizId } = useParams();
+  const { courseId, quizId, lessonId } = useParams();
   const [quiz, setQuiz] = useState([]);
   const [answers, setAnswers] = useState({});
   const [loading, setLoading] = useState(true);
@@ -26,7 +26,7 @@ export default function PassQuiz() {
     const fetchData = async () => {
       try {
         const quizResponse = await axios.get(
-          `http://localhost:5000/api/quizzes/course/${courseId}/quizz/${quizId}`,
+          `${import.meta.env.VITE_BACKEND_URI}/api/quizzes/course/${courseId}/lesson/${lessonId}/quizz/${quizId}`,
           {
             headers: {
               "x-auth-token": Cookies.get("token"),
@@ -55,7 +55,7 @@ export default function PassQuiz() {
     if (allCorrect) {
       try {
         await axios.post(
-          "http://localhost:5000/api/enrollments/progress/complete-quiz",
+          `${import.meta.env.VITE_BACKEND_URI}/api/enrollments/progress/complete-quiz`,
           {
             userId,
             quizId: quiz._id,
@@ -101,7 +101,7 @@ export default function PassQuiz() {
   return loading ? (
     <Preloader />
   ) : quiz ? (
-    <div className={"quizContainer"}>
+    <div className={"quizContainer main-wrapper"}>
       <Helmet>
         <title>Quiz</title>
       </Helmet>
@@ -116,27 +116,25 @@ export default function PassQuiz() {
                 Question {index + 1}: {question.questionText}
               </h3>
               {question.options.map((option) => (
-                <div key={option.text}>
-                  <label>
-                    <input
-                      type={hasMultipleCorrectAnswers ? "checkbox" : "radio"}
-                      name={`question-${index}`}
-                      value={option.text}
-                      onChange={() =>
-                        handleAnswerChange(
-                          index,
-                          option.text,
-                          hasMultipleCorrectAnswers,
-                        )
-                      }
-                      checked={
-                        hasMultipleCorrectAnswers
-                          ? answers[index]?.includes(option.text) || false
-                          : answers[index]?.[0] === option.text
-                      }
-                    />
-                    {option.text}
-                  </label>
+                <div className={"question-answer"} key={option.text}>
+                  <label>{option.text}</label>
+                  <input
+                    type={hasMultipleCorrectAnswers ? "checkbox" : "radio"}
+                    name={`question-${index}`}
+                    value={option.text}
+                    onChange={() =>
+                      handleAnswerChange(
+                        index,
+                        option.text,
+                        hasMultipleCorrectAnswers,
+                      )
+                    }
+                    checked={
+                      hasMultipleCorrectAnswers
+                        ? answers[index]?.includes(option.text) || false
+                        : answers[index]?.[0] === option.text
+                    }
+                  />
                 </div>
               ))}
             </div>

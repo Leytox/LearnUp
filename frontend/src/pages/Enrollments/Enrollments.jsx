@@ -17,7 +17,7 @@ export default function Enrollments() {
     const fetchEnrolledCourses = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:5000/api/enrollments/my-courses",
+          `${import.meta.env.VITE_BACKEND_URI}/api/enrollments/my-courses`,
           {
             headers: {
               "x-auth-token": Cookies.get("token"),
@@ -35,7 +35,7 @@ export default function Enrollments() {
   async function generateCertificate(courseId) {
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/enrollments/progress/certificate/${Cookies.get("id")}/${courseId}`,
+        `${import.meta.env.VITE_BACKEND_URI}/api/enrollments/progress/certificate/${Cookies.get("id")}/${courseId}`,
         {
           headers: {
             "x-auth-token": Cookies.get("token"),
@@ -43,7 +43,7 @@ export default function Enrollments() {
         },
       );
       window.open(
-        `http://localhost:5000/uploads/users_certificates/${response.data}`,
+        `${import.meta.env.VITE_BACKEND_URI}/uploads/users_certificates/${response.data}`,
         "_blank",
       );
       console.log(response.data);
@@ -59,14 +59,14 @@ export default function Enrollments() {
   return loading ? (
     <Preloader />
   ) : (
-    <div className={"enrollmentsContainer"}>
+    <div className={"enrollmentsContainer main-wrapper"}>
       <Helmet>
         <title>Enrollments</title>
       </Helmet>
       <h1>Enrollments</h1>
       {enrolledCourses.length === 0 && (
         <div className={"no-enrollments"}>
-          <h2>No courses enrolled yet...</h2>
+          <h1>No courses enrolled yet...</h1>
           <Link to={"/courses?search="}>
             <button>
               Buy courses <FontAwesomeIcon icon={faCartShopping} />

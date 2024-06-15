@@ -24,7 +24,7 @@ export default function CreateCategory() {
     formData.append("file", file[0]);
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/categories",
+        `${import.meta.env.VITE_BACKEND_URI}/api/categories`,
         formData,
         { headers: { "x-auth-token": Cookies.get("token") } },
       );
@@ -40,7 +40,7 @@ export default function CreateCategory() {
   return loading ? (
     <Preloader />
   ) : (
-    <div>
+    <div className={"main-wrapper"}>
       <Helmet>
         <title>Create Category</title>
       </Helmet>
@@ -48,6 +48,7 @@ export default function CreateCategory() {
       <form onSubmit={handleSubmit}>
         <label htmlFor={"name"}>Name</label>
         <input
+          maxLength={12}
           type={"text"}
           id={"name"}
           required={true}

@@ -1,0 +1,46 @@
+header {
+    z-index: 1000;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    transition: top 0.2s ease-in-out;
+}
+
+header.hidden {
+    top: -100px;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    background-color: #333;
+    color: #fff;
+    padding: 20px;
+}
+
+.navbar-links {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.header-logo {
+    display: flex;
+    align-items: center;
+    height: 30px;
+}
+
+
+@media (max-width: 768px) {
+    .navbar {
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .navbar .navbar-logo {
+        display: none;
+    }
+}

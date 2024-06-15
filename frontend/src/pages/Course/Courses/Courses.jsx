@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
 import CourseCard from "../../../components/CourseCard/CourseCard.jsx";
@@ -16,6 +16,7 @@ import {
   faFilterCircleXmark,
   faForwardStep,
 } from "@fortawesome/free-solid-svg-icons";
+import { DeviceContext } from "../../../DeviceContext.jsx";
 
 export default function Courses() {
   const [courses, setCourses] = useState([]);
@@ -24,8 +25,9 @@ export default function Courses() {
   const [category, setCategory] = useState("");
   const [sortOrder, setSortOrder] = useState("oldest"); // "oldest" or "newest"
   const [categories, setCategories] = useState([]);
+  const { isMobile } = useContext(DeviceContext);
   const [difficulty, setDifficulty] = useState(""); // Add this state
-  const [isFilterVisible, setFilterVisible] = useState(true);
+  const [isFilterVisible, setFilterVisible] = useState(!isMobile);
   const [page, setPage] = useState(1);
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
@@ -43,7 +45,7 @@ export default function Courses() {
     const fetchCourses = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5000/api/courses/search?query=${searchQuery}&minPrice=${priceRange[0]}&maxPrice=${priceRange[1]}&category=${category}&sortOrder=${sortOrder}&difficulty=${difficulty}&page=${page}&limit=${limit}`,
+          `${import.meta.env.VITE_BACKEND_URI}/api/courses/search?query=${searchQuery}&minPrice=${priceRange[0]}&maxPrice=${priceRange[1]}&category=${category}&sortOrder=${sortOrder}&difficulty=${difficulty}&page=${page}&limit=${limit}`,
         );
         setCourses(response.data.items);
         setTotalItems(response.data.totalItems);
@@ -62,6 +64,7 @@ export default function Courses() {
     setDifficulty(difficulty);
     setSortOrder(sortOrder);
     setFilterApplied((prev) => !prev);
+    setFilterVisible(false);
   }
 
   function resetFilter() {
@@ -77,7 +80,7 @@ export default function Courses() {
     const fetchCategories = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:5000/api/categories",
+          `${import.meta.env.VITE_BACKEND_URI}/api/categories`,
         );
         setCategories(response.data);
       } catch (err) {
@@ -88,7 +91,7 @@ export default function Courses() {
   }, []);
 
   return (
-    <div className="courses-container">
+    <div className="courses-container main-wrapper">
       <Helmet>
         <title>Courses</title>
       </Helmet>
@@ -103,8 +106,7 @@ export default function Courses() {
           <FontAwesomeIcon icon={faFilter} />
         )}
       </button>
-      <h1 style={{ textAlign: "center" }}>Courses</h1>
-      <div className={"main-wrapper"}>
+      <div className={"courses-main-wrapper"}>
         {isFilterVisible && (
           <div className={"filter"}>
             <h1>Filter</h1>
@@ -180,7 +182,7 @@ export default function Courses() {
           </div>
         )}
       </div>
-      {loading ? null : (
+      {loading ? null : courses.length !== 0 ? (
         <div className="page-buttons">
           <button onClick={() => setPage(1)} disabled={page === 1}>
             <FontAwesomeIcon icon={faBackwardStep} />
@@ -218,7 +220,7 @@ export default function Courses() {
             <FontAwesomeIcon icon={faForwardStep} />
           </button>
         </div>
-      )}
+      ) : null}
     </div>
   );
 }

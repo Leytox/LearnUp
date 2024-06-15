@@ -1,23 +1,42 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Search from "../Search/Search.jsx";
 import Cookies from "js-cookie";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import UserContext from "../../UserContext.jsx";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+  faArrowRightToBracket,
   faCartShopping,
   faChalkboardUser,
   faHouse,
   faRightFromBracket,
   faScrewdriverWrench,
   faUser,
+  faUserPlus,
 } from "@fortawesome/free-solid-svg-icons";
 import { faLeanpub } from "@fortawesome/free-brands-svg-icons";
+import ThemeSwitcher from "../ThemeSwitcher/ThemeSwitcher.jsx";
+import "./Header.css";
+import { DeviceContext } from "../../DeviceContext.jsx";
+import logo from "./logo.svg";
 
 export default function Header() {
   const { user, setUser } = useContext(UserContext);
   const location = useLocation().pathname;
   const navigate = useNavigate();
+  const [isHidden, setIsHidden] = useState(false);
+  const { isSearchVisible, isMobile } = useContext(DeviceContext);
+  useEffect(() => {
+    const checkScroll = () => {
+      setIsHidden(window.scrollY > 300);
+    };
+
+    window.addEventListener("scroll", checkScroll);
+
+    return () => {
+      window.removeEventListener("scroll", checkScroll);
+    };
+  }, []);
 
   function logout() {
     if (!window.confirm("Are you sure you want to logout?")) return;
@@ -34,112 +53,131 @@ export default function Header() {
   }, [setUser]);
 
   return (
-    <header>
+    <header className={isHidden ? "hidden" : ""}>
       <nav className={"navbar"}>
-        <div>
-          <Link to={"/"} style={{ fontSize: "2em" }}>
-            LearnUp
+        <div className={"navbar-logo"}>
+          <Link to={"/"}>
+            <img src={logo} alt={"logo"} className={"header-logo"} />
           </Link>
         </div>
         <Search />
-        <ul className={"navbar-links"}>
-          {location !== "/" && (
-            <li>
-              <Link to={"/"}>
-                <button
-                  style={{ width: "50px", height: "50px" }}
-                  title={"Go to home"}
-                >
-                  <FontAwesomeIcon icon={faHouse} />
-                </button>
-              </Link>
-            </li>
-          )}
-          {!user && location !== "/login" && (
-            <li>
-              <Link to={"/login"}>Log In</Link>
-            </li>
-          )}
-          {!user && location !== "/signup" && (
-            <li>
-              <Link to={"/signup"} id={"signup-link"}>
-                Join for Free
-              </Link>
-            </li>
-          )}
-          {Cookies.get("role") === "instructor" &&
-            location !== "/dashboard" && (
+        {!isSearchVisible || !isMobile ? (
+          <ul className={"navbar-links"}>
+            {location !== "/" && (
               <li>
-                <Link to={"/dashboard"}>
+                <Link to={"/"}>
                   <button
                     style={{ width: "50px", height: "50px" }}
-                    title={"Go to dashboard"}
+                    title={"Go to home"}
                   >
-                    <FontAwesomeIcon icon={faChalkboardUser} />
+                    <FontAwesomeIcon icon={faHouse} />
                   </button>
                 </Link>
               </li>
             )}
-          {Cookies.get("role") === "admin" && location !== "/admin" && (
-            <li>
-              <Link to={"/admin"}>
+            {!user && location !== "/login" && (
+              <li>
+                <Link to={"/login"}>
+                  {!isMobile ? (
+                    "Log In"
+                  ) : (
+                    <button style={{ width: "50px", height: "50px" }}>
+                      <FontAwesomeIcon icon={faArrowRightToBracket} />
+                    </button>
+                  )}
+                </Link>
+              </li>
+            )}
+            {!user && location !== "/signup" && (
+              <li>
+                <Link to={"/signup"}>
+                  {!isMobile ? (
+                    "Sign Up"
+                  ) : (
+                    <button style={{ width: "50px", height: "50px" }}>
+                      <FontAwesomeIcon icon={faUserPlus} />
+                    </button>
+                  )}
+                </Link>
+              </li>
+            )}
+            {Cookies.get("role") === "instructor" &&
+              location !== "/dashboard" && (
+                <li>
+                  <Link to={"/dashboard"}>
+                    <button
+                      style={{ width: "50px", height: "50px" }}
+                      title={"Go to dashboard"}
+                    >
+                      <FontAwesomeIcon icon={faChalkboardUser} />
+                    </button>
+                  </Link>
+                </li>
+              )}
+            {Cookies.get("role") === "admin" && location !== "/admin" && (
+              <li>
+                <Link to={"/admin"}>
+                  <button
+                    style={{ width: "50px", height: "50px" }}
+                    title={"Go to admin panel"}
+                  >
+                    <FontAwesomeIcon icon={faScrewdriverWrench} />
+                  </button>
+                </Link>
+              </li>
+            )}
+            {Cookies.get("role") === "student" &&
+              location !== "/my-courses" && (
+                <li>
+                  <Link to={"/my-courses"}>
+                    <button
+                      style={{ width: "50px", height: "50px" }}
+                      title={"Enrollments"}
+                    >
+                      <FontAwesomeIcon icon={faLeanpub} />
+                    </button>
+                  </Link>
+                </li>
+              )}
+            {Cookies.get("role") === "student" && location !== "/cart" && (
+              <li>
+                <Link to={"/cart"}>
+                  <button
+                    style={{ width: "50px", height: "50px" }}
+                    title={"Go to cart"}
+                  >
+                    <FontAwesomeIcon icon={faCartShopping} />
+                  </button>
+                </Link>
+              </li>
+            )}
+            {user && location !== "/profile" && (
+              <li>
+                <Link to={"/profile"}>
+                  <button
+                    style={{ width: "50px", height: "50px" }}
+                    title={"Go to profile"}
+                  >
+                    <FontAwesomeIcon icon={faUser} />
+                  </button>
+                </Link>
+              </li>
+            )}
+            {user && (
+              <li id={"logout"}>
                 <button
-                  style={{ width: "50px", height: "50px" }}
-                  title={"Go to admin panel"}
+                  onClick={logout}
+                  style={{ height: "50px", width: "50px" }}
                 >
-                  <FontAwesomeIcon icon={faScrewdriverWrench} />
+                  <FontAwesomeIcon icon={faRightFromBracket} />
                 </button>
-              </Link>
-            </li>
-          )}
-          {Cookies.get("role") === "student" && location !== "/my-courses" && (
+              </li>
+            )}
             <li>
-              <Link to={"/my-courses"}>
-                <button
-                  style={{ width: "50px", height: "50px" }}
-                  title={"Enrollments"}
-                >
-                  <FontAwesomeIcon icon={faLeanpub} />
-                </button>
-              </Link>
+              <ThemeSwitcher />
             </li>
-          )}
-          {Cookies.get("role") === "student" && location !== "/cart" && (
-            <li>
-              <Link to={"/cart"}>
-                <button
-                  style={{ width: "50px", height: "50px" }}
-                  title={"Go to cart"}
-                >
-                  <FontAwesomeIcon icon={faCartShopping} />
-                </button>
-              </Link>
-            </li>
-          )}
-          {user && location !== "/profile" && (
-            <li>
-              <Link to={"/profile"}>
-                <button
-                  style={{ width: "50px", height: "50px" }}
-                  title={"Go to profile"}
-                >
-                  <FontAwesomeIcon icon={faUser} />
-                </button>
-              </Link>
-            </li>
-          )}
-          {user && (
-            <li>
-              <button
-                onClick={logout}
-                style={{ height: "50px", width: "50px" }}
-                title={"Logout"}
-              >
-                <FontAwesomeIcon icon={faRightFromBracket} />
-              </button>
-            </li>
-          )}
-        </ul>
+          </ul>
+        ) : null}
       </nav>
     </header>
   );

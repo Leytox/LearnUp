@@ -1,29 +1,33 @@
 .course-item-card {
+    background-color: var(--bg-secondary-color);
     position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     width: 350px;
-    min-height: 300px;
-    max-height: 300px;
-    border: 1px solid #ddd;
+    min-height: 340px;
+    max-height: 340px;
     padding: 15px;
     margin: 10px;
     border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     border-bottom: 3px solid;
 }
 
 .course-item-card h1 {
     font-size: 2em;
-    color: #333;
+    color: var(--text-color);
 }
 
 .course-item-card p {
     font-size: 1.2em;
-    color: #666;
+    color: var(--text-color);
 }
 
 .course-item-card-link {
     display: flex;
     flex-direction: column;
+    width: 100%;
     gap: 5px;
     color: inherit;
 }
@@ -35,7 +39,9 @@
 }
 
 .course-item-card-children {
-    position: absolute;
-    right: 5px;
-    bottom: 5px;
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
 }

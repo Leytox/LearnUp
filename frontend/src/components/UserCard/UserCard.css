@@ -3,8 +3,11 @@
     padding: 20px;
     margin-bottom: 20px;
     border-radius: 5px;
-    height: 100px;
     background-color: #f5f5f5;
+}
+
+.user-card a {
+    height: fit-content;
 }
 
 .user-card p {

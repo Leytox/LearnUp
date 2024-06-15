@@ -24,12 +24,17 @@
 .no-enrollments {
     color: #777777;
     font-style: italic;
-    margin-bottom: 20px;
-    margin-top: 300px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
     text-align: center;
+    flex-grow: 1;
 }
 
-.no-enrollments h2 {
+.no-enrollments h1 {
     font-style: italic;
-    color: #555;
+    color: #777777;
 }

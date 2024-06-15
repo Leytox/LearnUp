@@ -10,22 +10,21 @@ import SignUp from "./pages/Auth/SignUp/SignUp.jsx";
 import NotFound from "./pages/NotFound/NotFound.jsx";
 import Profile from "./pages/Profiles/Profile/Profile.jsx";
 import Courses from "./pages/Course/Courses/Courses.jsx";
-import Partners from "./pages/Information/Partners/Partners.jsx";
 import CourseDetail from "./pages/Course/CourseDetail/CourseDetail.jsx";
 import Dashboard from "./pages/Dashboard/Dashboard.jsx";
 import Admin from "./pages/Admin/Admin.jsx";
 import Cart from "./pages/Cart/Cart.jsx";
-import CreateCourse from "./pages/Course/CreateCourse/CreateCourse.jsx";
-import CreateLesson from "./pages/Lesson/CreateLesson/CreateLesson.jsx";
+import CreateCourse from "./pages/Course/CreateCourse.jsx";
+import CreateLesson from "./pages/Lesson/CreateLesson.jsx";
 import Lesson from "./pages/Lesson/Lesson.jsx";
-import EditCourse from "./pages/Course/EditCourse/EditCourse.jsx";
+import EditCourse from "./pages/Course/EditCourse.jsx";
 import UserProfile from "./pages/Profiles/UserProfile/UserProfile.jsx";
 import CreateQuiz from "./pages/Quiz/CreateQuiz/CreateQuiz.jsx";
 import CreateCategory from "./pages/Category/CreateCategory/CreateCategory.jsx";
 import EditCategory from "./pages/Category/EditCategory/EditCategory.jsx";
 import EditQuiz from "./pages/Quiz/EditQuiz/EditQuiz.jsx";
 import PassQuiz from "./pages/Quiz/PassQuiz.jsx";
-import EditLesson from "./pages/Lesson/EditLesson/EditLesson.jsx";
+import EditLesson from "./pages/Lesson/EditLesson.jsx";
 import Enrollments from "./pages/Enrollments/Enrollments.jsx";
 
 export default function App() {
@@ -34,7 +33,6 @@ export default function App() {
       <Routes>
         <Route index path={"/"} element={<Home />} />
         <Route path={"/about"} element={<About />} />
-        <Route path={"/about/partners"} element={<Partners />} />
         <Route path={"/contact"} element={<Contact />} />
         <Route path={"/help"} element={<Help />} />
         <Route path={"/login"} element={<Login />} />

@@ -3,6 +3,9 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { Helmet } from "react-helmet";
+import "./SignUp.css";
+import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function Register() {
   const [name, setName] = useState("");
@@ -21,7 +24,7 @@ export default function Register() {
     event.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/auth/register",
+        `${import.meta.env.VITE_BACKEND_URI}/api/auth/register`,
         {
           name,
           email,
@@ -39,7 +42,7 @@ export default function Register() {
   if (redirect) navigate("/login");
 
   return (
-    <form onSubmit={Register}>
+    <form className={"main-wrapper"} onSubmit={Register}>
       <Helmet>
         <title>Sign Up</title>
       </Helmet>
@@ -80,14 +83,17 @@ export default function Register() {
         <option value={"instructor"}>Instructor</option>
       </select>
       <textarea
+        required={true}
         id="bio"
         name="bio"
         placeholder={"Tell something about yourself..."}
-        rows="2"
+        rows="3"
         cols="50"
         onChange={(event) => setBio(event.target.value)}
       />
-      <button type={"submit"}>Continue</button>
+      <button type={"submit"}>
+        Continue <FontAwesomeIcon icon={faArrowRight} />
+      </button>
       <p>
         Already have an account?{" "}
         <Link to={"/login"} style={{ color: "#007bff" }}>

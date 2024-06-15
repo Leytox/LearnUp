@@ -27,11 +27,14 @@ export default function Cart() {
           setRedirect(true);
           return;
         }
-        const response = await axios.get("http://localhost:5000/api/cart", {
-          headers: {
-            "x-auth-token": Cookies.get("token"),
+        const response = await axios.get(
+          `${import.meta.env.VITE_BACKEND_URI}/api/cart`,
+          {
+            headers: {
+              "x-auth-token": Cookies.get("token"),
+            },
           },
-        });
+        );
         setCart(response.data);
         const total = response.data.reduce(
           (sum, cartItem) => sum + cartItem.course.price,
@@ -48,8 +51,8 @@ export default function Cart() {
 
   const removeFromCart = async (courseId) => {
     try {
-      const response = await axios.post(
-        "http://localhost:5000/api/cart/remove",
+      await axios.post(
+        `${import.meta.env.VITE_BACKEND_URI}/api/cart/remove`,
         { courseId },
         {
           headers: {
@@ -75,8 +78,8 @@ export default function Cart() {
 
   const checkout = async () => {
     try {
-      const response = await axios.post(
-        "http://localhost:5000/api/payments/process",
+      await axios.post(
+        `${import.meta.env.VITE_BACKEND_URI}/api/payments/process`,
         {},
         {
           headers: {
@@ -95,7 +98,7 @@ export default function Cart() {
   return loading ? (
     <Preloader />
   ) : (
-    <div className="cart-container">
+    <div className="cart-container main-wrapper">
       <Helmet>
         <title>Cart</title>
       </Helmet>
@@ -115,13 +118,14 @@ export default function Cart() {
             <div className={"cart-items"}>
               {cart.map((cartItem, index) => (
                 <div key={index} className={"cart-item"}>
-                  <CourseCard course={cartItem.course} />
-                  <button
-                    onClick={() => removeFromCart(cartItem.course._id)}
-                    className={"cart-button-remove-item"}
-                  >
-                    Remove <FontAwesomeIcon icon={faTrash} />
-                  </button>
+                  <CourseCard course={cartItem.course}>
+                    <button
+                      onClick={() => removeFromCart(cartItem.course._id)}
+                      className={"cart-button-remove-item"}
+                    >
+                      <FontAwesomeIcon icon={faTrash} />
+                    </button>
+                  </CourseCard>
                 </div>
               ))}
             </div>

@@ -1,10 +1,8 @@
-/* frontend/src/pages/Cart/Cart.css */
-
 .cart-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center; /* This will center items vertically */
+    justify-content: center;
     padding: 20px;
     border-radius: 10px;
     margin-bottom: 60px;
@@ -15,13 +13,12 @@
     color: #777777;
     font-style: italic;
     margin-bottom: 20px;
-    margin-top: 300px;
     text-align: center;
 }
 
 .cart-title {
     font-size: 2em;
-    color: #333;
+    color: var(--text-color);
     margin-bottom: 20px;
 }
 
@@ -58,9 +55,52 @@
 }
 
 .cart-button-remove-item {
+    color: #fff;
+    width: 50px;
     background-color: #ff0000;
 }
 
 .cart-button-checkout {
+    color: #fff;
     background-color: #1f831f;
+}
+
+@media (max-width: 768px) {
+    .cart-container {
+        padding: 20px;
+    }
+
+    .cart-title {
+        font-size: 24px;
+    }
+
+    .cart-box {
+        flex-direction: column;
+    }
+
+    .cart-items {
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+    }
+
+    .cart-item {
+        width: 100%;
+        border-radius: 10px;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .cart-button-remove-item {
+        margin-top: 10px;
+    }
+
+    .cart-info {
+        width: 100%;
+        text-align: center;
+    }
+
+    .cart-button-checkout {
+        width: 100%;
+    }
 }

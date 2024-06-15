@@ -32,7 +32,7 @@ export default function EditQuiz() {
     }
     const fetchData = async () => {
       const quizResponse = await axios.get(
-        `http://localhost:5000/api/quizzes/course/${courseId}/quizz/${quizId}`,
+        `${import.meta.env.VITE_BACKEND_URI}/api/quizzes/course/${courseId}/lesson/${lessonId}/quizz/${quizId}`,
         {
           headers: {
             "x-auth-token": Cookies.get("token"),
@@ -44,7 +44,7 @@ export default function EditQuiz() {
       setDescription(quizResponse.data.description);
       setQuestions(quizResponse.data.questions);
       const lessonResponse = await axios.get(
-        `http://localhost:5000/api/lessons/${lessonId}`,
+        `${import.meta.env.VITE_BACKEND_URI}/api/lessons/${lessonId}`,
         {
           headers: {
             "x-auth-token": Cookies.get("token"),
@@ -53,7 +53,7 @@ export default function EditQuiz() {
       );
       setLesson(lessonResponse.data);
       const courseResponse = await axios.get(
-        `http://localhost:5000/api/courses/${courseId}`,
+        `${import.meta.env.VITE_BACKEND_URI}/api/courses/${courseId}`,
       );
       setCourse(courseResponse);
       if (courseResponse.data.instructor._id !== Cookies.get("id"))
@@ -66,7 +66,7 @@ export default function EditQuiz() {
     e.preventDefault();
     try {
       await axios.put(
-        `http://localhost:5000/api/quizzes/course/${courseId}/quizz/${quizId}`,
+        `${import.meta.env.VITE_BACKEND_URI}/api/quizzes/course/${courseId}/quizz/${quizId}`,
         {
           title,
           description,
@@ -127,7 +127,10 @@ export default function EditQuiz() {
   return loading ? (
     <Preloader />
   ) : quiz && lesson && course ? (
-    <form onSubmit={handleSubmit} className="create-quizz-container">
+    <form
+      onSubmit={handleSubmit}
+      className="create-quizz-container main-wrapper"
+    >
       <Helmet>
         <title>Edit Quiz</title>
       </Helmet>

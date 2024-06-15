@@ -41,33 +41,33 @@ export default function CourseDetail() {
       try {
         if (Cookies.get("id")) {
           const userResponse = await axios.get(
-            `http://localhost:5000/api/users/${Cookies.get("id")}`,
+            `${import.meta.env.VITE_BACKEND_URI}/api/profile/${Cookies.get("id")}`,
           );
           setUser(userResponse.data);
         }
         const courseResponse = await axios.get(
-          `http://localhost:5000/api/courses/${courseId}`,
+          `${import.meta.env.VITE_BACKEND_URI}/api/courses/${courseId}`,
         );
         setCourse(courseResponse.data);
         const lessonsResponse = await axios.get(
-          `http://localhost:5000/api/lessons/${courseId}`,
+          `${import.meta.env.VITE_BACKEND_URI}/api/lessons/${courseId}`,
         );
         setLessons(lessonsResponse.data);
         const quizzesResponse = await axios.get(
-          `http://localhost:5000/api/quizzes/${courseId}`,
+          `${import.meta.env.VITE_BACKEND_URI}/api/quizzes/${courseId}`,
         );
         setQuizzes(quizzesResponse.data);
         const instructorResponse = await axios.get(
-          `http://localhost:5000/api/profile/${courseResponse.data.instructor._id}`,
+          `${import.meta.env.VITE_BACKEND_URI}/api/profile/${courseResponse.data.instructor._id}`,
         );
         setInstructor(instructorResponse.data);
         const reviews = await axios.get(
-          `http://localhost:5000/api/reviews/${courseId}`,
+          `${import.meta.env.VITE_BACKEND_URI}/api/reviews/${courseId}`,
         );
         setReviews(reviews.data);
         if (Cookies.get("token") && Cookies.get("role") === "student") {
           const enrolledResponse = await axios.get(
-            `http://localhost:5000/api/enrollments/enrolled/${courseId}`,
+            `${import.meta.env.VITE_BACKEND_URI}/api/enrollments/enrolled/${courseId}`,
             {
               headers: {
                 "x-auth-token": Cookies.get("token"),
@@ -75,8 +75,9 @@ export default function CourseDetail() {
             },
           );
           setIsEnrolled(!!enrolledResponse.data);
+          if (!enrolledResponse.data) return;
           const progressResponse = await axios.get(
-            `http://localhost:5000/api/enrollments/progress/user/${Cookies.get("id")}/course/${courseId}`,
+            `${import.meta.env.VITE_BACKEND_URI}/api/enrollments/progress/user/${Cookies.get("id")}/course/${courseId}`,
             {
               headers: {
                 "x-auth-token": Cookies.get("token"),
@@ -96,11 +97,14 @@ export default function CourseDetail() {
     if (Cookies.get("role") === "instructor") return;
     const fetchCart = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/cart", {
-          headers: {
-            "x-auth-token": Cookies.get("token"),
+        const response = await axios.get(
+          `${import.meta.env.VITE_BACKEND_URI}/api/cart`,
+          {
+            headers: {
+              "x-auth-token": Cookies.get("token"),
+            },
           },
-        });
+        );
         const courseInCart = response.data.some(
           (cartItem) => cartItem.course._id === course._id,
         );
@@ -110,15 +114,13 @@ export default function CourseDetail() {
       }
     };
 
-    if (Cookies.get("token")) {
-      fetchCart();
-    }
+    if (Cookies.get("token") && Cookies.get("role") === "student") fetchCart();
   }, [course]);
 
   const addToCart = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/cart/add",
+        `${import.meta.env.VITE_BACKEND_URI}/api/cart/add`,
         { courseId: course._id },
         {
           headers: {
@@ -136,7 +138,7 @@ export default function CourseDetail() {
   const submitReview = async () => {
     try {
       await axios.post(
-        "http://localhost:5000/api/reviews/",
+        `${import.meta.env.VITE_BACKEND_URI}/api/reviews/`,
         { courseId, rating, comment: reviewText },
         {
           headers: {
@@ -148,7 +150,7 @@ export default function CourseDetail() {
       setRating(0);
       alert("Review submitted!");
       const reviewsResponse = await axios.get(
-        `http://localhost:5000/api/reviews/${courseId}`,
+        `${import.meta.env.VITE_BACKEND_URI}/api/reviews/${courseId}`,
       );
       setReviews(reviewsResponse.data);
     } catch (error) {
@@ -163,7 +165,7 @@ export default function CourseDetail() {
   return loading ? (
     <Preloader />
   ) : course ? (
-    <div className="course-container">
+    <div className="course-container main-wrapper">
       <Helmet>
         <title>Course Details</title>
       </Helmet>
@@ -204,7 +206,8 @@ export default function CourseDetail() {
           </Link>
         ) : user._id === course.instructor._id ||
           isEnrolled ||
-          Cookies.get("role") === "instructor" ? null : isInCart ? (
+          Cookies.get("role") === "instructor" ||
+          Cookies.get("role") === "admin" ? null : isInCart ? (
           <Link to={"/cart"}>
             <button id={"buy-button"}>
               Go to cart <FontAwesomeIcon icon={faCartShopping} />
@@ -231,7 +234,7 @@ export default function CourseDetail() {
               <img
                 src={
                   user.profilePicture
-                    ? `http://localhost:5000/${user.profilePicture}`
+                    ? `${import.meta.env.VITE_BACKEND_URI}/${user.profilePicture}`
                     : "https://cdn-icons-png.flaticon.com/512/21/21104.png"
                 }
                 alt={"profile picture"}
@@ -266,7 +269,7 @@ export default function CourseDetail() {
               <img
                 src={
                   review.user.profilePicture
-                    ? `http://localhost:5000/${review.user.profilePicture}`
+                    ? `${import.meta.env.VITE_BACKEND_URI}/${review.user.profilePicture}`
                     : "https://cdn-icons-png.flaticon.com/512/21/21104.png"
                 }
                 alt={"profile picture"}
@@ -301,7 +304,7 @@ export default function CourseDetail() {
         <img
           src={
             instructor.profilePicture
-              ? `http://localhost:5000/${instructor.profilePicture}`
+              ? `${import.meta.env.VITE_BACKEND_URI}/${instructor.profilePicture}`
               : "https://cdn-icons-png.flaticon.com/512/21/21104.png"
           }
           alt={"profile picture"}

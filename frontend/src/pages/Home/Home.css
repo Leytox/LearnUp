@@ -1,0 +1,144 @@
+.welcome-section {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    gap: 25px;
+    width: 100%;
+}
+
+.welcome-section h1 {
+    font-size: 2.5em;
+}
+
+.welcome-section button {
+    background-color: var(--special-button-background);
+    color: var(--special-button-color);
+}
+
+.welcome-section button:hover {
+    background-color: #222;
+}
+
+.welcome-section img {
+    border-radius: 5px;
+}
+
+.welcome-section .texts {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 25%;
+    gap: 25px;
+}
+
+.features {
+    background-color: var(--bg-secondary-color);
+    margin-top: 50px;
+}
+
+.features .texts {
+    padding: 75px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 25px;
+    text-align: center;
+}
+
+
+.explore {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 20px;
+    padding: 50px;
+}
+
+.course-types {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 50px;
+}
+
+.community {
+    background-color: var(--bg-secondary-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 40px;
+    padding: 50px;
+}
+
+.feedback {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    width: 100%;
+    gap: 20px;
+}
+
+.contacts {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 20px;
+    padding: 50px;
+}
+
+@media (max-width: 768px) {
+    .welcome-section {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 25px;
+    }
+
+    .welcome-section .texts {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 90%;
+    }
+
+    .welcome-section h1 {
+        text-align: center;
+    }
+
+    .welcome-section img {
+        width: 90%;
+    }
+
+    .features .texts {
+        padding: 25px;
+    }
+
+    .explore {
+        padding: 25px;
+    }
+
+    .course-types {
+        padding: 25px;
+    }
+
+    .community {
+        padding: 25px;
+    }
+
+    .feedback {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .contacts {
+        text-align: center;
+        padding: 25px;
+    }
+}
