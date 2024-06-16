@@ -4,6 +4,7 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const path = require("path");
 const PORT = process.env.PORT || 5000;
+const bot = require("./bot/telegramBot");
 dotenv.config();
 const app = express();
 
@@ -11,7 +12,6 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
-
 // Routes
 app.use("/api/auth", require("./routes/auth"));
 app.use("/api/categories", require("./routes/categories"));
@@ -27,6 +27,8 @@ app.use("/api/reviews", require("./routes/reviews"));
 app.use("/api/cart", require("./routes/cart"));
 
 // Start the App
-connectDB().then(() =>
-  app.listen(PORT, () => console.log(`Server running on port ${PORT}`)),
-);
+connectDB()
+  .then(() =>
+    app.listen(PORT, () => console.log(`Server running on port ${PORT}`)),
+  )
+  .catch((error) => console.error(error));

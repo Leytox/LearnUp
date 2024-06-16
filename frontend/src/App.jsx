@@ -26,6 +26,9 @@ import EditQuiz from "./pages/Quiz/EditQuiz/EditQuiz.jsx";
 import PassQuiz from "./pages/Quiz/PassQuiz.jsx";
 import EditLesson from "./pages/Lesson/EditLesson.jsx";
 import Enrollments from "./pages/Enrollments/Enrollments.jsx";
+import Verification from "./pages/Verification/Verification.jsx";
+import ForgotPassword from "./pages/ForgotPassword/ForgotPassword.jsx";
+import ResetPassword from "./pages/ResetPassword/ResetPassword.jsx";
 
 export default function App() {
   return (
@@ -37,6 +40,9 @@ export default function App() {
         <Route path={"/help"} element={<Help />} />
         <Route path={"/login"} element={<Login />} />
         <Route path={"/signup"} element={<SignUp />} />
+        <Route path={"/forgot-password"} element={<ForgotPassword />} />
+        <Route path={"/reset-password/:token"} element={<ResetPassword />} />
+        <Route path={"/verify/:id"} element={<Verification />} />
         <Route path={"/profile"} element={<Profile />} />
         <Route path={"/profile/:id"} element={<UserProfile />} />
         <Route path={"/courses"} element={<Courses />} />

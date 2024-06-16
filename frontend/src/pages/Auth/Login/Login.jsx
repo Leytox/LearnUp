@@ -50,7 +50,7 @@ export default function Login() {
           sameSite: "strict",
         });
     } catch (err) {
-      setError(true);
+      setError(err.response.data);
     }
   }
 
@@ -92,7 +92,23 @@ export default function Login() {
           Sign up
         </Link>
       </p>
-      {error && <p style={{ color: "red" }}>Invalid email or password</p>}
+      {error && error.errorType === "email" && (
+        <p style={{ color: "red" }}>{error.msg}</p>
+      )}
+      {error && error.errorType === "password" && (
+        <p style={{ color: "red" }}>
+          {error.msg}
+          <Link to={"/forgot-password"}>
+            <br /> Forgot password?
+          </Link>
+        </p>
+      )}
+      {error && error.errorType === "verification" && (
+        <p style={{ color: "red" }}>
+          {error.msg}
+          <Link to={`/verify/${error.userId}`}>Verify account</Link>
+        </p>
+      )}
     </form>
   );
 }

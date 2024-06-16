@@ -1,5 +1,6 @@
 const User = require("../models/User");
 const fs = require("node:fs");
+const bcrypt = require("bcryptjs");
 
 async function getUserProfileById(req, res) {
   try {
@@ -66,6 +67,28 @@ async function updateProfilePicture(req, res) {
   }
 }
 
+async function updatePassword(req, res) {
+  const { oldPassword, newPassword } = req.body;
+  try {
+    const user = await User.findById(req.user.id);
+    if (!user) return res.status(404).json({ msg: "User not found" });
+
+    const isMatch = await bcrypt.compare(oldPassword, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ msg: "Old password is incorrect" });
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(newPassword, salt);
+    await user.save();
+
+    res.json({ msg: "Password updated successfully" });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server error");
+  }
+}
+
 async function deleteProfilePicture(req, res) {
   try {
     const user = await User.findById(req.user.id);
@@ -92,5 +115,6 @@ module.exports = {
   updateUserProfile,
   deleteUserProfile,
   updateProfilePicture,
+  updatePassword,
   deleteProfilePicture,
 };

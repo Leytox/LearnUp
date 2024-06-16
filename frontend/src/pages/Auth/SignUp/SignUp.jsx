@@ -6,6 +6,8 @@ import { Helmet } from "react-helmet";
 import "./SignUp.css";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import "react-phone-number-input/style.css";
+import PhoneInput from "react-phone-number-input";
 
 export default function Register() {
   const [name, setName] = useState("");
@@ -13,8 +15,10 @@ export default function Register() {
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("student");
   const [bio, setBio] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [redirect, setRedirect] = useState(false);
   const [error, setError] = useState(false);
+  const [userId, setUserId] = useState("");
   const navigate = useNavigate();
   useEffect(() => {
     if (Cookies.get("token")) setRedirect(true);
@@ -31,15 +35,17 @@ export default function Register() {
           password,
           role,
           bio,
+          phoneNumber,
         },
       );
+      setUserId(response.data.id);
       if (response.status === 200) setRedirect(true);
     } catch (err) {
       setError(true);
     }
   }
 
-  if (redirect) navigate("/login");
+  if (redirect) navigate(`/verify/${userId}`);
 
   return (
     <form className={"main-wrapper"} onSubmit={Register}>
@@ -72,6 +78,11 @@ export default function Register() {
         required={true}
         minLength={6}
         onChange={(event) => setPassword(event.target.value)}
+      />
+      <PhoneInput
+        placeholder="Enter phone number"
+        value={phoneNumber}
+        onChange={setPhoneNumber}
       />
       <select
         id="role"

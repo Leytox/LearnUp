@@ -6,6 +6,7 @@ import {
   faTwitter,
 } from "@fortawesome/free-brands-svg-icons";
 import "./Contacts.css";
+import { faEnvelope, faPhone } from "@fortawesome/free-solid-svg-icons";
 
 export default function Contacts() {
   return (
@@ -43,10 +44,12 @@ export default function Contacts() {
             <FontAwesomeIcon icon={faLinkedin} size="2x" />
           </a>
         </div>
-        <p>
+        <p className={"contact-list"}>
           For more information, please contact us at{" "}
-          <a href={"mailto:nfo@yourpage.com"}>info@yourpage.com</a> or call us
-          at <a href={"tel:1234567890"}>(123) 456-7890</a>.
+          <a href={"mailto:nfo@yourpage.com"}>info@yourpage.com</a>{" "}
+          <FontAwesomeIcon icon={faEnvelope} /> or call us{" "}
+          <a href={"tel:1234567890"}>(123) 456-7890</a>{" "}
+          <FontAwesomeIcon icon={faPhone} />
         </p>
       </div>
     </div>

@@ -12,7 +12,6 @@
     border: 2px solid var(--text-color);
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     border-radius: 5px;
-    height: 600px;
 }
 
 .profile-info {
@@ -68,6 +67,15 @@
     background-color: #222;
 }
 
+.reset-password-button {
+    background-color: darkgoldenrod;
+    color: var(--special-button-color);
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+}
+
 .delete-account-button {
     background-color: #dc3545;
     color: #fff;
@@ -79,6 +87,55 @@
 
 .delete-account-button:hover {
     background-color: #a71d2a;
+}
+
+.modal {
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+    border-radius: 5px;
+    background-color: var(--bg-color);
+    margin: 15% auto;
+    padding: 20px;
+    width: 50%;
+}
+
+.modal-content h1 {
+    text-align: center;
+}
+
+.modal-content form {
+    width: 50%;
+}
+
+.modal-content input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid var(--text-color);
+    border-radius: 5px;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
 }
 
 @media screen and (max-width: 768px) {

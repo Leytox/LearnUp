@@ -21,6 +21,9 @@ router.post(
   ProfileService.updateProfilePicture,
 );
 
+// Update password
+router.put("/password", auth, ProfileService.updatePassword);
+
 // Delete user profile picture
 router.delete("/picture", auth, ProfileService.deleteProfilePicture);
 

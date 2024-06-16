@@ -1,0 +1,16 @@
+.vi__container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.verification-button-link {
+    background-color: var(--special-button-background);
+    color: white;
+}
+
+.verification-button-link:hover {
+    background-color: var(--special-button-background-hover);
+    cursor: pointer;
+}

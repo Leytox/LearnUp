@@ -9,6 +9,7 @@ import Preloader from "../../../components/Preloader/Preloader.jsx";
 import {
   faArrowRightFromBracket,
   faFloppyDisk,
+  faKey,
   faPenToSquare,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
@@ -21,6 +22,12 @@ export default function Profile() {
   const [name, setName] = useState("");
   const [bio, setBio] = useState("");
   const [loading, setLoading] = useState(true);
+  const [showResetPassword, setShowResetPassword] = useState(false);
+  const [oldPassword, setOldPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmNewPassword, setConfirmNewPassword] = useState("");
+  const [passwordError, setPasswordError] = useState(null);
+  const [showModal, setShowModal] = useState(false);
   const { setUser } = useContext(UserContext);
   const navigate = useNavigate();
 
@@ -49,6 +56,40 @@ export default function Profile() {
     };
     fetchProfile().finally(() => setLoading(false));
   }, []);
+
+  const toggleModal = () => {
+    setShowModal(!showModal);
+  };
+
+  const handlePasswordReset = async (event) => {
+    event.preventDefault();
+    if (newPassword !== confirmNewPassword) {
+      setPasswordError("New passwords do not match");
+      return;
+    }
+    try {
+      const response = await axios.put(
+        `${import.meta.env.VITE_BACKEND_URI}/api/profile/password`,
+        { oldPassword, newPassword },
+        {
+          headers: {
+            "x-auth-token": Cookies.get("token"),
+          },
+        },
+      );
+      if (response.status === 200) {
+        alert("Password reset successful");
+        setShowModal(false);
+        setOldPassword("");
+        setNewPassword("");
+        setConfirmNewPassword("");
+        setPasswordError(null);
+        setShowResetPassword(false);
+      }
+    } catch (error) {
+      setPasswordError("Old password is incorrect");
+    }
+  };
 
   const uploadProfilePicture = async (event) => {
     const formData = new FormData();
@@ -259,6 +300,48 @@ export default function Profile() {
                 Edit Profile <FontAwesomeIcon icon={faPenToSquare} />
               </button>
             </div>
+            <div className={"profile-settings-buttons"}>
+              <h3>Reset Password</h3>
+              <p>Reset your account password</p>
+              <button onClick={toggleModal} className={"reset-password-button"}>
+                Reset Password <FontAwesomeIcon icon={faKey} />
+              </button>
+            </div>
+            {showModal && (
+              <div className="modal">
+                <div className="modal-content">
+                  <span className="close" onClick={toggleModal}>
+                    &times;
+                  </span>
+                  <h1>Reset Password</h1>
+                  <form onSubmit={handlePasswordReset}>
+                    <input
+                      type="password"
+                      placeholder="Old password"
+                      value={oldPassword}
+                      onChange={(e) => setOldPassword(e.target.value)}
+                      required
+                    />
+                    <input
+                      type="password"
+                      placeholder="New password"
+                      value={newPassword}
+                      onChange={(e) => setNewPassword(e.target.value)}
+                      required
+                    />
+                    <input
+                      type="password"
+                      placeholder="Confirm new password"
+                      value={confirmNewPassword}
+                      onChange={(e) => setConfirmNewPassword(e.target.value)}
+                      required
+                    />
+                    <button type="submit">Reset Password</button>
+                    {passwordError && <p>{passwordError}</p>}
+                  </form>
+                </div>
+              </div>
+            )}
             <div className={"profile-settings-buttons"}>
               <h3>Delete Account</h3>
               <p>
