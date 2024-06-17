@@ -24,6 +24,7 @@ export default function Verification() {
         const response = await axios.get(
           `${import.meta.env.VITE_BACKEND_URI}/api/profile/${id}`,
         );
+        if (response.data.isPhoneVerified) navigate("/");
         setUser(response.data);
       };
       fetchUser().finally(() => setLoading(false));
