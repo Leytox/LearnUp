@@ -12,6 +12,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import CourseCard from "../../components/CourseCard/CourseCard.jsx";
+import { useTranslation } from "react-i18next";
 
 export default function Cart() {
   const [cart, setCart] = useState([]);
@@ -19,7 +20,7 @@ export default function Cart() {
   const [redirect, setRedirect] = useState(false);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-
+  const { t } = useTranslation();
   useEffect(() => {
     const fetchProfile = async () => {
       try {
@@ -100,14 +101,15 @@ export default function Cart() {
   ) : (
     <div className="cart-container main-wrapper">
       <Helmet>
-        <title>Cart</title>
+        <title>{t("cart")}</title>
       </Helmet>
       {cart.length === 0 ? (
         <>
-          <h1 className={"cart-empty"}>Your cart is empty...</h1>
+          <h1 className={"cart-empty"}>{t("emptyCart")}</h1>
           <Link to={"/courses?search="}>
             <button>
-              Buy courses <FontAwesomeIcon icon={faCartShopping} />
+              {t("buyCourses")}
+              <FontAwesomeIcon icon={faCartShopping} />
             </button>
           </Link>
         </>
@@ -130,9 +132,11 @@ export default function Cart() {
               ))}
             </div>
             <div className={"cart-info"}>
-              <h1>Total: ${total}</h1>
+              <h1>
+                {t("total")}: ${total}
+              </h1>
               <button className={"cart-button-checkout"} onClick={checkout}>
-                Checkout <FontAwesomeIcon icon={faCreditCard} />
+                {t("checkout")} <FontAwesomeIcon icon={faCreditCard} />
               </button>
             </div>
           </div>

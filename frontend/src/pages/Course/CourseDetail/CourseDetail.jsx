@@ -18,6 +18,7 @@ import TimeAgo from "javascript-time-ago";
 import en from "javascript-time-ago/locale/en";
 import { Helmet } from "react-helmet";
 import NotFound from "../../NotFound/NotFound.jsx";
+import { useTranslation } from "react-i18next";
 
 TimeAgo.addDefaultLocale(en);
 
@@ -35,6 +36,7 @@ export default function CourseDetail() {
   const [isInCart, setIsInCart] = useState(false);
   const [isEnrolled, setIsEnrolled] = useState(false);
   const [user, setUser] = useState(null);
+  const { t } = useTranslation();
   const { courseId } = useParams();
   useEffect(() => {
     const fetchCourse = async () => {
@@ -167,7 +169,7 @@ export default function CourseDetail() {
   ) : course ? (
     <div className="course-container main-wrapper">
       <Helmet>
-        <title>Course Details</title>
+        <title>{t("courseDetails")}</title>
       </Helmet>
       <div className={"course-details"}>
         <h1 className="course-title">{course.title}</h1>
@@ -175,9 +177,9 @@ export default function CourseDetail() {
         <h2 className={"course-category"}>{course.category}</h2>
         <p className="course-description">{course.description}</p>
         <div className={"course-content"}>
-          <h2>Course Content:</h2>
+          <h2>{t("courseContent")}:</h2>
           <h2 className="course-subtitle">
-            Lessons <FontAwesomeIcon icon={faPersonChalkboard} />
+            {t("lessons")} <FontAwesomeIcon icon={faPersonChalkboard} />
           </h2>
           <div>
             {lessons.map((lesson, index) => (
@@ -185,14 +187,14 @@ export default function CourseDetail() {
                 <p>{lesson.description}</p>
                 {(user?._id === course.instructor._id || isEnrolled) && (
                   <Link to={`/course/${course._id}/lesson/${lesson._id}`}>
-                    <button>Show Lesson</button>
+                    <button>{t("showLesson")}</button>
                   </Link>
                 )}
               </Accordion>
             ))}
           </div>
           <h2 className="course-subtitle">
-            Quizzes <FontAwesomeIcon icon={faVialCircleCheck} />
+            {t("quizzes")} <FontAwesomeIcon icon={faVialCircleCheck} />
           </h2>
           {quizzes.map((quiz, index) => (
             <Accordion key={index} title={quiz.title}>
@@ -202,7 +204,10 @@ export default function CourseDetail() {
         </div>
         {!Cookies.get("token") ? (
           <Link to={"/login"}>
-            <button> Log in to buy (${course.price})</button>
+            <button>
+              {" "}
+              {t("logInToBuy")} (${course.price})
+            </button>
           </Link>
         ) : user._id === course.instructor._id ||
           isEnrolled ||
@@ -210,17 +215,17 @@ export default function CourseDetail() {
           Cookies.get("role") === "admin" ? null : isInCart ? (
           <Link to={"/cart"}>
             <button id={"buy-button"}>
-              Go to cart <FontAwesomeIcon icon={faCartShopping} />
+              {t("goToCart")} <FontAwesomeIcon icon={faCartShopping} />
             </button>
           </Link>
         ) : (
           <button id={"buy-button"} onClick={addToCart}>
-            <FontAwesomeIcon icon={faCartShopping} /> Add to cart ($
+            <FontAwesomeIcon icon={faCartShopping} /> {t("addToCart")} ($
             {course.price})
           </button>
         )}
         <h2 className="review-header">
-          Comments <FontAwesomeIcon icon={faComment} />
+          {t("comments")} <FontAwesomeIcon icon={faComment} />
         </h2>
         {isEnrolled && (
           <div className={"review-creation"}>
@@ -251,18 +256,18 @@ export default function CourseDetail() {
             <textarea
               rows={1}
               required={true}
-              placeholder={"Leave a comment..."}
+              placeholder={t("leaveAComment")}
               className={"review-textarea"}
               value={reviewText}
               onChange={(event) => setReviewText(event.target.value)}
             />
             <button onClick={submitReview} className={"review-button-submit"}>
-              Submit <FontAwesomeIcon icon={faPaperPlane} />
+              {t("submit")} <FontAwesomeIcon icon={faPaperPlane} />
             </button>
           </div>
         )}
         {reviews.length === 0 ? (
-          <h3 className={"reviews-empty"}>No reviews yet...</h3>
+          <h3 className={"reviews-empty"}>{t("noReviewsYet")}</h3>
         ) : (
           reviews.map((review, index) => (
             <div key={index} className="review">
@@ -294,13 +299,15 @@ export default function CourseDetail() {
                   </p>
                 </div>
                 <p className="review-text">{review.comment}</p>
-                <p className="review-rating">Rating: {review.rating}</p>
+                <p className="review-rating">
+                  {t("rating")}: {review.rating}
+                </p>
               </div>
             </div>
           ))
         )}
       </div>
-      <div className={"course-instructor-container"}>
+      <div className="course-instructor-container">
         <img
           src={
             instructor.profilePicture
@@ -311,7 +318,7 @@ export default function CourseDetail() {
           className={"course-instructor-picture"}
         />
         <p className="course-instructor">
-          Created by:{" "}
+          {t("createdBy")}:{" "}
           <Link to={`/profile/${instructor._id}`}>{instructor.name}</Link>
         </p>
         <p className="course-instructor-bio">{instructor.bio}</p>

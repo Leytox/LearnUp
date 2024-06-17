@@ -16,8 +16,10 @@ import {
   faPlus,
 } from "@fortawesome/free-solid-svg-icons";
 import { Helmet } from "react-helmet";
+import { useTranslation } from "react-i18next";
 
 export default function Admin() {
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(true);
   const [categories, setCategories] = useState([]);
   const [courses, setCourses] = useState([]);
@@ -50,7 +52,7 @@ export default function Admin() {
             },
           },
         );
-        setUsers(usersResponse.data); // Add this line
+        setUsers(usersResponse.data);
       } catch (error) {
         console.error(error);
       }
@@ -67,12 +69,11 @@ export default function Admin() {
   ) : (
     <div className={"admin-panel main-wrapper"}>
       <Helmet>
-        <title>Admin</title>
+        <title>{t("adminPanel")}</title>
       </Helmet>
       <button
         className={"hide-filter-admin"}
         onClick={() => setAdminPanelVisible((prev) => !prev)}
-        title={"Toggle Filter"}
       >
         {isAdminPanelVisible ? (
           <FontAwesomeIcon icon={faMinus} />
@@ -83,7 +84,7 @@ export default function Admin() {
       <div className={"admin-panel-container"}>
         {isAdminPanelVisible && (
           <div className={"admin-panel-control"}>
-            <h1>Control</h1>
+            <h1>{t("controlPanel")}</h1>
             <div className={"admin-panel-control-buttons"}>
               <button
                 onClick={() => setTab("categories")}
@@ -94,7 +95,7 @@ export default function Admin() {
                 }}
                 disabled={tab === "categories"}
               >
-                Categories
+                {t("category")}
               </button>
               <button
                 onClick={() => setTab("courses")}
@@ -105,7 +106,7 @@ export default function Admin() {
                 }}
                 disabled={tab === "courses"}
               >
-                Courses
+                {t("courses")}
               </button>
               <button
                 onClick={() => setTab("users")}
@@ -116,7 +117,7 @@ export default function Admin() {
                 }}
                 disabled={tab === "users"}
               >
-                Users
+                {t("users")}
               </button>
             </div>
           </div>
@@ -136,7 +137,7 @@ export default function Admin() {
                 <CategoryCard key={category._id} category={category}>
                   <Link to={`/admin/categories/${category._id}/edit`}>
                     <button>
-                      Edit <FontAwesomeIcon icon={faPen} />
+                      {t("edit")} <FontAwesomeIcon icon={faPen} />
                     </button>
                   </Link>
                 </CategoryCard>
@@ -144,7 +145,7 @@ export default function Admin() {
             </div>
             <Link to={"/admin/categories/create"}>
               <button>
-                Create new <FontAwesomeIcon icon={faPlus} />
+                {t("createNew")} <FontAwesomeIcon icon={faPlus} />
               </button>
             </Link>
           </div>
@@ -156,11 +157,11 @@ export default function Admin() {
                 <CourseCard course={course}>
                   <Link to={`/course/${course._id}/edit`}>
                     <button>
-                      Edit <FontAwesomeIcon icon={faPen} />
+                      {t("edit")} <FontAwesomeIcon icon={faPen} />
                     </button>
                   </Link>
                   <p>
-                    Available:{" "}
+                    {t("availability")}:{" "}
                     {course.available ? (
                       <FontAwesomeIcon icon={faCheck} />
                     ) : (

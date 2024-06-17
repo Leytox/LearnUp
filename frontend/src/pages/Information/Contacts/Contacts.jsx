@@ -7,13 +7,19 @@ import {
 } from "@fortawesome/free-brands-svg-icons";
 import "./Contacts.css";
 import { faEnvelope, faPhone } from "@fortawesome/free-solid-svg-icons";
+import { useTranslation } from "react-i18next";
+import { Helmet } from "react-helmet";
 
 export default function Contacts() {
+  const { t } = useTranslation();
   return (
     <div className={"contacts-wrapper main-wrapper"}>
-      <h1>Contacts</h1>
+      <Helmet>
+        <title>{t("contacts")}</title>
+      </Helmet>
+      <h1>{t("contacts")}</h1>
       <div className={"contacts-info"}>
-        <p>Connect with us on social media:</p>
+        <p>{t("connectWithUs")}</p>
         <div className={"contacts-info-social"}>
           <a
             href="https://www.facebook.com/yourpage"
@@ -45,9 +51,9 @@ export default function Contacts() {
           </a>
         </div>
         <p className={"contact-list"}>
-          For more information, please contact us at{" "}
+          {t("moreInformation")}{" "}
           <a href={"mailto:nfo@yourpage.com"}>info@yourpage.com</a>{" "}
-          <FontAwesomeIcon icon={faEnvelope} /> or call us{" "}
+          <FontAwesomeIcon icon={faEnvelope} /> {t("orCallUs")}{" "}
           <a href={"tel:1234567890"}>(123) 456-7890</a>{" "}
           <FontAwesomeIcon icon={faPhone} />
         </p>

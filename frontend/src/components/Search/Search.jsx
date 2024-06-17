@@ -4,13 +4,14 @@ import { Link, useNavigate } from "react-router-dom";
 import { useContext, useState } from "react";
 import { DeviceContext } from "../../DeviceContext.jsx";
 import "./Search.css";
+import { useTranslation } from "react-i18next";
 
 export default function Search() {
   const [searchTerm, setSearchTerm] = useState("");
   const { isSearchVisible, setIsSearchVisible } = useContext(DeviceContext);
   const { isMobile } = useContext(DeviceContext);
   const navigate = useNavigate();
-
+  const { t } = useTranslation();
   const handleInputChange = (event) => {
     setSearchTerm(event.target.value);
   };
@@ -24,7 +25,6 @@ export default function Search() {
   return (
     <div className={"search"}>
       {isMobile ? (
-        // Mobile search component
         <>
           {isSearchVisible ? (
             <input
@@ -56,7 +56,7 @@ export default function Search() {
         <>
           <input
             type="text"
-            placeholder="Search for courses..."
+            placeholder={t("search-for-courses")}
             id={"search"}
             value={searchTerm}
             onChange={handleInputChange}

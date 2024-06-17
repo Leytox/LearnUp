@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useNavigate } from "react-router-dom";
 import Preloader from "../../components/Preloader/Preloader.jsx";
 import { Helmet } from "react-helmet";
+import { useTranslation } from "react-i18next";
 
 export default function CreateCourse() {
   const [availableCategories, setAvailableCategories] = useState([]);
@@ -18,6 +19,7 @@ export default function CreateCourse() {
   const [file, setFile] = useState(null);
   const [redirect, setRedirect] = useState(false);
   const [loading, setLoading] = useState(true);
+  const { t } = useTranslation();
   const navigate = useNavigate();
   useEffect(() => {
     const fetchCategories = async () => {
@@ -69,11 +71,11 @@ export default function CreateCourse() {
       className="create-course-container main-wrapper"
     >
       <Helmet>
-        <title>Create Course</title>
+        <title>{t("createCourse")}</title>
       </Helmet>
-      <h1 className="create-course-title">Create Course</h1>
+      <h1 className="create-course-title">{t("createCourse")}</h1>
       <div className="course-item">
-        <label>Title</label>
+        <label>{t("title")}</label>
         <input
           type="text"
           value={title}
@@ -82,7 +84,7 @@ export default function CreateCourse() {
         />
       </div>
       <div className="course-item">
-        <label>Description</label>
+        <label>{t("description")}</label>
         <textarea
           value={description}
           onChange={(e) => setDescription(e.target.value)}
@@ -90,7 +92,7 @@ export default function CreateCourse() {
         />
       </div>
       <div className="course-item">
-        <label>Price ($)</label>
+        <label>{t("price")} ($)</label>
         <input
           type="number"
           value={price}
@@ -100,13 +102,13 @@ export default function CreateCourse() {
         />
       </div>
       <div className="course-item">
-        <label>Category</label>
+        <label>{t("category")}</label>
         <select
           value={category}
           onChange={(e) => setCategory(e.target.value)}
           required={true}
         >
-          <option value="">Select a category</option>
+          <option value="">{t("selectCategory")}</option>
           {availableCategories.map((category) => (
             <option key={category._id} value={category.name}>
               {category.name}
@@ -115,20 +117,20 @@ export default function CreateCourse() {
         </select>
       </div>
       <div className="course-item">
-        <label>Difficulty</label>
+        <label>{t("difficulty")}</label>
         <select
           value={difficulty}
           onChange={(e) => setDifficulty(e.target.value)}
-          required={true}
+          required
         >
-          <option value="">Select a difficulty</option>
-          <option value={"Beginner"}>Beginner</option>
-          <option value={"Intermediate"}>Intermediate</option>
-          <option value={"Advanced"}>Advanced</option>
+          <option value="">{t("selectDifficulty")}</option>
+          <option value={"Beginner"}>{t("beginner")}</option>
+          <option value={"Intermediate"}>{t("intermediate")}</option>
+          <option value={"Advanced"}>{t("advanced")}</option>
         </select>
       </div>
       <div className="course-item">
-        <label>Image</label>
+        <label>{t("image")}</label>
         <input
           required={true}
           type="file"
@@ -136,7 +138,7 @@ export default function CreateCourse() {
         />
       </div>
       <button type="submit" className="create-course-button">
-        Create Course <FontAwesomeIcon icon={faPlus} />
+        {t("createCourseButton")} <FontAwesomeIcon icon={faPlus} />
       </button>
     </form>
   );

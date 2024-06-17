@@ -36,7 +36,7 @@
 
 .admin-panel-details-item {
     display: flex;
-    margin-left: 50px;
+    padding-left: 50px;
     flex-direction: row;
     flex-wrap: wrap;
     gap: 10px;

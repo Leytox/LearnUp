@@ -17,6 +17,7 @@ import {
   faForwardStep,
 } from "@fortawesome/free-solid-svg-icons";
 import { DeviceContext } from "../../../DeviceContext.jsx";
+import { useTranslation } from "react-i18next";
 
 export default function Courses() {
   const [courses, setCourses] = useState([]);
@@ -39,6 +40,7 @@ export default function Courses() {
   const startPage = Math.max(1, page - Math.floor(pageLimit / 2));
   const totalPages = Math.ceil(totalItems / limit);
   const endPage = Math.min(totalPages, startPage + pageLimit - 1);
+  const { t } = useTranslation(); // Initialize useTranslation
 
   useEffect(() => {
     setLoading(true);
@@ -55,8 +57,6 @@ export default function Courses() {
     };
     fetchCourses().finally(() => setLoading(false));
   }, [searchQuery, filterApplied, page]);
-
-  // Calculate total pages
 
   function applyFilter() {
     setPriceRange(priceRange);
@@ -75,7 +75,6 @@ export default function Courses() {
     setFilterApplied((prev) => !prev);
   }
 
-  //fetch categories
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -93,12 +92,12 @@ export default function Courses() {
   return (
     <div className="courses-container main-wrapper">
       <Helmet>
-        <title>Courses</title>
+        <title>{t("courses")}</title>
       </Helmet>
       <button
         className={"hide-filter"}
         onClick={() => setFilterVisible(!isFilterVisible)}
-        title={"Toggle Filter"}
+        title={t("filter")}
       >
         {isFilterVisible ? (
           <FontAwesomeIcon icon={faFilterCircleXmark} />
@@ -109,8 +108,10 @@ export default function Courses() {
       <div className={"courses-main-wrapper"}>
         {isFilterVisible && (
           <div className={"filter"}>
-            <h1>Filter</h1>
-            <label>From: {priceRange[0]}$</label>
+            <h1>{t("filter")}</h1>
+            <label>
+              {t("from")}: {priceRange[0]}$
+            </label>
             <input
               type="range"
               min="0"
@@ -118,7 +119,9 @@ export default function Courses() {
               value={priceRange[0]}
               onChange={(e) => setPriceRange([e.target.value, priceRange[1]])}
             />{" "}
-            <label>To: {priceRange[1]}$</label>
+            <label>
+              {t("to")}: {priceRange[1]}$
+            </label>
             <input
               type="range"
               min="0"
@@ -126,44 +129,44 @@ export default function Courses() {
               value={priceRange[1]}
               onChange={(e) => setPriceRange([priceRange[0], e.target.value])}
             />
-            <label>Category:</label>
+            <label>{t("category")}:</label>
             <select
               value={category}
               onChange={(e) => setCategory(e.target.value)}
             >
-              <option value="">All Categories</option>
+              <option value="">{t("allCategories")}</option>
               {categories.map((category) => (
                 <option key={category._id} value={category.name}>
                   {category.name}
                 </option>
               ))}
             </select>
-            <label>Sort Order:</label>
+            <label>{t("sortOrder")}:</label>
             <select
               value={sortOrder}
               onChange={(e) => setSortOrder(e.target.value)}
             >
-              <option value="oldest">Oldest</option>
-              <option value="newest">Newest</option>
+              <option value="oldest">{t("oldest")}</option>
+              <option value="newest">{t("newest")}</option>
             </select>
-            <label>Difficulty:</label>
+            <label>{t("difficulty")}:</label>
             <select
               value={difficulty}
               onChange={(e) => setDifficulty(e.target.value)}
             >
-              <option value="">All</option>
-              <option value="Beginner">Beginner</option>
-              <option value="Intermediate">Intermediate</option>
-              <option value="Advanced">Advanced</option>
+              <option value="">{t("allDifficulties")}</option>
+              <option value="Beginner">{t("beginner")}</option>
+              <option value="Intermediate">{t("intermediate")}</option>
+              <option value="Advanced">{t("advanced")}</option>
             </select>
             <div
               style={{ display: "flex", gap: "10px", justifyContent: "center" }}
             >
               <button onClick={applyFilter}>
-                Apply <FontAwesomeIcon icon={faCheck} />
+                {t("applyFilter")} <FontAwesomeIcon icon={faCheck} />
               </button>
               <button onClick={resetFilter}>
-                Reset <FontAwesomeIcon icon={faBroom} />
+                {t("resetFilter")} <FontAwesomeIcon icon={faBroom} />
               </button>
             </div>
           </div>
@@ -173,7 +176,7 @@ export default function Courses() {
         ) : (
           <div className={"courses-list"}>
             {courses.length === 0 ? (
-              <h1 className={"courses-not-found"}>No courses found...</h1>
+              <h1 className={"courses-not-found"}>{t("noCoursesFound")}</h1>
             ) : (
               courses.map((course) => (
                 <CourseCard key={course._id} course={course} />
@@ -182,7 +185,7 @@ export default function Courses() {
           </div>
         )}
       </div>
-      {loading ? null : courses.length !== 0 ? (
+      {loading ? null : courses.length !== 0 && totalPages > 1 ? (
         <div className="page-buttons">
           <button onClick={() => setPage(1)} disabled={page === 1}>
             <FontAwesomeIcon icon={faBackwardStep} />

@@ -8,6 +8,7 @@ import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
+import { useTranslation } from "react-i18next";
 
 export default function Register() {
   const [name, setName] = useState("");
@@ -19,6 +20,7 @@ export default function Register() {
   const [redirect, setRedirect] = useState(false);
   const [error, setError] = useState(false);
   const [userId, setUserId] = useState("");
+  const { t } = useTranslation();
   const navigate = useNavigate();
   useEffect(() => {
     if (Cookies.get("token")) setRedirect(true);
@@ -50,14 +52,14 @@ export default function Register() {
   return (
     <form className={"main-wrapper"} onSubmit={Register}>
       <Helmet>
-        <title>Sign Up</title>
+        <title>{t("signUp")}</title>
       </Helmet>
-      <h1>Create an account</h1>
+      <h1>{t("createAccount")}</h1>
       <input
         type="text"
         id="name"
         name="name"
-        placeholder={"Name"}
+        placeholder={t("name")}
         required={true}
         minLength={3}
         onChange={(event) => setName(event.target.value)}
@@ -66,7 +68,7 @@ export default function Register() {
         type="email"
         id="email"
         name="email"
-        placeholder={"Email"}
+        placeholder={t("email")}
         required={true}
         onChange={(event) => setEmail(event.target.value)}
       />
@@ -74,13 +76,13 @@ export default function Register() {
         type="password"
         id="password"
         name="password"
-        placeholder={"Password"}
+        placeholder={t("password")}
         required={true}
         minLength={6}
         onChange={(event) => setPassword(event.target.value)}
       />
       <PhoneInput
-        placeholder="Enter phone number"
+        placeholder={t("enterPhoneNumber")}
         value={phoneNumber}
         onChange={setPhoneNumber}
       />
@@ -90,28 +92,28 @@ export default function Register() {
         required={true}
         onChange={(event) => setRole(event.target.value)}
       >
-        <option value={"student"}>Student</option>
-        <option value={"instructor"}>Instructor</option>
+        <option value={"student"}>{t("student")}</option>
+        <option value={"instructor"}>{t("instructor")}</option>
       </select>
       <textarea
         required={true}
         id="bio"
         name="bio"
-        placeholder={"Tell something about yourself..."}
+        placeholder={t("tellSomething")}
         rows="3"
         cols="50"
         onChange={(event) => setBio(event.target.value)}
       />
       <button type={"submit"}>
-        Continue <FontAwesomeIcon icon={faArrowRight} />
+        {t("continue")} <FontAwesomeIcon icon={faArrowRight} />
       </button>
       <p>
-        Already have an account?{" "}
+        {t("alreadyHaveAccount")}{" "}
         <Link to={"/login"} style={{ color: "#007bff" }}>
-          Log in
+          {t("login")}
         </Link>
       </p>
-      {error && <p style={{ color: "red" }}>User already exists</p>}
+      {error && <p style={{ color: "red" }}>{t("userExists")}</p>}
     </form>
   );
 }

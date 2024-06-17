@@ -6,26 +6,28 @@ import {
   faUsers,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useTranslation } from "react-i18next";
 
 export default function Footer() {
+  const { t } = useTranslation();
   return (
     <footer className="footer">
       <div className="footer-content">
-        <p>&copy; 2024 LearnUp. All rights reserved.</p>
+        <p>{t("allRightsReserved")}</p>
         <ul className="footer-links">
           <li>
             <Link to="/help">
-              Help <FontAwesomeIcon icon={faInfo} />
+              {t("help")} <FontAwesomeIcon icon={faInfo} />
             </Link>
           </li>
           <li>
             <Link to="/about">
-              About us <FontAwesomeIcon icon={faUsers} />
+              {t("aboutUs")} <FontAwesomeIcon icon={faUsers} />
             </Link>
           </li>
           <li>
             <Link to="/contact">
-              Contact Us <FontAwesomeIcon icon={faAddressBook} />
+              {t("contactUs")} <FontAwesomeIcon icon={faAddressBook} />
             </Link>
           </li>
         </ul>

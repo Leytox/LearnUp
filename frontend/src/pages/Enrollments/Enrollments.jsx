@@ -8,11 +8,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCartShopping, faStamp } from "@fortawesome/free-solid-svg-icons";
 import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 export default function Enrollments() {
   const [enrolledCourses, setEnrolledCourses] = useState([]);
   const [loading, setLoading] = useState(true);
-
+  const { t } = useTranslation();
   useEffect(() => {
     const fetchEnrolledCourses = async () => {
       try {
@@ -61,15 +62,15 @@ export default function Enrollments() {
   ) : (
     <div className={"enrollmentsContainer main-wrapper"}>
       <Helmet>
-        <title>Enrollments</title>
+        <title>{t("enrollments")}</title>
       </Helmet>
-      <h1>Enrollments</h1>
       {enrolledCourses.length === 0 && (
         <div className={"no-enrollments"}>
-          <h1>No courses enrolled yet...</h1>
+          <h1>{t("noCoursesEnrolled")}</h1>
           <Link to={"/courses?search="}>
             <button>
-              Buy courses <FontAwesomeIcon icon={faCartShopping} />
+              {t("buyCourses")}
+              <FontAwesomeIcon icon={faCartShopping} />
             </button>
           </Link>
         </div>
@@ -85,10 +86,14 @@ export default function Enrollments() {
               <button
                 onClick={() => handleGenerateCertificate(enrolled.course._id)}
               >
-                Get Certificate <FontAwesomeIcon icon={faStamp} />
+                {t("generateCertificate")}
+                <FontAwesomeIcon icon={faStamp} />
               </button>
             ) : (
-              <p> Progress: {enrolled.progress}%</p>
+              <p>
+                {" "}
+                {t("progress")}: {enrolled.progress}%
+              </p>
             )}
           </CourseCard>
         ))}

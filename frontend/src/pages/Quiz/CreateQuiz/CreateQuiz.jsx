@@ -7,8 +7,10 @@ import { Helmet } from "react-helmet";
 import Preloader from "../../../components/Preloader/Preloader.jsx";
 import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useTranslation } from "react-i18next";
 
 export default function CreateQuiz() {
+  const { t } = useTranslation(); // Initialize useTranslation
   const { courseId, lessonId } = useParams();
   const navigate = useNavigate();
   const [title, setTitle] = useState("");
@@ -113,11 +115,11 @@ export default function CreateQuiz() {
       className="create-quizz-container main-wrapper"
     >
       <Helmet>
-        <title>Create Quiz</title>
+        <title>{t("createQuiz")}</title>
       </Helmet>
-      <h1 className="create-quizz-title">Create Quiz</h1>
+      <h1 className="create-quizz-title">{t("createQuiz")}</h1>
       <div className={"question-item"}>
-        <label>Title</label>
+        <label>{t("title")}</label>
         <input
           type="text"
           value={title}
@@ -126,7 +128,7 @@ export default function CreateQuiz() {
         />
       </div>
       <div className={"question-item"}>
-        <label>Description</label>
+        <label>{t("description")}</label>
         <input
           type="text"
           value={description}
@@ -137,7 +139,9 @@ export default function CreateQuiz() {
       {questions.map((question, qIndex) => (
         <div key={qIndex} className="question-item">
           <div className={"question-text"}>
-            <label>Question {qIndex + 1}</label>
+            <label>
+              {t("question")} {qIndex + 1}
+            </label>
             <input
               type="text"
               value={question.questionText}
@@ -149,7 +153,9 @@ export default function CreateQuiz() {
           </div>
           {question.options.map((option, oIndex) => (
             <div key={oIndex} className={"question-option"}>
-              <label>Option {oIndex + 1}</label>
+              <label>
+                {t("option")} {oIndex + 1}
+              </label>
               <div className={"question-option-input"}>
                 <input
                   type="text"
@@ -172,17 +178,17 @@ export default function CreateQuiz() {
                       )
                     }
                   />
-                  Correct
+                  {t("correct")}
                 </label>
               </div>
             </div>
           ))}
           <div className={"question-item-buttons"}>
             <button type="button" onClick={() => addOption(qIndex)}>
-              Add Option <FontAwesomeIcon icon={faPlus} />
+              {t("addOption")} <FontAwesomeIcon icon={faPlus} />
             </button>
             <button type="button" onClick={() => deleteQuestion(qIndex)}>
-              Delete Question <FontAwesomeIcon icon={faTrash} />
+              {t("deleteQuestion")} <FontAwesomeIcon icon={faTrash} />
             </button>
           </div>
         </div>
@@ -192,10 +198,10 @@ export default function CreateQuiz() {
         onClick={addQuestion}
         className="add-question-button"
       >
-        New Question <FontAwesomeIcon icon={faPlus} />
+        {t("newQuestion")} <FontAwesomeIcon icon={faPlus} />
       </button>
       <button type="submit" className="create-quizz-button">
-        Create Quiz <FontAwesomeIcon icon={faPlus} />
+        {t("createQuizButton")} <FontAwesomeIcon icon={faPlus} />
       </button>
     </form>
   );

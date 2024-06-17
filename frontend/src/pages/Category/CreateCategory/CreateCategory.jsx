@@ -4,8 +4,12 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Preloader from "../../../components/Preloader/Preloader.jsx";
 import { Helmet } from "react-helmet";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useTranslation } from "react-i18next";
 
 export default function CreateCategory() {
+  const { t } = useTranslation(); // Initialize useTranslation
   const [loading, setLoading] = useState(true);
   const [name, setName] = useState("");
   const [file, setFile] = useState(null);
@@ -42,11 +46,11 @@ export default function CreateCategory() {
   ) : (
     <div className={"main-wrapper"}>
       <Helmet>
-        <title>Create Category</title>
+        <title>{t("createCategory")}</title>
       </Helmet>
-      <h1 style={{ textAlign: "center" }}>Create Category</h1>
+      <h1 style={{ textAlign: "center" }}>{t("createCategory")}</h1>
       <form onSubmit={handleSubmit}>
-        <label htmlFor={"name"}>Name</label>
+        <label htmlFor={"name"}>{t("name")}</label>
         <input
           maxLength={12}
           type={"text"}
@@ -54,13 +58,15 @@ export default function CreateCategory() {
           required={true}
           onChange={(e) => setName(e.target.value)}
         />
-        <label htmlFor={"picture"}>Picture</label>
+        <label htmlFor={"picture"}>{t("picture")}</label>
         <input
           required={true}
           type="file"
           onChange={(e) => setFile(e.target.files)}
         />
-        <button type={"submit"}>Create</button>
+        <button type={"submit"}>
+          {t("createCategoryButton")} <FontAwesomeIcon icon={faPlus} />
+        </button>
       </form>
     </div>
   );

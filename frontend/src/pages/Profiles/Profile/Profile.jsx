@@ -14,6 +14,7 @@ import {
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useTranslation } from "react-i18next";
 
 export default function Profile() {
   const [profile, setProfile] = useState(null);
@@ -22,12 +23,12 @@ export default function Profile() {
   const [name, setName] = useState("");
   const [bio, setBio] = useState("");
   const [loading, setLoading] = useState(true);
-  const [showResetPassword, setShowResetPassword] = useState(false);
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
   const [passwordError, setPasswordError] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const { t } = useTranslation();
   const { setUser } = useContext(UserContext);
   const navigate = useNavigate();
 
@@ -84,7 +85,6 @@ export default function Profile() {
         setNewPassword("");
         setConfirmNewPassword("");
         setPasswordError(null);
-        setShowResetPassword(false);
       }
     } catch (error) {
       setPasswordError("Old password is incorrect");
@@ -178,9 +178,9 @@ export default function Profile() {
   ) : (
     <div className="profile-container main-wrapper">
       <Helmet>
-        <title>Profile</title>
+        <title>{t("profile")}</title>
       </Helmet>
-      <h1>Profile</h1>
+      <h1>{t("profile")}</h1>
       {profile && (
         <div className={"profile"}>
           <div className={"profile-info"}>
@@ -217,11 +217,11 @@ export default function Profile() {
                     onClick={deleteProfilePicture}
                     style={{ backgroundColor: "red" }}
                   >
-                    Delete Avatar <FontAwesomeIcon icon={faTrash} />
+                    {t("deleteAvatar")} <FontAwesomeIcon icon={faTrash} />
                   </button>
                 </div>
                 <label>
-                  <strong>Name</strong>
+                  <strong>{t("name")}</strong>
                 </label>
                 <input
                   type="text"
@@ -229,7 +229,7 @@ export default function Profile() {
                   onChange={(e) => setName(e.target.value)}
                 />
                 <label>
-                  <strong>Bio</strong>
+                  <strong>{t("bio")}</strong>
                 </label>
                 <textarea
                   value={bio}
@@ -239,40 +239,39 @@ export default function Profile() {
                   onClick={handleEdit}
                   style={{ backgroundColor: "darkgreen" }}
                 >
-                  Save <FontAwesomeIcon icon={faFloppyDisk} />
+                  {t("save")} <FontAwesomeIcon icon={faFloppyDisk} />
                 </button>
               </>
             ) : (
               <>
                 <p>
-                  <strong>Name:</strong> {profile.name}
+                  <strong>{t("name")}:</strong> {profile.name}
                 </p>
                 <p>
-                  <strong>Email:</strong> {profile.email}
+                  <strong>{t("email")}:</strong> {profile.email}
                 </p>
                 <p>
-                  <strong>Role:</strong>{" "}
+                  <strong>{t("role")}:</strong>{" "}
                   {profile.role.charAt(0).toUpperCase() + profile.role.slice(1)}
                 </p>
                 <p>
-                  <strong>With us since:</strong> :{" "}
+                  <strong>{t("withUsSince")}:</strong> :{" "}
                   {new Date(profile.createdAt).getFullYear()} year
                 </p>
                 <p>
-                  <strong>Bio:</strong> {profile.bio}
+                  <strong>{t("bio")}:</strong> {profile.bio}
                 </p>
               </>
             )}
           </div>
           <div className={"profile-settings"}>
-            <h2 style={{ textAlign: "center" }}>Settings</h2>
+            <h2 style={{ textAlign: "center" }}>{t("settings")}</h2>
             <div className={"profile-settings-buttons"}>
-              <h3>Logout from your account </h3>
-              <p>This will log you out and redirect you to the homepage.</p>
+              <h3>{t("logout")}</h3>
+              <p>{t("logoutDescription")}</p>
               <button
                 onClick={() => {
-                  if (!window.confirm("Are you sure you want to logout?"))
-                    return;
+                  if (!window.confirm(t("areYouSureLogout"))) return;
                   Cookies.remove("token");
                   Cookies.remove("username");
                   Cookies.remove("role");
@@ -281,12 +280,12 @@ export default function Profile() {
                   navigate("/");
                 }}
               >
-                Logout <FontAwesomeIcon icon={faArrowRightFromBracket} />
+                {t("logout")} <FontAwesomeIcon icon={faArrowRightFromBracket} />
               </button>
             </div>
             <div className={"profile-settings-buttons"}>
-              <h3>Edit Profile Data</h3>
-              <p>This will allow you to update your profile information.</p>
+              <h3>{t("editProfile")}</h3>
+              <p>{t("editDescription")}</p>
               <button
                 className={"edit-profile-button"}
                 onClick={() => {
@@ -297,14 +296,14 @@ export default function Profile() {
                   });
                 }}
               >
-                Edit Profile <FontAwesomeIcon icon={faPenToSquare} />
+                {t("editProfile")} <FontAwesomeIcon icon={faPenToSquare} />
               </button>
             </div>
             <div className={"profile-settings-buttons"}>
-              <h3>Reset Password</h3>
-              <p>Reset your account password</p>
+              <h3>{t("resetPassword")}</h3>
+              <p>{t("resetDescription")}</p>
               <button onClick={toggleModal} className={"reset-password-button"}>
-                Reset Password <FontAwesomeIcon icon={faKey} />
+                {t("resetPassword")} <FontAwesomeIcon icon={faKey} />
               </button>
             </div>
             {showModal && (
@@ -313,49 +312,42 @@ export default function Profile() {
                   <span className="close" onClick={toggleModal}>
                     &times;
                   </span>
-                  <h1>Reset Password</h1>
+                  <h1>{t("resetPassword")}</h1>
                   <form onSubmit={handlePasswordReset}>
                     <input
                       type="password"
-                      placeholder="Old password"
+                      placeholder={t("oldPassword")}
                       value={oldPassword}
                       onChange={(e) => setOldPassword(e.target.value)}
                       required
                     />
                     <input
                       type="password"
-                      placeholder="New password"
+                      placeholder={t("newPassword")}
                       value={newPassword}
                       onChange={(e) => setNewPassword(e.target.value)}
                       required
                     />
                     <input
                       type="password"
-                      placeholder="Confirm new password"
+                      placeholder={t("confirmNewPassword")}
                       value={confirmNewPassword}
                       onChange={(e) => setConfirmNewPassword(e.target.value)}
                       required
                     />
-                    <button type="submit">Reset Password</button>
+                    <button type="submit">{t("resetPassword")}</button>
                     {passwordError && <p>{passwordError}</p>}
                   </form>
                 </div>
               </div>
             )}
             <div className={"profile-settings-buttons"}>
-              <h3>Delete Account</h3>
-              <p>
-                This will permanently delete your account and all associated
-                data.
-              </p>
+              <h3>{t("deleteAccount")}</h3>
+              <p>{t("deleteDescription")}</p>
               <button
                 className={"delete-account-button"}
                 onClick={() => {
-                  if (
-                    window.confirm(
-                      "Are you sure you want to delete your account? This action cannot be undone.",
-                    )
-                  ) {
+                  if (window.confirm(t("areYouSureDeleteAccount"))) {
                     axios
                       .delete(
                         `${import.meta.env.VITE_BACKEND_URI}/api/profile`,
@@ -375,7 +367,7 @@ export default function Profile() {
                   }
                 }}
               >
-                Delete <FontAwesomeIcon icon={faTrash} />
+                {t("deleteAccountButton")} <FontAwesomeIcon icon={faTrash} />
               </button>
             </div>
           </div>

@@ -11,21 +11,20 @@ import "./Home.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faAddressBook,
-  faBuilding,
-  faBuildingColumns,
   faCircleInfo,
   faFlagCheckered,
-  faHandshake,
   faPeopleGroup,
   faPersonChalkboard,
   faTurnUp,
 } from "@fortawesome/free-solid-svg-icons";
 import { faLeanpub } from "@fortawesome/free-brands-svg-icons";
+import { useTranslation } from "react-i18next";
 
 export default function Home() {
   const { user } = useContext(UserContext);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { t } = useTranslation();
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -49,7 +48,7 @@ export default function Home() {
   ) : (
     <div className={"main-wrapper"}>
       <Helmet>
-        <title>Home</title>
+        <title>{t("home")}</title>
       </Helmet>
       <div
         style={{
@@ -63,25 +62,20 @@ export default function Home() {
         <div className={"welcome-section"}>
           <div className={"texts"}>
             <h1>
-              <FontAwesomeIcon icon={faLeanpub} /> Learn without limits
+              <FontAwesomeIcon icon={faLeanpub} /> {t("welcome")}
             </h1>
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolore
-              eius ipsam iure officia repudiandae. Minima quod quos rerum vitae
-              voluptate! Excepturi hic iste laudantium libero quaerat sed sunt
-              ut veniam!
-            </p>
+            <p>{t("introduction")}</p>
             <div style={{ display: "flex", gap: "20px" }}>
               {!user && (
                 <Link to={"/signup"}>
                   <button>
-                    Get Started <FontAwesomeIcon icon={faFlagCheckered} />
+                    {t("getStarted")} <FontAwesomeIcon icon={faFlagCheckered} />
                   </button>
                 </Link>
               )}
               <Link to={"/about"}>
                 <button>
-                  Learn More <FontAwesomeIcon icon={faCircleInfo} />
+                  {t("learnMore")} <FontAwesomeIcon icon={faCircleInfo} />
                 </button>
               </Link>
             </div>
@@ -97,24 +91,14 @@ export default function Home() {
 
         <div className={"features"}>
           <div className={"texts"}>
-            <h2>
-              We collaborate <FontAwesomeIcon icon={faHandshake} /> with{"  "}
-              325+ leading universities{" "}
-              <FontAwesomeIcon icon={faBuildingColumns} /> and companies{" "}
-              <FontAwesomeIcon icon={faBuilding} />
-            </h2>
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolore
-              eius ipsam iure officia repudiandae. Minima quod quos rerum vitae
-              voluptate! Excepturi hic iste laudantium libero quaerat sed sunt
-              ut veniam!
-            </p>
+            <h2>{t("weCollaborate")}</h2>
+            <p>{t("weCollaborateText")}</p>
           </div>
         </div>
 
         <div className={"explore"}>
           <h1>
-            Explore courses <FontAwesomeIcon icon={faPersonChalkboard} />
+            {t("exploreCourses")} <FontAwesomeIcon icon={faPersonChalkboard} />
           </h1>
           <div className={"course-types"}>
             {categories.map((category) => (
@@ -123,14 +107,14 @@ export default function Home() {
           </div>
           <Link to={"/courses?search="}>
             <button>
-              Check more <FontAwesomeIcon icon={faTurnUp} />
+              {t("checkMore")} <FontAwesomeIcon icon={faTurnUp} />
             </button>
           </Link>
         </div>
 
         <div className={"community"}>
           <h1>
-            Community <FontAwesomeIcon icon={faPeopleGroup} />
+            {t("community")} <FontAwesomeIcon icon={faPeopleGroup} />
           </h1>
           <div className={"feedback"}>
             <FeedBackCard
@@ -140,7 +124,7 @@ export default function Home() {
                 name: "John Doe",
                 country: "United States",
                 comment:
-                  "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolore eius ipsam iure officia repudiandae.",
+                  "LearnUp exceeded my expectations in every way! The course content was incredibly comprehensive and well-structured, making complex topics easy to understand. The interactive quizzes and hands-on projects were particularly engaging and helped solidify my knowledge.",
               }}
             />
             <FeedBackCard
@@ -150,7 +134,7 @@ export default function Home() {
                 name: "Gabriela",
                 country: "Nigeria",
                 comment:
-                  "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolore eius ipsam iure officia repudiandae.",
+                  "The e-learning program had its pros and cons. On the plus side, the platform was easy to navigate, and the course material was accessible and well-organized. The discussion forums provided a good opportunity to interact with fellow learners. ",
               }}
             />
             <FeedBackCard
@@ -160,16 +144,16 @@ export default function Home() {
                 name: "Rafael",
                 country: "Spain",
                 comment:
-                  "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolore eius ipsam iure officia repudiandae.",
+                  "Overall, the e-learning program was a positive experience. The course material was detailed and covered all the necessary aspects of the subject. I appreciated the flexibility to learn at my own pace, which was perfect for balancing with my busy schedule. The video lectures were clear, and the supplemental resources were very helpful. ",
               }}
             />
           </div>
         </div>
         <div className={"contacts"}>
-          <h1>Got any questions left? Just see for FAQ!</h1>
-          <Link to={"/contact"}>
+          <h1>{t("gotQuestions")}</h1>
+          <Link to={"/help"}>
             <button>
-              Contacts <FontAwesomeIcon icon={faAddressBook} />
+              FAQ <FontAwesomeIcon icon={faAddressBook} />
             </button>
           </Link>
         </div>

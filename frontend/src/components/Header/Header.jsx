@@ -19,6 +19,8 @@ import ThemeSwitcher from "../ThemeSwitcher/ThemeSwitcher.jsx";
 import "./Header.css";
 import { DeviceContext } from "../../DeviceContext.jsx";
 import logo from "./logo.svg";
+import LanguageSelector from "../LanguageSelector/LanguageSelector.jsx";
+import { useTranslation } from "react-i18next";
 
 export default function Header() {
   const { user, setUser } = useContext(UserContext);
@@ -26,6 +28,7 @@ export default function Header() {
   const navigate = useNavigate();
   const [isHidden, setIsHidden] = useState(false);
   const { isSearchVisible, isMobile } = useContext(DeviceContext);
+  const { t } = useTranslation();
   useEffect(() => {
     const checkScroll = () => {
       setIsHidden(window.scrollY > 300);
@@ -56,7 +59,7 @@ export default function Header() {
     <header className={isHidden ? "hidden" : ""}>
       <nav className={"navbar"}>
         <div className={"navbar-logo"}>
-          <Link to={"/"}>
+          <Link to={"/courses?search="}>
             <img src={logo} alt={"logo"} className={"header-logo"} />
           </Link>
         </div>
@@ -79,7 +82,7 @@ export default function Header() {
               <li>
                 <Link to={"/login"}>
                   {!isMobile ? (
-                    "Log In"
+                    t("login")
                   ) : (
                     <button style={{ width: "50px", height: "50px" }}>
                       <FontAwesomeIcon icon={faArrowRightToBracket} />
@@ -92,7 +95,7 @@ export default function Header() {
               <li>
                 <Link to={"/signup"}>
                   {!isMobile ? (
-                    "Sign Up"
+                    t("signup")
                   ) : (
                     <button style={{ width: "50px", height: "50px" }}>
                       <FontAwesomeIcon icon={faUserPlus} />
@@ -173,6 +176,9 @@ export default function Header() {
                 </button>
               </li>
             )}
+            <li>
+              <LanguageSelector />
+            </li>
             <li>
               <ThemeSwitcher />
             </li>

@@ -13,8 +13,10 @@ import {
   faPlus,
   faVial,
 } from "@fortawesome/free-solid-svg-icons";
+import { useTranslation } from "react-i18next";
 
 export default function Lesson() {
+  const { t } = useTranslation(); // Initialize useTranslation
   const [lesson, setLesson] = useState(null);
   const [loading, setLoading] = useState(true);
   const [redirect, setRedirect] = useState(false);
@@ -52,7 +54,7 @@ export default function Lesson() {
   ) : lesson ? (
     <div className="lesson-container main-wrapper">
       <Helmet>
-        <title>Lesson</title>
+        <title>{t("lesson")}</title>
       </Helmet>
       <h1 className="lesson-title">{lesson.title}</h1>
       <p className="lesson-description">{lesson.description}</p>
@@ -64,7 +66,7 @@ export default function Lesson() {
         {userId === lesson.course.instructor ? (
           <Link to={`/course/${lesson.course._id}/lesson/${lesson._id}/edit`}>
             <button>
-              Edit Lesson <FontAwesomeIcon icon={faPen} />
+              {t("editLessonButton")} <FontAwesomeIcon icon={faPen} />
             </button>
           </Link>
         ) : null}
@@ -74,7 +76,7 @@ export default function Lesson() {
               to={`/course/${lesson.course._id}/lesson/${lesson._id}/quiz/${lesson.quiz}/edit`}
             >
               <button>
-                Edit Quiz <FontAwesomeIcon icon={faFlaskVial} />
+                {t("editQuizButton")} <FontAwesomeIcon icon={faFlaskVial} />
               </button>
             </Link>
           ) : (
@@ -82,7 +84,7 @@ export default function Lesson() {
               to={`/course/${lesson.course._id}/lesson/${lesson._id}/quiz/${lesson.quiz}`}
             >
               <button>
-                Quiz <FontAwesomeIcon icon={faVial} />
+                {t("quizButton")} <FontAwesomeIcon icon={faVial} />
               </button>
             </Link>
           )
@@ -91,7 +93,7 @@ export default function Lesson() {
             to={`/course/${lesson.course._id}/lesson/${lesson._id}/create-quiz`}
           >
             <button>
-              Create Quiz <FontAwesomeIcon icon={faPlus} />
+              {t("createQuizButton")} <FontAwesomeIcon icon={faPlus} />
             </button>
           </Link>
         ) : null}

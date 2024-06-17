@@ -6,20 +6,31 @@ import {
   faGraduationCap,
   faUserTie,
 } from "@fortawesome/free-solid-svg-icons";
+import { useTranslation } from "react-i18next"; // Import useTranslation
 
 export default function UserCard({ user }) {
+  const { t } = useTranslation(); // Initialize useTranslation
+
   return (
     <Link to={`/profile/${user._id}`} style={{ color: "black" }}>
       <div className="user-card">
-        <p>Email: {user.email}</p>
         <p>
-          Role: {user.role}{" "}
+          {t("email")}: {user.email}
+        </p>
+        <p>
+          {t("role")}:{" "}
           {user.role === "student" ? (
-            <FontAwesomeIcon icon={faGraduationCap} />
+            <span>
+              {t("student")} <FontAwesomeIcon icon={faGraduationCap} />
+            </span>
           ) : user.role === "instructor" ? (
-            <FontAwesomeIcon icon={faChalkboardUser} />
+            <span>
+              {t("instructor")} <FontAwesomeIcon icon={faChalkboardUser} />
+            </span>
           ) : (
-            <FontAwesomeIcon icon={faUserTie} />
+            <span>
+              {t("admin")} <FontAwesomeIcon icon={faUserTie} />
+            </span>
           )}
         </p>
       </div>

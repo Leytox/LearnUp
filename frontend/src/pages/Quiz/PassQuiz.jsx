@@ -8,8 +8,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 import { Helmet } from "react-helmet";
 import NotFound from "../NotFound/NotFound.jsx";
+import { useTranslation } from "react-i18next";
 
 export default function PassQuiz() {
+  const { t } = useTranslation();
   const { courseId, quizId, lessonId } = useParams();
   const [quiz, setQuiz] = useState([]);
   const [answers, setAnswers] = useState({});
@@ -67,13 +69,13 @@ export default function PassQuiz() {
             },
           },
         );
-        alert("Quiz completed successfully!");
+        alert(t("quizCompleted"));
         navigate(`/courses/${courseId}`);
       } catch (error) {
         console.error("Error updating progress:", error);
       }
     } else {
-      alert("Some answers are incorrect. Please try again.");
+      alert(t("quizIncorrect"));
     }
   };
 
@@ -98,12 +100,13 @@ export default function PassQuiz() {
 
   if (redirect) navigate("/");
   if (quiz && quiz.length === 0) navigate("/");
+
   return loading ? (
     <Preloader />
   ) : quiz ? (
     <div className={"quizContainer main-wrapper"}>
       <Helmet>
-        <title>Quiz</title>
+        <title>{t("quiz")}</title>
       </Helmet>
       <h2>{quiz.title}</h2>
       <form onSubmit={handleSubmit}>
@@ -141,7 +144,7 @@ export default function PassQuiz() {
           );
         })}
         <button className={"quiz-submit-button"} type="submit">
-          Submit <FontAwesomeIcon icon={faPaperPlane} />
+          {t("submitQuiz")} <FontAwesomeIcon icon={faPaperPlane} />
         </button>
       </form>
     </div>

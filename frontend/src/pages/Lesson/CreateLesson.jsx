@@ -8,6 +8,9 @@ import Cookies from "js-cookie";
 import Preloader from "../../components/Preloader/Preloader.jsx";
 import { Helmet } from "react-helmet";
 import NotFound from "../NotFound/NotFound.jsx";
+import { useTranslation } from "react-i18next";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function CreateLesson() {
   const { courseId } = useParams();
@@ -19,7 +22,7 @@ export default function CreateLesson() {
   const [redirect, setRedirect] = useState(false);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-
+  const { t } = useTranslation();
   useEffect(() => {
     const fetchCourse = async () => {
       try {
@@ -93,11 +96,11 @@ export default function CreateLesson() {
       className="create-lesson-container main-wrapper"
     >
       <Helmet>
-        <title>Create Lesson</title>
+        <title>{t("createLesson")}</title>
       </Helmet>
-      <h1 className="create-lesson-title">Create Lesson</h1>
+      <h1 className="create-lesson-title">{t("createLesson")}</h1>
       <div className="lesson-item">
-        <label>Title</label>
+        <label>{t("title")}</label>
         <input
           type="text"
           value={title}
@@ -106,7 +109,7 @@ export default function CreateLesson() {
         />
       </div>
       <div className="lesson-item">
-        <label>Description</label>
+        <label>{t("description")}</label>
         <input
           type="text"
           value={description}
@@ -115,7 +118,7 @@ export default function CreateLesson() {
         />
       </div>
       <div className="lesson-item">
-        <label>Content</label>
+        <label>{t("content")}</label>
         <ReactQuill
           modules={{ toolbar: toolbarOptions }}
           theme={"snow"}
@@ -126,7 +129,7 @@ export default function CreateLesson() {
         />
       </div>
       <button type="submit" className="create-lesson-button">
-        Create Lesson
+        {t("createLessonButton")} <FontAwesomeIcon icon={faPlus} />
       </button>
     </form>
   ) : (

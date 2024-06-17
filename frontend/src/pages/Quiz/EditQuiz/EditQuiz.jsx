@@ -6,8 +6,12 @@ import { useNavigate, useParams } from "react-router-dom";
 import Preloader from "../../../components/Preloader/Preloader.jsx";
 import { Helmet } from "react-helmet";
 import NotFound from "../../NotFound/NotFound.jsx";
+import { useTranslation } from "react-i18next";
+import { faPen, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function EditQuiz() {
+  const { t } = useTranslation(); // Initialize useTranslation
   const { courseId, lessonId, quizId } = useParams();
   const navigate = useNavigate();
   const [title, setTitle] = useState("");
@@ -132,11 +136,11 @@ export default function EditQuiz() {
       className="create-quizz-container main-wrapper"
     >
       <Helmet>
-        <title>Edit Quiz</title>
+        <title>{t("editQuiz")}</title>
       </Helmet>
-      <h1 className="create-quizz-title">Edit Quiz</h1>
+      <h1 className="create-quizz-title">{t("editQuiz")}</h1>
       <div className={"question-item"}>
-        <label>Title</label>
+        <label>{t("title")}</label>
         <input
           type="text"
           value={title}
@@ -145,7 +149,7 @@ export default function EditQuiz() {
         />
       </div>
       <div className={"question-item"}>
-        <label>Description</label>
+        <label>{t("description")}</label>
         <input
           type="text"
           value={description}
@@ -156,7 +160,9 @@ export default function EditQuiz() {
       {questions.map((question, qIndex) => (
         <div key={qIndex} className="question-item">
           <div className={"question-text"}>
-            <label>Question {qIndex + 1}</label>
+            <label>
+              {t("question")} {qIndex + 1}
+            </label>
             <input
               type="text"
               value={question.questionText}
@@ -168,7 +174,9 @@ export default function EditQuiz() {
           </div>
           {question.options.map((option, oIndex) => (
             <div key={oIndex} className={"question-option"}>
-              <label>Option {oIndex + 1}</label>
+              <label>
+                {t("option")} {oIndex + 1}
+              </label>
               <div className={"question-option-input"}>
                 <input
                   type="text"
@@ -191,17 +199,17 @@ export default function EditQuiz() {
                       )
                     }
                   />
-                  Correct
+                  {t("correct")}
                 </label>
               </div>
             </div>
           ))}
           <div className={"question-item-buttons"}>
             <button type="button" onClick={() => addOption(qIndex)}>
-              Add Option
+              {t("addOption")} <FontAwesomeIcon icon={faPlus} />
             </button>
             <button type="button" onClick={() => deleteQuestion(qIndex)}>
-              Delete Question
+              {t("deleteQuestion")} <FontAwesomeIcon icon={faTrash} />
             </button>
           </div>
         </div>
@@ -211,10 +219,10 @@ export default function EditQuiz() {
         onClick={addQuestion}
         className="add-question-button"
       >
-        Add Question
+        {t("newQuestion")} <FontAwesomeIcon icon={faPlus} />
       </button>
       <button type="submit" className="create-quizz-button">
-        Edit Quiz
+        {t("editQuizButton")} <FontAwesomeIcon icon={faPen} />
       </button>
     </form>
   ) : (

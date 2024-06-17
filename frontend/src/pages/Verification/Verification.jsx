@@ -7,6 +7,7 @@ import NotFound from "../NotFound/NotFound.jsx";
 import "./Verification.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTelegram } from "@fortawesome/free-brands-svg-icons";
+import { useTranslation } from "react-i18next";
 
 export default function Verification() {
   const [verificationCode, setVerificationCode] = useState("");
@@ -15,6 +16,7 @@ export default function Verification() {
   const [user, setUser] = useState(null);
   const { id } = useParams();
   const navigate = useNavigate();
+  const { t } = useTranslation(); // Initialize useTranslation
 
   useEffect(() => {
     try {
@@ -54,7 +56,7 @@ export default function Verification() {
     <Preloader />
   ) : user ? (
     <form onSubmit={verify} className={"verification-input main-wrapper"}>
-      <h1>Verification</h1>
+      <h1>{t("verification")}</h1>
       <VerificationInput
         placeholder={""}
         length={4}
@@ -64,15 +66,15 @@ export default function Verification() {
         required={true}
         onChange={(event) => setVerificationCode(event)}
       />
-      <button type={"submit"}>Verify</button>
-      {error && <p style={{ color: "red" }}>Invalid verification code</p>}
+      <button type={"submit"}>{t("verify")}</button>
+      {error && <p style={{ color: "red" }}>{t("invalidVerificationCode")}</p>}
       <a
         href="https://t.me/LearnUpOfficialBot"
         target="_blank"
         rel="noreferrer"
       >
         <button className={"verification-button-link"} type={"button"}>
-          Get code via Telegram <FontAwesomeIcon icon={faTelegram} />
+          {t("getCodeViaTelegram")} <FontAwesomeIcon icon={faTelegram} />
         </button>
       </a>
     </form>

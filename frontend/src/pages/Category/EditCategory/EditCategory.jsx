@@ -5,8 +5,12 @@ import { useNavigate, useParams } from "react-router-dom";
 import Preloader from "../../../components/Preloader/Preloader.jsx";
 import { Helmet } from "react-helmet";
 import NotFound from "../../NotFound/NotFound.jsx";
+import { faPen } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useTranslation } from "react-i18next";
 
 export default function EditCategory() {
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(true);
   const [name, setName] = useState("");
   const [file, setFile] = useState(null);
@@ -59,26 +63,27 @@ export default function EditCategory() {
   ) : category ? (
     <div className={"main-wrapper"}>
       <Helmet>
-        <title>Edit Category</title>
+        <title>{t("editCategory")}</title>
       </Helmet>
-      <h1 style={{ textAlign: "center" }}>Edit Category</h1>
+      <h1 style={{ textAlign: "center" }}>{t("editCategory")}</h1>
       <form onSubmit={handleSubmit}>
-        <label htmlFor={"name"}>Name</label>
+        <label htmlFor={"name"}>{t("name")}</label>
         <input
           maxLength={12}
-          value={name}
           type={"text"}
           id={"name"}
           required={true}
           onChange={(e) => setName(e.target.value)}
         />
-        <label htmlFor={"picture"}>Picture</label>
+        <label htmlFor={"picture"}>{t("picture")}</label>
         <input
-          required={false}
+          required={true}
           type="file"
           onChange={(e) => setFile(e.target.files)}
         />
-        <button type={"submit"}>Edit</button>
+        <button type={"submit"}>
+          {t("editCategoryButton")} <FontAwesomeIcon icon={faPen} />
+        </button>
       </form>
     </div>
   ) : (

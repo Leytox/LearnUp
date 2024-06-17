@@ -8,6 +8,7 @@ import Preloader from "../../components/Preloader/Preloader.jsx";
 import { Helmet } from "react-helmet";
 import "./CreateEditCourse.css";
 import NotFound from "../NotFound/NotFound.jsx";
+import { useTranslation } from "react-i18next";
 
 export default function CreateCourse() {
   const [course, setCourse] = useState(null);
@@ -25,7 +26,7 @@ export default function CreateCourse() {
   const navigate = useNavigate();
   const { courseId } = useParams();
   const userId = Cookies.get("id");
-
+  const { t } = useTranslation();
   useEffect(() => {
     const fetchCourse = async () => {
       try {
@@ -95,11 +96,11 @@ export default function CreateCourse() {
       className="create-course-container main-wrapper"
     >
       <Helmet>
-        <title>Edit Course</title>
+        <title>{t("editCourse")}</title>
       </Helmet>
-      <h1 className="create-course-title">Edit Course</h1>
+      <h1 className="create-course-title">{t("editCourse")}</h1>
       <div className="course-item">
-        <label>Title</label>
+        <label>{t("title")}</label>
         <input
           type="text"
           value={title}
@@ -108,7 +109,7 @@ export default function CreateCourse() {
         />
       </div>
       <div className="course-item">
-        <label>Description</label>
+        <label>{t("description")}</label>
         <textarea
           value={description}
           onChange={(e) => setDescription(e.target.value)}
@@ -116,7 +117,7 @@ export default function CreateCourse() {
         />
       </div>
       <div className="course-item">
-        <label>Price ($)</label>
+        <label>{t("price")} ($)</label>
         <input
           type="number"
           value={price}
@@ -126,24 +127,24 @@ export default function CreateCourse() {
         />
       </div>
       <div className="course-item">
-        <label>Availability</label>
+        <label>{t("availability")}</label>
         <select
           value={availability}
           onChange={(e) => setAvailability(e.target.value)}
           required={true}
         >
-          <option value={"true"}>Shown</option>
-          <option value={"false"}>Hidden</option>
+          <option value={"true"}>{t("shown")}</option>
+          <option value={"false"}>{t("hidden")}</option>
         </select>
       </div>
       <div className="course-item">
-        <label>Category</label>
+        <label>{t("category")}</label>
         <select
           value={category}
           onChange={(e) => setCategory(e.target.value)}
           required={true}
         >
-          <option value="">Select a category</option>
+          <option value="">{t("selectCategory")}</option>
           {availableCategories.map((category) => (
             <option key={category._id} value={category.name}>
               {category.name}
@@ -152,20 +153,20 @@ export default function CreateCourse() {
         </select>
       </div>
       <div className="course-item">
-        <label>Difficulty</label>
+        <label>{t("difficulty")}</label>
         <select
           value={difficulty}
           onChange={(e) => setDifficulty(e.target.value)}
           required={true}
         >
-          <option value="">Select a difficulty</option>
-          <option value={"Beginner"}>Beginner</option>
-          <option value={"Intermediate"}>Intermediate</option>
-          <option value={"Advanced"}>Advanced</option>
+          <option value="">{t("selectDifficulty")}</option>
+          <option value={"Beginner"}>{t("beginner")}</option>
+          <option value={"Intermediate"}>{t("intermediate")}</option>
+          <option value={"Advanced"}>{t("advanced")}</option>
         </select>
       </div>
       <div className="course-item">
-        <label>Image</label>
+        <label>{t("image")}</label>
         <img
           className={"course-picture"}
           src={
@@ -184,11 +185,11 @@ export default function CreateCourse() {
       </div>
       <div className={"create-course-buttons"}>
         <button type="submit" className="create-course-button">
-          Save <FontAwesomeIcon icon={faFloppyDisk} />
+          {t("save")} <FontAwesomeIcon icon={faFloppyDisk} />
         </button>
         <Link to={Cookies.get("role") === "admin" ? "/admin" : "/dashboard"}>
           <button>
-            Cancel <FontAwesomeIcon icon={faBan} />
+            {t("cancel")} <FontAwesomeIcon icon={faBan} />
           </button>
         </Link>
       </div>

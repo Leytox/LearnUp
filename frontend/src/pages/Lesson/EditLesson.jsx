@@ -8,6 +8,9 @@ import Preloader from "../../components/Preloader/Preloader.jsx";
 import NotFound from "../NotFound/NotFound.jsx";
 import ReactQuill from "react-quill";
 import "./CreateEditLesson.css";
+import { useTranslation } from "react-i18next";
+import { faPen } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function EditLesson() {
   const { courseId, lessonId } = useParams();
@@ -20,6 +23,7 @@ export default function EditLesson() {
   const [lesson, setLesson] = useState(null);
   const [course, setCourse] = useState(null);
   const navigate = useNavigate();
+  const { t } = useTranslation(); // Initialize useTranslation
   const userId = Cookies.get("id");
 
   useEffect(() => {
@@ -99,6 +103,7 @@ export default function EditLesson() {
   if (redirect && instructorId === Cookies.get("id"))
     navigate(`/course/${courseId}/lesson/${lessonId}`);
   else if (redirect && instructorId !== Cookies.get("id")) navigate("/");
+
   return loading ? (
     <Preloader />
   ) : course && lesson ? (
@@ -107,11 +112,11 @@ export default function EditLesson() {
       className="create-lesson-container main-wrapper"
     >
       <Helmet>
-        <title>Edit Lesson</title>
+        <title>{t("editLesson")}</title>
       </Helmet>
-      <h1 className="create-lesson-title">Edit Lesson</h1>
+      <h1 className="create-lesson-title">{t("editLesson")}</h1>
       <div className="lesson-item">
-        <label>Title</label>
+        <label>{t("title")}</label>
         <input
           type="text"
           value={title}
@@ -120,7 +125,7 @@ export default function EditLesson() {
         />
       </div>
       <div className="lesson-item">
-        <label>Description</label>
+        <label>{t("description")}</label>
         <input
           type="text"
           value={description}
@@ -129,7 +134,7 @@ export default function EditLesson() {
         />
       </div>
       <div className="lesson-item">
-        <label>Content</label>
+        <label>{t("content")}</label>
         <ReactQuill
           modules={{ toolbar: toolbarOptions }}
           theme={"snow"}
@@ -140,7 +145,7 @@ export default function EditLesson() {
         />
       </div>
       <button type="submit" className="create-lesson-button">
-        Edit Lesson
+        {t("editLessonButton")} <FontAwesomeIcon icon={faPen} />
       </button>
     </form>
   ) : (

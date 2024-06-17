@@ -6,12 +6,14 @@ import CourseCard from "../../../components/CourseCard/CourseCard.jsx";
 import NotFound from "../../NotFound/NotFound.jsx";
 import { Helmet } from "react-helmet";
 import "./UserProfile.css";
+import { useTranslation } from "react-i18next";
 
 export default function UserProfile() {
   const [user, setUser] = useState(null);
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const { id } = useParams();
+  const { t } = useTranslation(); // Initialize useTranslation
 
   useEffect(() => {
     const fetchUserAndCourses = async () => {
@@ -36,7 +38,9 @@ export default function UserProfile() {
   ) : user ? (
     <div className={"main-wrapper"}>
       <Helmet>
-        <title>{user.name}&amp;s Profile</title>
+        <title>
+          {user.name}&apos;s {t("profile")}
+        </title>
       </Helmet>
       <div className="user-profile">
         <img
@@ -51,12 +55,16 @@ export default function UserProfile() {
         <h1>{user.name}</h1>
         <p>{user.username}</p>
         <p>{user.email}</p>
-        <p>Joined: {new Date(user.createdAt).getFullYear()}</p>
+        <p>
+          {t("joined")}: {new Date(user.createdAt).getFullYear()}
+        </p>
         <p>{user.bio}</p>
       </div>
       {user.role === "instructor" && (
         <div className={"user-courses"}>
-          <h2>{user.name}&#39;s Courses:</h2>
+          <h2>
+            {user.name}&#39;s {t("courses")}:
+          </h2>
           <div className={"user-courses-list"}>
             {courses.map((course) => (
               <CourseCard key={course._id} course={course} />

@@ -8,12 +8,14 @@ import { faPen, faPlus } from "@fortawesome/free-solid-svg-icons";
 import Cookies from "js-cookie";
 import { Helmet } from "react-helmet";
 import CourseCard from "../../components/CourseCard/CourseCard.jsx";
+import { useTranslation } from "react-i18next";
 
 export default function Dashboard() {
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const [redirect, setRedirect] = useState(false);
+  const { t } = useTranslation(); // Initialize useTranslation
   useEffect(() => {
     if (!Cookies.get("token") && Cookies.get("role") !== "instructor") {
       setRedirect(true);
@@ -46,12 +48,11 @@ export default function Dashboard() {
   ) : (
     <div className="dashboard-container main-wrapper">
       <Helmet>
-        <title>Dashboard</title>
+        <title>{t("dashboard")}</title>
       </Helmet>
-      <h1 className="dashboard-title">Dashboard</h1>
       {courses.length === 0 && (
         <div className={"courses-empty"}>
-          <h3>No courses found</h3>
+          <h3>{t("noCoursesFound")}</h3>
         </div>
       )}
       <div className={"course-items"}>
@@ -59,12 +60,12 @@ export default function Dashboard() {
           <CourseCard key={course._id} course={course}>
             <Link to={`/course/${course._id}/edit`}>
               <button>
-                <FontAwesomeIcon icon={faPen} /> Edit Course
+                <FontAwesomeIcon icon={faPen} /> {t("editCourse")}
               </button>
             </Link>
             <Link to={`/course/${course._id}/create-lesson`}>
               <button>
-                <FontAwesomeIcon icon={faPlus} /> Add Lesson
+                <FontAwesomeIcon icon={faPlus} /> {t("addLesson")}
               </button>
             </Link>
           </CourseCard>
@@ -72,7 +73,7 @@ export default function Dashboard() {
       </div>
       <Link to="/create-course">
         <button>
-          <FontAwesomeIcon icon={faPlus} /> New course
+          <FontAwesomeIcon icon={faPlus} /> {t("newCourse")}
         </button>
       </Link>
     </div>

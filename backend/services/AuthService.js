@@ -66,7 +66,6 @@ async function ForgotPassword(req, res) {
     user.resetPasswordExpires = Date.now() + 3600000;
     await user.save();
     const resetURL = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
-    console.log(resetURL);
     const mailOptions = {
       from: process.env.OUTLOOK_EMAIL,
       to: email,
@@ -87,24 +86,17 @@ async function ForgotPassword(req, res) {
 async function ResetPassword(req, res) {
   const { token } = req.params;
   const { newPassword } = req.body;
-
   try {
-    // Find user by reset token and check if it's valid
     const user = await User.findOne({
       resetPasswordToken: token,
       resetPasswordExpires: { $gt: Date.now() },
     });
-
     if (!user) return res.status(400).json({ msg: "Invalid or expired token" });
-
-    // Hash the new password & update user's password and reset token fields
     const salt = await bcrypt.genSalt(10);
     user.password = await bcrypt.hash(newPassword, salt);
     user.resetPasswordToken = undefined;
     user.resetPasswordExpires = undefined;
     await user.save();
-
-    // Optionally, notify the user via email that their password has been changed.
     const mailOptions = {
       from: process.env.OUTLOOK_EMAIL,
       to: user.email,
@@ -112,7 +104,6 @@ async function ResetPassword(req, res) {
       html: `<p>This is a confirmation that the password for your account ${user.email} has just been changed.</p>`,
     };
     await transporter.sendMail(mailOptions);
-
     res.status(200).json({ msg: "Password updated successfully" });
   } catch (err) {
     console.error(err.message);

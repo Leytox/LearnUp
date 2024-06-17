@@ -6,6 +6,7 @@ import UserContext from "../../../UserContext.jsx";
 import { Helmet } from "react-helmet";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import { useTranslation } from "react-i18next";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -13,6 +14,7 @@ export default function Login() {
   const [redirect, setRedirect] = useState(false);
   const [error, setError] = useState(false);
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { setUser } = useContext(UserContext);
 
   useEffect(() => {
@@ -58,14 +60,14 @@ export default function Login() {
   return (
     <form onSubmit={Login} className={"main-wrapper"}>
       <Helmet>
-        <title>Login</title>
+        <title>{t("login")}</title>
       </Helmet>
-      <h1>Welcome back</h1>
+      <h1>{t("welcomeBack")}</h1>
       <input
         type="email"
         id="email"
         name="email"
-        placeholder={"Email"}
+        placeholder={t("email")}
         required={true}
         onChange={(event) => {
           setEmail(event.target.value);
@@ -76,7 +78,7 @@ export default function Login() {
         type="password"
         id="password"
         name="password"
-        placeholder={"Password"}
+        placeholder={t("password")}
         required={true}
         onChange={(event) => {
           setPassword(event.target.value);
@@ -84,12 +86,12 @@ export default function Login() {
         }}
       />
       <button type={"submit"}>
-        Continue <FontAwesomeIcon icon={faArrowRight} />
+        {t("continue")} <FontAwesomeIcon icon={faArrowRight} />
       </button>
       <p>
-        Don&apos;t have an account?{" "}
+        {t("dontHaveAccount")}{" "}
         <Link to={"/signup"} style={{ color: "#007bff" }}>
-          Sign up
+          {t("signUp")}
         </Link>
       </p>
       {error && error.errorType === "email" && (
@@ -99,14 +101,14 @@ export default function Login() {
         <p style={{ color: "red" }}>
           {error.msg}
           <Link to={"/forgot-password"}>
-            <br /> Forgot password?
+            <br /> {t("forgotPassword")}
           </Link>
         </p>
       )}
       {error && error.errorType === "verification" && (
         <p style={{ color: "red" }}>
           {error.msg}
-          <Link to={`/verify/${error.userId}`}>Verify account</Link>
+          <Link to={`/verify/${error.userId}`}>{t("verifyAccount")}</Link>
         </p>
       )}
     </form>
