@@ -115,7 +115,6 @@ export default function Cart() {
         </>
       ) : (
         <>
-          <h1 className="cart-title">Cart</h1>
           <div className={"cart-box"}>
             <div className={"cart-items"}>
               {cart.map((cartItem, index) => (

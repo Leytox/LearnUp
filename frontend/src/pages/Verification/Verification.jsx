@@ -8,6 +8,7 @@ import "./Verification.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTelegram } from "@fortawesome/free-brands-svg-icons";
 import { useTranslation } from "react-i18next";
+import { faMailBulk } from "@fortawesome/free-solid-svg-icons";
 
 export default function Verification() {
   const [verificationCode, setVerificationCode] = useState("");
@@ -46,8 +47,20 @@ export default function Verification() {
       );
       alert(response.data.msg);
       if (response.status === 200) navigate("/login");
+    } catch (err) {
+      setError(true);
+    }
+  }
 
-      // navigate to home page after successful verification
+  async function getVerificationViaEmail() {
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URI}/api/auth/verify-via-email`,
+        {
+          id,
+        },
+      );
+      alert(response.data.msg);
     } catch (err) {
       setError(true);
     }
@@ -69,18 +82,27 @@ export default function Verification() {
       />
       <button type={"submit"}>{t("verify")}</button>
       {error && <p style={{ color: "red" }}>{t("invalidVerificationCode")}</p>}
-      <a
-        href="https://t.me/LearnUpOfficialBot"
-        target="_blank"
-        rel="noreferrer"
-      >
-        <button className={"verification-button-link"} type={"button"}>
-          {t("getCodeViaTelegram")} <FontAwesomeIcon icon={faTelegram} />
+      <div className={"verification-buttons"}>
+        <a
+          href="https://t.me/LearnUpOfficialBot"
+          target="_blank"
+          rel="noreferrer"
+        >
+          <button className={"verification-button-link"} type={"button"}>
+            {t("getCodeViaTelegram")} <FontAwesomeIcon icon={faTelegram} />
+          </button>
+        </a>
+        <button
+          className={"verification-button-link"}
+          type={"button"}
+          onClick={getVerificationViaEmail}
+        >
+          {t("getVerificationViaEmail")} <FontAwesomeIcon icon={faMailBulk} />
         </button>
-      </a>
+      </div>
     </form>
   ) : user.isPhoneVerified ? (
-    navigate("/")
+    navigate("/login")
   ) : (
     <NotFound />
   );

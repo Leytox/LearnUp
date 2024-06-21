@@ -66,18 +66,6 @@ export default function Header() {
         <Search />
         {!isSearchVisible || !isMobile ? (
           <ul className={"navbar-links"}>
-            {location !== "/" && (
-              <li>
-                <Link to={"/"}>
-                  <button
-                    style={{ width: "50px", height: "50px" }}
-                    title={"Go to home"}
-                  >
-                    <FontAwesomeIcon icon={faHouse} />
-                  </button>
-                </Link>
-              </li>
-            )}
             {!user && location !== "/login" && (
               <li>
                 <Link to={"/login"}>
@@ -101,6 +89,18 @@ export default function Header() {
                       <FontAwesomeIcon icon={faUserPlus} />
                     </button>
                   )}
+                </Link>
+              </li>
+            )}
+            {location !== "/" && (
+              <li>
+                <Link to={"/"}>
+                  <button
+                    style={{ width: "50px", height: "50px" }}
+                    title={"Go to home"}
+                  >
+                    <FontAwesomeIcon icon={faHouse} />
+                  </button>
                 </Link>
               </li>
             )}

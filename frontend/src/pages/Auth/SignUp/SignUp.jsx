@@ -82,6 +82,7 @@ export default function Register() {
         onChange={(event) => setPassword(event.target.value)}
       />
       <PhoneInput
+        maxLength={16}
         placeholder={t("enterPhoneNumber")}
         value={phoneNumber}
         onChange={setPhoneNumber}

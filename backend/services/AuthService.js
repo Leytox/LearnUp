@@ -39,6 +39,27 @@ async function Register(req, res) {
   }
 }
 
+async function VerifyViaEmail(req, res) {
+  const { id } = req.body;
+  try {
+    let user = await User.findById(id);
+    if (!user) return res.status(404).json({ msg: "User not found" });
+    user.verificationCode = generateVerification();
+    await user.save();
+    const mailOptions = {
+      from: process.env.OUTLOOK_EMAIL,
+      to: user.email,
+      subject: "Verification Code",
+      html: `<p>Your verification code is ${user.verificationCode}</p>`,
+    };
+    await transporter.sendMail(mailOptions);
+    res.status(200).json({ msg: "Verification code sent" });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Server error");
+  }
+}
+
 async function VerifyAccount(req, res) {
   const { verificationCode, id } = req.body;
   try {
@@ -148,6 +169,7 @@ async function Login(req, res) {
 
 module.exports = {
   Register,
+  VerifyViaEmail,
   VerifyAccount,
   ForgotPassword,
   ResetPassword,

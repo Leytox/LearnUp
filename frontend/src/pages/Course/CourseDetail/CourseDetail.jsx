@@ -8,6 +8,7 @@ import {
   faComment,
   faPaperPlane,
   faPersonChalkboard,
+  faRightToBracket,
   faVialCircleCheck,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -206,7 +207,8 @@ export default function CourseDetail() {
           <Link to={"/login"}>
             <button>
               {" "}
-              {t("logInToBuy")} (${course.price})
+              <FontAwesomeIcon icon={faRightToBracket} /> {t("logInToBuy")} ($
+              {course.price})
             </button>
           </Link>
         ) : user._id === course.instructor._id ||

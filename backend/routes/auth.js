@@ -8,6 +8,9 @@ router.post("/register", AuthService.Register);
 // Verify Account
 router.post("/verify", AuthService.VerifyAccount);
 
+// Verify via email
+router.post("/verify-via-email", AuthService.VerifyViaEmail);
+
 // Forgot Password
 router.post("/forgot-password", AuthService.ForgotPassword);
 

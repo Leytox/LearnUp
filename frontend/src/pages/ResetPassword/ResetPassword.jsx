@@ -28,10 +28,14 @@ export default function ResetPassword() {
           newPassword,
         },
       );
-      if (response.status === 200) setSuccess(t("passwordResetSuccessful"));
-      setTimeout(() => {
-        navigate("/login");
-      }, 3000);
+      if (response.status === 200) {
+        setSuccess(t("passwordResetSuccessful"));
+        setTimeout(() => {
+          navigate("/login");
+        }, 3000);
+      } else {
+        setError(response.data.msg);
+      }
     } catch (err) {
       setError(err.response.data);
     }
