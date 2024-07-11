@@ -1,11 +1,11 @@
-const Lesson = require("../models/Lesson");
-const Course = require("../models/Course");
-const Enrollment = require("../models/Enrollment");
-module.exports = async function checkEnrollmentOrCreator(req, res, next) {
+import Lesson from "../models/Lesson.js";
+import Course from "../models/Course.js";
+import Enrollment from "../models/Enrollment.js";
+export default async function checkEnrollmentOrCreator(req, res, next) {
   try {
     if (req.user.role === "admin") return next();
     const lesson = await Lesson.findById(
-      req.body.lesson || req.params.lessonId,
+      req.body.lesson || req.params.lessonId
     );
     if (!lesson) return res.status(404).json({ msg: "Lesson not found" });
     const course = await Course.findById(lesson.course);
@@ -21,4 +21,4 @@ module.exports = async function checkEnrollmentOrCreator(req, res, next) {
     console.error(err.message);
     res.status(500).send("Server error");
   }
-};
+}

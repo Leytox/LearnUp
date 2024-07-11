@@ -1,23 +1,23 @@
-const mongoose = require("mongoose");
+import { Schema, model } from "mongoose";
 
-const QuestionSchema = new mongoose.Schema({
+const QuestionSchema = new Schema({
   questionText: { type: String, required: true },
   options: [{ text: String, isCorrect: Boolean }],
 });
 
-const QuizSchema = new mongoose.Schema(
+const QuizSchema = new Schema(
   {
     title: { type: String, required: true },
     description: { type: String, required: true },
     questions: [QuestionSchema],
     course: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: "Course",
       required: true,
       unique: true,
     },
     lesson: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: "Lesson",
       required: true,
       unique: true,
@@ -26,4 +26,4 @@ const QuizSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
-module.exports = mongoose.model("Quiz", QuizSchema);
+export default model("Quiz", QuizSchema);

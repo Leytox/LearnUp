@@ -1,6 +1,6 @@
-const User = require("../models/User");
-const fs = require("node:fs");
-const bcrypt = require("bcryptjs");
+import User from "../models/User.js";
+import fs from "node:fs";
+import bcrypt from "bcrypt";
 
 async function getUserProfileById(req, res) {
   try {
@@ -51,15 +51,18 @@ async function updateProfilePicture(req, res) {
     const user = await User.findById(req.user.id);
     if (!user) return res.status(404).json({ msg: "User not found" });
 
-    // Delete the old profile picture file from the server
-    if (user.profilePicture)
-      fs.unlink(`${user.profilePicture}`, (err) => {
+    const profilePicturePath = path.resolve(user.profilePicture);
+    if (
+      !/^https?:\/\//i.test(user.profilePicture) &&
+      fs.existsSync(profilePicturePath)
+    ) {
+      fs.unlink(profilePicturePath, (err) => {
         if (err) console.error(err);
       });
-    // Save the new profile picture
+    }
+    // Assuming req.file.path is correct and the directory exists
     user.profilePicture = req.file.path;
     await user.save();
-
     res.json(user);
   } catch (err) {
     console.error(err.message);
@@ -95,12 +98,11 @@ async function deleteProfilePicture(req, res) {
     if (!user) return res.status(404).json({ msg: "User not found" });
 
     // Delete the profile picture file from the server
-    if (user.profilePicture) {
+    if (!/^https?:\/\//i.test(user.profilePicture) && user.profilePicture)
       fs.unlink(`${user.profilePicture}`, (err) => {
         if (err) console.error(err);
       });
-    }
-    user.profilePicture = "";
+    user.profilePicture = "https://cdn-icons-png.flaticon.com/512/21/21104.png";
     await user.save();
 
     res.json(user);
@@ -110,7 +112,7 @@ async function deleteProfilePicture(req, res) {
   }
 }
 
-module.exports = {
+export default {
   getUserProfileById,
   updateUserProfile,
   deleteUserProfile,

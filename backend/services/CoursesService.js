@@ -1,6 +1,6 @@
-const Course = require("../models/Course");
-const Enrollments = require("../models/Enrollment");
-const fs = require("fs");
+import Course from "../models/Course.js";
+import Enrollment from "../models/Enrollment.js";
+import { unlinkSync } from "fs";
 
 async function createCourse(req, res) {
   const { title, description, category, difficulty, price } = req.body;
@@ -34,7 +34,7 @@ async function updateCourse(req, res) {
       req.user.role !== "admin"
     )
       return res.status(401).json({ msg: "User not authorized" });
-    const enrollments = await Enrollments.find({ course: req.params.id });
+    const enrollments = await Enrollment.find({ course: req.params.id });
     if (enrollments.length > 0 && available === "false")
       return res.status(400).json({
         msg: "Cannot make course unavailable. There are students enrolled",
@@ -46,7 +46,7 @@ async function updateCourse(req, res) {
     course.price = price || course.price;
     course.available = available || course.available;
     if (req.file) {
-      fs.unlinkSync(course.picture);
+      unlinkSync(course.picture);
       course.picture = req.file.path;
     }
     await course.save();
@@ -73,10 +73,7 @@ async function deleteCourse(req, res) {
 
 async function getAllCourses(req, res) {
   try {
-    const courses = await Course.find().populate("instructor", [
-      "name",
-      "email",
-    ]);
+    const courses = await find().populate("instructor", ["name", "email"]);
     res.json(courses);
   } catch (err) {
     console.error(err.message);
@@ -167,7 +164,7 @@ async function searchCourses(req, res) {
   }
 }
 
-module.exports = {
+export default {
   createCourse,
   updateCourse,
   deleteCourse,

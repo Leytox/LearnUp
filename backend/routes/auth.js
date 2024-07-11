@@ -1,6 +1,6 @@
-const express = require("express");
-const router = express.Router();
-const AuthService = require("../services/AuthService");
+import { Router } from "express";
+const router = Router();
+import AuthService from "../services/AuthService.js";
 
 // Register
 router.post("/register", AuthService.Register);
@@ -20,4 +20,7 @@ router.post("/reset-password/:token", AuthService.ResetPassword);
 // Login
 router.post("/login", AuthService.Login);
 
-module.exports = router;
+// OAuth
+router.post("/google-oauth", AuthService.GoogleOAuth);
+
+export default router;

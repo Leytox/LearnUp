@@ -1,5 +1,5 @@
-const Course = require("../models/Course");
-const Enrollment = require("../models/Enrollment");
+import Course from "../models/Course.js";
+import Enrollment from "../models/Enrollment.js";
 
 async function enrollInCourse(req, res) {
   const { courseId } = req.body;
@@ -55,7 +55,7 @@ async function getAllEnrollmentsById(req, res) {
   }
 }
 
-module.exports = {
+export default {
   enrollInCourse,
   checkEnrollment,
   checkEnrollmentsById,

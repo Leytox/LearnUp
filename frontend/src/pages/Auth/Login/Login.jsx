@@ -7,6 +7,7 @@ import { Helmet } from "react-helmet";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { useTranslation } from "react-i18next";
+import OAuth from "../../../components/OAuth/OAuth.jsx";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -29,7 +30,7 @@ export default function Login() {
         {
           email,
           password,
-        },
+        }
       );
       if (response.status === 200) setRedirect(true);
       if (response.data.token)
@@ -88,6 +89,7 @@ export default function Login() {
       <button type={"submit"}>
         {t("continue")} <FontAwesomeIcon icon={faArrowRight} />
       </button>
+      <OAuth />
       <p>
         {t("dontHaveAccount")}{" "}
         <Link to={"/signup"} style={{ color: "#007bff" }}>

@@ -1,9 +1,9 @@
-const mongoose = require("mongoose");
+import { Schema, model } from "mongoose";
 
-const LessonSchema = new mongoose.Schema(
+const LessonSchema = new Schema(
   {
     course: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: "Course",
       required: true,
     },
@@ -11,13 +11,13 @@ const LessonSchema = new mongoose.Schema(
     description: { type: String, required: true },
     content: { type: String, required: true },
     quiz: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: "Quiz",
       required: false,
       default: null,
     },
   },
-  { timestamps: true },
+  { timestamps: true }
 );
 
-module.exports = mongoose.model("Lesson", LessonSchema);
+export default model("Lesson", LessonSchema);

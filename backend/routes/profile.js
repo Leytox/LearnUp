@@ -1,9 +1,8 @@
-const express = require("express");
-const router = express.Router();
-const auth = require("../middlewares/auth");
-const upload = require("../middlewares/upload");
-const ProfileService = require("../services/ProfileService");
-
+import { Router } from "express";
+const router = Router();
+import auth from "../middlewares/auth.js";
+import upload from "../middlewares/upload.js";
+import ProfileService from "../services/ProfileService.js";
 // Get user profile
 router.get("/:id", ProfileService.getUserProfileById);
 
@@ -17,8 +16,8 @@ router.delete("/", auth, ProfileService.deleteUserProfile);
 router.post(
   "/picture",
   auth,
-  upload("uploads/profile").single("profilePicture"),
-  ProfileService.updateProfilePicture,
+  upload("../uploads/profile/").single("profilePicture"),
+  ProfileService.updateProfilePicture
 );
 
 // Update password
@@ -27,4 +26,4 @@ router.put("/password", auth, ProfileService.updatePassword);
 // Delete user profile picture
 router.delete("/picture", auth, ProfileService.deleteProfilePicture);
 
-module.exports = router;
+export default router;

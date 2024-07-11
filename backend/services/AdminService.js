@@ -1,5 +1,5 @@
-const User = require("../models/User");
-const Course = require("../models/Course");
+import User from "../models/User.js";
+import Course from "../models/Course.js";
 
 async function getAllUsers(req, res) {
   try {
@@ -25,4 +25,4 @@ async function getAllCourses(req, res) {
   }
 }
 
-module.exports = { getAllUsers, getAllCourses };
+export default { getAllUsers, getAllCourses };

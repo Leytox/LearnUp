@@ -1,8 +1,8 @@
-const User = require("../models/User");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const transporter = require("../utils/email");
-const crypto = require("crypto");
+import User from "../models/User.js";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import transporter from "../utils/email.js";
+import crypto from "crypto";
 
 function generateVerification() {
   return Math.floor(1000 + Math.random() * 9000);
@@ -19,8 +19,7 @@ async function Register(req, res) {
     let user = await User.findOne({ email, phoneNumber });
     if (user) return res.status(400).json({ msg: "User already exists" });
     user = new User({ name, email, password, role, bio, phoneNumber });
-    const salt = await bcrypt.genSalt(10);
-    user.password = await bcrypt.hash(password, salt);
+    user.password = bcrypt.hashSync(password, 10);
     user.verificationCode = generateVerification();
     await user.save();
     const payload = { user: { id: user.id, role: user.role } };
@@ -31,7 +30,7 @@ async function Register(req, res) {
       (err, token) => {
         if (err) throw err;
         res.json({ token, id: user.id });
-      },
+      }
     );
   } catch (err) {
     console.error(err.message);
@@ -113,7 +112,7 @@ async function ResetPassword(req, res) {
       resetPasswordExpires: { $gt: Date.now() },
     });
     if (!user) return res.status(400).json({ msg: "Invalid or expired token" });
-    const salt = await bcrypt.genSalt(10);
+    const salt = await genSalt(10);
     user.password = await bcrypt.hash(newPassword, salt);
     user.resetPasswordToken = undefined;
     user.resetPasswordExpires = undefined;
@@ -159,7 +158,7 @@ async function Login(req, res) {
       (err, token) => {
         if (err) throw err;
         res.json({ token, username: user.name, id: user.id, role: user.role });
-      },
+      }
     );
   } catch (err) {
     console.error(err.message);
@@ -167,11 +166,66 @@ async function Login(req, res) {
   }
 }
 
-module.exports = {
+async function GoogleOAuth(req, res) {
+  const { username, email, avatar } = req.body;
+  try {
+    const user = await User.findOne({ email });
+    const expiryDate = new Date(Date.now() + 2 * 3600000);
+    if (!user) {
+      const hashedPassword = bcrypt.hashSync(
+        Math.random().toString(36).slice(-8),
+        12
+      );
+      const newUser = new User({
+        name: username,
+        email,
+        password: hashedPassword,
+        profilePicture: avatar,
+      });
+      await newUser.save();
+      const payload = { user: { id: newUser.id, role: newUser.role } };
+      jwt.sign(
+        payload,
+        process.env.JWT_SECRET,
+        { expiresIn: "24h" },
+        (err, token) => {
+          if (err) throw err;
+          res.json({
+            token,
+            username: user.name,
+            id: user.id,
+            role: user.role,
+          });
+        }
+      );
+    } else {
+      const payload = { user: { id: user.id, role: user.role } };
+      jwt.sign(
+        payload,
+        process.env.JWT_SECRET,
+        { expiresIn: "24h" },
+        (err, token) => {
+          if (err) throw err;
+          res.json({
+            token,
+            username: user.name,
+            id: user.id,
+            role: user.role,
+          });
+        }
+      );
+    }
+  } catch (error) {
+    console.error(error.message);
+  }
+}
+
+export default {
   Register,
   VerifyViaEmail,
   VerifyAccount,
   ForgotPassword,
   ResetPassword,
   Login,
+  GoogleOAuth,
 };

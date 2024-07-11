@@ -1,23 +1,23 @@
-const fs = require("fs");
-const path = require("path");
-const { PDFDocument, rgb } = require("pdf-lib");
-const certificatesDir = path.join(
-  __dirname,
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "fs";
+import { join } from "path";
+import { PDFDocument, rgb } from "pdf-lib";
+const certificatesDir = join(
+  new URL(".", import.meta.url).pathname,
   "..",
   "uploads",
-  "users_certificates",
+  "users_certificates"
 );
 
-if (!fs.existsSync(certificatesDir))
-  fs.mkdirSync(certificatesDir, { recursive: true });
+if (!existsSync(certificatesDir))
+  mkdirSync(certificatesDir, { recursive: true });
 
-module.exports = async function generateCertificate(
+export default async function generateCertificate(
   userName,
   courseTitle,
-  courseId,
+  courseId
 ) {
-  const certificateTemplatePath = path.join(__dirname, "template.pdf");
-  const certificateTemplate = fs.readFileSync(certificateTemplatePath);
+  const certificateTemplatePath = new URL("template.pdf", import.meta.url);
+  const certificateTemplate = readFileSync(certificateTemplatePath);
   const pdfDoc = await PDFDocument.load(certificateTemplate);
   const pages = pdfDoc.getPages();
   const firstPage = pages[0];
@@ -64,8 +64,8 @@ module.exports = async function generateCertificate(
   });
 
   const pdfBytes = await pdfDoc.save();
-  const filePath = path.join(`${userName}_${courseId}.pdf`.trim());
-  fs.writeFileSync(certificatesDir + "/" + filePath, pdfBytes);
+  const filePath = join(`${userName}_${courseId}.pdf`.trim());
+  writeFileSync(certificatesDir + "/" + filePath, pdfBytes);
 
   return filePath;
-};
+}

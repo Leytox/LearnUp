@@ -1,12 +1,12 @@
-const Cart = require("../models/Cart");
-const User = require("../models/User");
-const Enrollment = require("../models/Enrollment");
-const transporter = require("../utils/email");
+import Cart from "../models/Cart.js";
+import User from "../models/User.js";
+import Enrollment from "../models/Enrollment.js";
+import transporter from "../utils/email.js";
 
 async function processPayment(req, res) {
   try {
     let cart = await Cart.findOne({ user: req.user.id }).populate(
-      "courses.course",
+      "courses.course"
     );
     if (!cart || cart.courses.length === 0)
       return res.status(400).json({ msg: "Cart is empty" });
@@ -39,5 +39,4 @@ async function processPayment(req, res) {
     res.status(500).send("Server error");
   }
 }
-
-module.exports = { processPayment };
+export default { processPayment };

@@ -1,9 +1,8 @@
-const express = require("express");
-const router = express.Router();
-const auth = require("../middlewares/auth");
-const checkEnrollmentOrCreator = require("../middlewares/enrollmentOrCreator");
-const QuizzesService = require("../services/QuizzesService");
-const { checkEnrollment } = require("../services/EnrollmentsService");
+import { Router } from "express";
+const router = Router();
+import auth from "../middlewares/auth.js";
+import checkEnrollmentOrCreator from "../middlewares/enrollmentOrCreator.js";
+import QuizzesService from "../services/QuizzesService.js";
 
 // Get quizzes for a specific course
 router.get("/:courseId", QuizzesService.getQuizzesForCourse);
@@ -15,14 +14,14 @@ router.put(
   "/course/:courseId/quizz/:quizzId",
   auth,
   checkEnrollmentOrCreator,
-  QuizzesService.updateQuiz,
+  QuizzesService.updateQuiz
 );
 // Get quiz for a specific course (only enrolled users or creators)
 router.get(
   "/course/:courseId/lesson/:lessonId/quizz/:quizzId",
   auth,
   checkEnrollmentOrCreator,
-  QuizzesService.getQuiz,
+  QuizzesService.getQuiz
 );
 
-module.exports = router;
+export default router;

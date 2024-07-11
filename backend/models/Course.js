@@ -1,10 +1,10 @@
-const mongoose = require("mongoose");
-const CourseSchema = new mongoose.Schema(
+import { Schema, model } from "mongoose";
+const CourseSchema = new Schema(
   {
     title: { type: String, required: true },
     description: { type: String, required: true },
     instructor: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },
@@ -19,9 +19,9 @@ const CourseSchema = new mongoose.Schema(
     available: { type: Boolean, required: false, default: false },
     picture: { type: String, required: false },
   },
-  { timestamps: true },
+  { timestamps: true }
 );
 
 CourseSchema.index({ title: "text", description: "text", category: "text" });
 
-module.exports = mongoose.model("Course", CourseSchema);
+export default model("Course", CourseSchema);

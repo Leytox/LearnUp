@@ -1,15 +1,15 @@
-const express = require("express");
-const router = express.Router();
-const auth = require("../middlewares/auth");
-const upload = require("../middlewares/upload");
-const CategoriesService = require("../services/CategoriesService");
+import { Router } from "express";
+const router = Router();
+import auth from "../middlewares/auth.js";
+import upload from "../middlewares/upload.js";
+import CategoriesService from "../services/CategoriesService.js";
 
 // Create a category (only admins)
 router.post(
   "/",
   auth,
   upload("uploads/categories").single("file"),
-  CategoriesService.createCategory,
+  CategoriesService.createCategory
 );
 
 // Edit a category by id (only admins)
@@ -17,7 +17,7 @@ router.put(
   "/:id",
   auth,
   upload("uploads/categories").single("file"),
-  CategoriesService.editCategory,
+  CategoriesService.editCategory
 );
 
 // Get all categories
@@ -26,4 +26,4 @@ router.get("/", CategoriesService.getAllCategories);
 // Get a category by id
 router.get("/:id", CategoriesService.getCategoryById);
 
-module.exports = router;
+export default router;

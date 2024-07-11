@@ -1,8 +1,8 @@
-const express = require("express");
-const router = express.Router();
-const auth = require("../middlewares/auth");
-const checkEnrollmentOrCreator = require("../middlewares/enrollmentOrCreator");
-const LessonsService = require("../services/LessonsService");
+import { Router } from "express";
+const router = Router();
+import auth from "../middlewares/auth.js";
+import checkEnrollmentOrCreator from "../middlewares/enrollmentOrCreator.js";
+import LessonsService from "../services/LessonsService.js";
 
 // Add a lesson to a course (only instructors and admins)
 router.post("/", auth, LessonsService.createLesson);
@@ -15,10 +15,10 @@ router.get(
   "/details/:lessonId",
   auth,
   checkEnrollmentOrCreator,
-  LessonsService.getLessonById,
+  LessonsService.getLessonById
 );
 
 // Get all lessons of a course
 router.get("/:courseId", LessonsService.getLessonsForCourse);
 
-module.exports = router;
+export default router;

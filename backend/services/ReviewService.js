@@ -1,4 +1,4 @@
-const Review = require("../models/Review");
+import Review from "../models/Review.js";
 
 async function createReview(req, res) {
   const { courseId, rating, comment } = req.body;
@@ -30,4 +30,4 @@ async function getReviewsForCourse(req, res) {
   }
 }
 
-module.exports = { createReview, getReviewsForCourse };
+export default { createReview, getReviewsForCourse };

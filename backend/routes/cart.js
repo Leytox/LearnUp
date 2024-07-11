@@ -1,7 +1,7 @@
-const express = require("express");
-const router = express.Router();
-const auth = require("../middlewares/auth");
-const CartService = require("../services/CartService");
+import { Router } from "express";
+const router = Router();
+import auth from "../middlewares/auth.js";
+import CartService from "../services/CartService.js";
 
 // Get cart for the current user
 router.get("/", auth, CartService.getCartItems);
@@ -12,4 +12,4 @@ router.post("/add", auth, CartService.addToCart);
 // Remove a course from the cart
 router.post("/remove", auth, CartService.removeFromCart);
 
-module.exports = router;
+export default router;

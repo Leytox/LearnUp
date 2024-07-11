@@ -1,7 +1,7 @@
-const nodemailer = require("nodemailer");
+import { createTransport } from "nodemailer";
 
 // Create a transporter object using the default SMTP transport
-let transporter = nodemailer.createTransport({
+let transporter = createTransport({
   host: "smtp-mail.outlook.com",
   port: 587,
   secure: false, // true for 465, false for other ports
@@ -11,4 +11,4 @@ let transporter = nodemailer.createTransport({
   },
 });
 
-module.exports = transporter;
+export default transporter;

@@ -1,5 +1,5 @@
-const Lesson = require("../models/Lesson");
-const Quiz = require("../models/Quiz");
+import Lesson from "../models/Lesson.js";
+import Quiz from "../models/Quiz.js";
 
 async function addQuiz(req, res) {
   const { title, description, questions, course, lesson } = req.body;
@@ -60,4 +60,4 @@ async function getQuizzesForCourse(req, res) {
   }
 }
 
-module.exports = { addQuiz, updateQuiz, getQuiz, getQuizzesForCourse };
+export default { addQuiz, updateQuiz, getQuiz, getQuizzesForCourse };

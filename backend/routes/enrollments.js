@@ -1,7 +1,8 @@
-const express = require("express");
-const router = express.Router();
-const auth = require("../middlewares/auth");
-const EnrollmentsService = require("../services/EnrollmentsService");
+import { Router } from "express";
+import auth from "../middlewares/auth.js";
+import EnrollmentsService from "../services/EnrollmentsService.js";
+
+const router = Router();
 
 // Enroll in a course
 router.post("/", auth, EnrollmentsService.enrollInCourse);
@@ -15,4 +16,4 @@ router.get("/my-courses", auth, EnrollmentsService.checkEnrollmentsById);
 // Get all enrollments for a course
 router.get("/course/:courseId", auth, EnrollmentsService.getAllEnrollmentsById);
 
-module.exports = router;
+export default router;

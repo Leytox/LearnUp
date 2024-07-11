@@ -41,12 +41,14 @@ export default function Profile() {
           return;
         }
         const response = await axios.get(
-          `${import.meta.env.VITE_BACKEND_URI}/api/profile/${Cookies.get("id")}`,
+          `${import.meta.env.VITE_BACKEND_URI}/api/profile/${Cookies.get(
+            "id"
+          )}`,
           {
             headers: {
               "x-auth-token": Cookies.get("token"),
             },
-          },
+          }
         );
         setProfile(response.data);
         setName(response.data.name);
@@ -76,7 +78,7 @@ export default function Profile() {
           headers: {
             "x-auth-token": Cookies.get("token"),
           },
-        },
+        }
       );
       if (response.status === 200) {
         alert("Password reset successful");
@@ -104,7 +106,7 @@ export default function Profile() {
             "Content-Type": "multipart/form-data",
             "x-auth-token": Cookies.get("token"),
           },
-        },
+        }
       );
       setProfile(response.data);
     } catch (error) {
@@ -124,7 +126,7 @@ export default function Profile() {
           headers: {
             "x-auth-token": Cookies.get("token"),
           },
-        },
+        }
       );
       setProfile(response.data);
     } catch (error) {
@@ -141,7 +143,7 @@ export default function Profile() {
           headers: {
             "x-auth-token": Cookies.get("token"),
           },
-        },
+        }
       );
       setProfile(response.data);
       setEditMode(false);
@@ -188,9 +190,11 @@ export default function Profile() {
               <img
                 className={"profile-picture"}
                 src={
-                  profile.profilePicture
-                    ? `${import.meta.env.VITE_BACKEND_URI}/${profile.profilePicture}`
-                    : "https://cdn-icons-png.flaticon.com/512/21/21104.png"
+                  !/^https?:\/\//i.test(profile.profilePicture)
+                    ? `${import.meta.env.VITE_BACKEND_URI}/${
+                        profile.profilePicture
+                      }`
+                    : [profile.profilePicture]
                 }
                 alt={"profile picture"}
               />
@@ -355,7 +359,7 @@ export default function Profile() {
                           headers: {
                             "x-auth-token": Cookies.get("token"),
                           },
-                        },
+                        }
                       )
                       .then(() => {
                         Cookies.remove("token");

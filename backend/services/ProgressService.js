@@ -1,6 +1,6 @@
-const Enrollment = require("../models/Enrollment");
-const Quiz = require("../models/Quiz");
-const generateCertificate = require("../utils/certificate");
+import Enrollment from "../models/Enrollment.js";
+import Quiz from "../models/Quiz.js";
+import generateCertificate from "../utils/certificate.js";
 
 async function completeQuiz(req, res) {
   const { userId, quizId, courseId } = req.body;
@@ -45,7 +45,7 @@ async function getCertificate(req, res) {
         enrollment.certificate = await generateCertificate(
           enrollment.student.name,
           enrollment.course.title,
-          enrollment.course._id,
+          enrollment.course._id
         );
         await enrollment.save();
         res.status(200).send(enrollment.certificate);
@@ -73,4 +73,4 @@ async function getProgress(req, res) {
   }
 }
 
-module.exports = { completeQuiz, getCertificate, getProgress };
+export default { completeQuiz, getCertificate, getProgress };

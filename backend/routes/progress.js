@@ -1,7 +1,7 @@
-const express = require("express");
-const router = express.Router();
-const auth = require("../middlewares/auth");
-const ProgressService = require("../services/ProgressService");
+import { Router } from "express";
+const router = Router();
+import auth from "../middlewares/auth.js";
+import ProgressService from "../services/ProgressService.js";
 
 // Complete quiz and possibly generate certificate
 router.post("/complete-quiz", auth, ProgressService.completeQuiz);
@@ -10,10 +10,10 @@ router.post("/complete-quiz", auth, ProgressService.completeQuiz);
 router.get(
   "/certificate/:userId/:courseId",
   auth,
-  ProgressService.getCertificate,
+  ProgressService.getCertificate
 );
 
 // Get progress
 router.get("/user/:userId/course/:courseId", auth, ProgressService.getProgress);
 
-module.exports = router;
+export default router;

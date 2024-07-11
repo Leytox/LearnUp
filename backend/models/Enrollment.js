@@ -1,15 +1,15 @@
 // models/Enrollment.js
-const mongoose = require("mongoose");
+import { Schema, model } from "mongoose";
 
-const EnrollmentSchema = new mongoose.Schema(
+const EnrollmentSchema = new Schema(
   {
     student: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },
     course: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: "Course",
       required: true,
     },
@@ -20,7 +20,7 @@ const EnrollmentSchema = new mongoose.Schema(
     },
     completedQuizzes: [
       {
-        type: mongoose.Schema.Types.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: "Quiz",
       },
     ],
@@ -29,7 +29,7 @@ const EnrollmentSchema = new mongoose.Schema(
       default: "",
     },
   },
-  { timestamps: true },
+  { timestamps: true }
 );
 
-module.exports = mongoose.model("Enrollment", EnrollmentSchema);
+export default model("Enrollment", EnrollmentSchema);

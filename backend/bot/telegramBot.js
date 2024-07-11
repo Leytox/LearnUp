@@ -1,6 +1,7 @@
-const TelegramBot = require("node-telegram-bot-api");
-const User = require("../models/User");
-require("dotenv").config();
+import TelegramBot from "node-telegram-bot-api";
+import User from "../models/User.js";
+import dotenv from "dotenv";
+dotenv.config();
 const token = process.env.TELEGRAM_BOT_TOKEN;
 const bot = new TelegramBot(token, { polling: true });
 
@@ -23,7 +24,7 @@ bot.onText(/^\/start/, function (msg) {
   bot.sendMessage(
     msg.chat.id,
     "Please share your phone number to verify",
-    option,
+    option
   );
 });
 
@@ -45,15 +46,15 @@ bot.on("contact", async (msg) => {
     await bot.sendMessage(
       chatId,
       `Here is your verification code: ||${user.verificationCode}||`,
-      { parse_mode: "MarkdownV2" },
+      { parse_mode: "MarkdownV2" }
     );
   } catch (error) {
     console.error(error);
     await bot.sendMessage(
       chatId,
-      "An error occurred while verifying the phone number.",
+      "An error occurred while verifying the phone number."
     );
   }
 });
 
-module.exports = bot;
+export default bot;

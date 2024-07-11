@@ -1,12 +1,12 @@
-const Cart = require("../models/Cart");
-const Enrollment = require("../models/Enrollment");
+import Cart from "../models/Cart.js";
+import Enrollment from "../models/Enrollment.js";
 
 async function getCartItems(req, res) {
   try {
-    const cart = await Cart.find({ user: req.user.id }).populate(
-      "courses.course",
-    );
+    let cart = await Cart.findOne({ user: req.user.id });
     if (!cart) return res.status(404).json({ msg: "Cart not found" });
+    else
+      cart = await Cart.find({ user: req.user.id }).populate("courses.course");
     res.status(200).json(cart[0].courses);
   } catch (err) {
     console.error(err.message);
@@ -23,7 +23,7 @@ async function addToCart(req, res) {
     else {
       // Check if the course is already in the cart
       const courseExists = cart.courses.some(
-        (courseItem) => courseItem.course.toString() === courseId,
+        (courseItem) => courseItem.course.toString() === courseId
       );
       // Check if user already enrolled in the course
       const enrollment = await Enrollment.findOne({
@@ -52,7 +52,7 @@ async function removeFromCart(req, res) {
       return res.status(404).json({ msg: "Cart not found" });
     }
     cart.courses = cart.courses.filter(
-      (courseItem) => courseItem.course.toString() !== courseId,
+      (courseItem) => courseItem.course.toString() !== courseId
     );
     await cart.save();
     res.json(cart);
@@ -62,4 +62,4 @@ async function removeFromCart(req, res) {
   }
 }
 
-module.exports = { getCartItems, addToCart, removeFromCart };
+export default { getCartItems, addToCart, removeFromCart };

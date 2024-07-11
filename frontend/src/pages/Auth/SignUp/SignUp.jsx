@@ -9,6 +9,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
 import { useTranslation } from "react-i18next";
+import OAuth from "../../../components/OAuth/OAuth";
 
 export default function Register() {
   const [name, setName] = useState("");
@@ -38,7 +39,7 @@ export default function Register() {
           role,
           bio,
           phoneNumber,
-        },
+        }
       );
       setUserId(response.data.id);
       if (response.status === 200) setRedirect(true);
@@ -108,6 +109,7 @@ export default function Register() {
       <button type={"submit"}>
         {t("continue")} <FontAwesomeIcon icon={faArrowRight} />
       </button>
+      <OAuth />
       <p>
         {t("alreadyHaveAccount")}{" "}
         <Link to={"/login"} style={{ color: "#007bff" }}>

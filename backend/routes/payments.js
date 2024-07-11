@@ -1,9 +1,9 @@
-const express = require("express");
-const router = express.Router();
-const auth = require("../middlewares/auth");
-const PaymentService = require("../services/PaymentsService");
+import { Router } from "express";
+const router = Router();
+import auth from "../middlewares/auth.js";
+import PaymentService from "../services/PaymentsService.js";
 
 // Simulate payment processing and enroll in courses
 router.post("/process", auth, PaymentService.processPayment);
 
-module.exports = router;
+export default router;

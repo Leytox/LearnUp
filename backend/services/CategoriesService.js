@@ -1,8 +1,8 @@
-const Category = require("../models/Category");
-const fs = require("fs");
+import Category from "../models/Category.js";
+import { unlinkSync } from "fs";
 
 async function createCategory(req, res) {
-  const { name, role } = req.body;
+  const { name } = req.body;
   try {
     if (req.user.role !== "admin")
       return res
@@ -24,10 +24,10 @@ async function editCategory(req, res) {
       return res
         .status(401)
         .json({ msg: "You are not authorized to edit a category" });
-    const category = await Category.findById(req.params.id);
+    const category = await findById(req.params.id);
     if (!category) return res.status(404).json({ msg: "Category not found" });
     if (req.file) {
-      fs.unlinkSync(category.picture);
+      unlinkSync(category.picture);
       category.picture = req.file.path;
     }
     category.name = name;
@@ -60,7 +60,7 @@ async function getCategoryById(req, res) {
   }
 }
 
-module.exports = {
+export default {
   createCategory,
   editCategory,
   getAllCategories,
